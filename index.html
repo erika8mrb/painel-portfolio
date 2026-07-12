@@ -422,50 +422,103 @@
   /* ===================== PORTFÓLIO ===================== */
   .portfolio{ background: var(--creme-escuro); }
   .portfolio-cabecalho{ margin-bottom: 40px; }
-  .filtros{
+
+  /* Uma linha por nicho, com carrossel horizontal de cards */
+  .portfolio-nicho{ margin-bottom: 56px; }
+  .portfolio-nicho:last-child{ margin-bottom: 0; }
+
+  .portfolio-nicho-cabecalho{
     display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 40px;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 22px;
   }
-  .filtro-botao{
-    background: var(--branco);
-    border: 1.5px solid transparent;
-    color: var(--tinta);
+  .portfolio-nicho-titulo{
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    font-family: 'Noto Serif Display', serif;
+    font-size: 26px;
     font-weight: 600;
-    font-size: 14px;
-    padding: 10px 20px;
-    border-radius: 999px;
+    color: var(--tinta);
+  }
+  .portfolio-nicho-contagem{
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--tinta-suave);
+  }
+  .portfolio-nicho-subtitulo{
+    font-family: 'Noto Serif Display', serif;
+    font-style: italic;
+    font-size: 15px;
+    color: var(--tinta-suave);
+    margin: 4px 0 0;
+  }
+  .portfolio-nicho-setas{
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .portfolio-nicho-seta{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(20,17,13,0.15);
+    background: var(--branco);
+    color: var(--tinta);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
     transition: all .2s ease;
   }
-  .filtro-botao:hover{ border-color: var(--acento); }
-  .filtro-botao[aria-pressed="true"]{
-    background: var(--tinta);
+  .portfolio-nicho-seta:hover{
+    border-color: var(--acento);
+    background: var(--acento);
     color: var(--branco);
   }
+  .portfolio-nicho-seta svg{ width: 18px; height: 18px; }
 
-  .portfolio-grid{
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
+  .portfolio-trilho{
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    padding-bottom: 6px;
+    cursor: grab;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    user-select: none;
   }
+  .portfolio-trilho::-webkit-scrollbar{ display: none; }
+  .portfolio-trilho.arrastando{ cursor: grabbing; scroll-snap-type: none; }
+
   .portfolio-item{
+    flex: 0 0 auto;
+    width: 220px;
+    scroll-snap-align: start;
     border-radius: var(--raio);
     overflow: hidden;
     box-shadow: var(--sombra-suave);
-    transition: opacity .35s ease, transform .35s ease;
   }
-  .portfolio-item.escondido{
-    display: none;
+  .portfolio-item-categoria{
+    margin: 2px 0 0;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--tinta-suave);
   }
   .midia-portfolio{
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 9 / 16;
     width: 100%;
     display: flex;
     align-items: flex-end;
     padding: 20px;
   }
+  .midia-portfolio img{ -webkit-user-drag: none; }
   .portfolio-item-tag{
     position: relative; /* garante que fique acima da miniatura do vídeo */
     background: rgba(20,17,13,0.55);
@@ -796,7 +849,6 @@
   @media (max-width: 1000px){
     .sobre-grid{ grid-template-columns: 1fr; }
     .midia-sobre{ aspect-ratio: 16/9; }
-    .portfolio-grid{ grid-template-columns: repeat(2, 1fr); }
     .servicos-grid{ grid-template-columns: repeat(2, 1fr); }
     .numeros-grid{ grid-template-columns: repeat(2, 1fr); }
     .depoimentos-grid{ grid-template-columns: 1fr 1fr; }
@@ -811,12 +863,13 @@
     .hero-acoes{ flex-direction: column; width: 100%; }
     .hero-acoes .botao{ width: 100%; }
     .hero-rodape-mini{ flex-direction: column; align-items: flex-start; gap: 14px; }
-    .portfolio-grid{ grid-template-columns: 1fr; }
     .servicos-grid{ grid-template-columns: 1fr; }
     .numeros-grid{ grid-template-columns: repeat(2, 1fr); }
     .depoimentos-grid{ grid-template-columns: 1fr; }
     .rodape-topo{ flex-direction: column; align-items: flex-start; }
     .rodape-baixo{ flex-direction: column; }
+    .portfolio-item{ width: 160px; }
+    .portfolio-nicho-titulo{ font-size: 21px; }
   }
 
   @media (max-width: 420px){
@@ -877,10 +930,9 @@
       <div class="portfolio-cabecalho reveal">
         <p class="rotulo">Portfólio</p>
         <h2 class="titulo-secao" id="portfolio-titulo">Trabalhos em <em>diferentes</em> nichos</h2>
-        <p class="descricao-secao">Alguns exemplos de conteúdo criado para marcas parceiras. Use os filtros para ver por nicho de atuação.</p>
+        <p class="descricao-secao">Alguns exemplos de conteúdo criado para marcas parceiras, organizados por nicho de atuação.</p>
       </div>
-      <div class="filtros" id="portfolio-filtros" role="group" aria-label="Filtrar portfólio por nicho"></div>
-      <div class="portfolio-grid" id="portfolio-grid"></div>
+      <div id="portfolio-nichos"></div>
     </div>
   </section>
 
@@ -1025,15 +1077,14 @@ const CONFIG = {
     descricaoMidia: "Foto de Erika Barreiros sorrindo, transmitindo confiança e proximidade"
   },
 
-  // EDITE AQUI: categorias de filtro do portfólio
+  // EDITE AQUI: nichos do portfólio. Cada um vira uma linha (carrossel) na seção de portfólio
   portfolioCategorias: [
-    { chave: "todos", texto: "Todos" },
-    { chave: "skincare", texto: "Skincare & Beleza" },
-    { chave: "tecnologia", texto: "Tecnologia" },
-    { chave: "consumo", texto: "Consumo & Reviews" },
-    { chave: "pet", texto: "Pet" },
-    { chave: "bem-estar", texto: "Bem-Estar" },
-    { chave: "casa", texto: "Casa & Organização" }
+    { chave: "skincare", texto: "Skincare & Beleza", subtitulo: "Produtos que viram ritual" },
+    { chave: "tecnologia", texto: "Tecnologia", subtitulo: "Testes que resolvem o dia a dia" },
+    { chave: "consumo", texto: "Consumo & Reviews", subtitulo: "Decisões de compra mais fáceis" },
+    { chave: "pet", texto: "Pet", subtitulo: "Cuidado de verdade para quem a gente ama" },
+    { chave: "bem-estar", texto: "Bem-Estar", subtitulo: "Hábitos que fazem diferença" },
+    { chave: "casa", texto: "Casa & Organização", subtitulo: "Ambientes mais leves e organizados" }
   ],
 
   // EDITE AQUI: trabalhos do portfólio. "categoria" precisa bater com a "chave" definida acima.
@@ -1103,6 +1154,9 @@ const GRADIENTES = [
 const ICONE_INSTAGRAM = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1"/></svg>`;
 const ICONE_TIKTOK = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.6 3c.4 2.2 1.8 3.9 4 4.3v3.1a7.6 7.6 0 0 1-4-1.2v6.6a5.9 5.9 0 1 1-5.9-5.9c.2 0 .5 0 .7.1v3.2a2.8 2.8 0 1 0 2 2.7V3h3.2z"/></svg>`;
 const ICONE_LOCAL = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 21s-7-7.1-7-12a7 7 0 1 1 14 0c0 4.9-7 12-7 12z"/><circle cx="12" cy="9" r="2.4"/></svg>`;
+/* Setas usadas na navegação dos carrosséis de portfólio por nicho */
+const ICONE_SETA_ESQUERDA = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>`;
+const ICONE_SETA_DIREITA = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>`;
 
 /* =====================================================================
    RASTREAMENTO (ANALYTICS)
@@ -1265,41 +1319,62 @@ function renderizarSobre(){
 }
 
 function renderizarPortfolio(){
-  const filtrosHtml = CONFIG.portfolioCategorias.map((cat, i) =>
-    `<button class="filtro-botao" data-categoria="${cat.chave}" data-evento="filtro_${cat.chave}" aria-pressed="${i === 0 ? "true" : "false"}">${cat.texto}</button>`
-  ).join("");
-  document.getElementById("portfolio-filtros").innerHTML = filtrosHtml;
+  const nichosHtml = CONFIG.portfolioCategorias.map((cat) => {
+    const itensDoNicho = CONFIG.portfolioItens.filter(item => item.categoria === cat.chave);
+    if(itensDoNicho.length === 0) return "";
 
-  const gridHtml = CONFIG.portfolioItens.map((item, i) => {
-    // Item com vídeo real do YouTube: mostra a miniatura de verdade, clicável
-    if(item.videoId){
-      // "oar2" é a miniatura vertical em alta resolução do YouTube Shorts (sem
-      // as barras pretas laterais que aparecem nas miniaturas padrão 16:9)
-      const thumb = `https://i.ytimg.com/vi/${item.videoId}/oar2.jpg`;
+    const idTrilho = `trilho-${cat.chave}`;
+
+    const cardsHtml = itensDoNicho.map((item, i) => {
+      // Item com vídeo real do YouTube: mostra a miniatura de verdade, clicável
+      if(item.videoId){
+        // "oar2" é a miniatura vertical em alta resolução do YouTube Shorts (sem
+        // as barras pretas laterais que aparecem nas miniaturas padrão 16:9)
+        const thumb = `https://i.ytimg.com/vi/${item.videoId}/oar2.jpg`;
+        return `
+          <div class="portfolio-item">
+            <button type="button" class="midia-gradiente midia-portfolio midia-video"
+               data-video-id="${item.videoId}" data-video-titulo="${item.titulo}"
+               aria-label="Assistir vídeo: ${item.titulo}">
+              <img src="${thumb}" alt="Miniatura do vídeo: ${item.titulo}" loading="lazy" draggable="false">
+              <span class="midia-video-play" aria-hidden="true">▶</span>
+              <span class="portfolio-item-tag">${item.tag}</span>
+            </button>
+            <p class="portfolio-item-titulo">${item.titulo}</p>
+            <p class="portfolio-item-categoria">${cat.texto}</p>
+          </div>
+        `;
+      }
+      // Item sem vídeo ainda: mantém o bloco de gradiente (placeholder)
       return `
-        <div class="portfolio-item reveal" data-categoria="${item.categoria}">
-          <button type="button" class="midia-gradiente midia-portfolio midia-video"
-             data-video-id="${item.videoId}" data-video-titulo="${item.titulo}"
-             aria-label="Assistir vídeo: ${item.titulo}">
-            <img src="${thumb}" alt="Miniatura do vídeo: ${item.titulo}" loading="lazy">
-            <span class="midia-video-play" aria-hidden="true">▶</span>
+        <div class="portfolio-item">
+          <div class="midia-gradiente midia-portfolio" role="img" aria-label="Exemplo de trabalho: ${item.titulo}" style="background:${GRADIENTES[i % GRADIENTES.length]}">
             <span class="portfolio-item-tag">${item.tag}</span>
-          </button>
+          </div>
           <p class="portfolio-item-titulo">${item.titulo}</p>
+          <p class="portfolio-item-categoria">${cat.texto}</p>
         </div>
       `;
-    }
-    // Item sem vídeo ainda: mantém o bloco de gradiente (placeholder)
+    }).join("");
+
     return `
-      <div class="portfolio-item reveal" data-categoria="${item.categoria}">
-        <div class="midia-gradiente midia-portfolio" role="img" aria-label="Exemplo de trabalho: ${item.titulo}" style="background:${GRADIENTES[i % GRADIENTES.length]}">
-          <span class="portfolio-item-tag">${item.tag}</span>
+      <div class="portfolio-nicho reveal">
+        <div class="portfolio-nicho-cabecalho">
+          <div>
+            <h3 class="portfolio-nicho-titulo">${cat.texto} <span class="portfolio-nicho-contagem">${itensDoNicho.length}</span></h3>
+            <p class="portfolio-nicho-subtitulo">${cat.subtitulo}</p>
+          </div>
+          <div class="portfolio-nicho-setas">
+            <button type="button" class="portfolio-nicho-seta" data-trilho="${idTrilho}" data-direcao="-1" aria-label="Ver itens anteriores de ${cat.texto}">${ICONE_SETA_ESQUERDA}</button>
+            <button type="button" class="portfolio-nicho-seta" data-trilho="${idTrilho}" data-direcao="1" aria-label="Ver mais itens de ${cat.texto}">${ICONE_SETA_DIREITA}</button>
+          </div>
         </div>
-        <p class="portfolio-item-titulo">${item.titulo}</p>
+        <div class="portfolio-trilho" id="${idTrilho}">${cardsHtml}</div>
       </div>
     `;
   }).join("");
-  document.getElementById("portfolio-grid").innerHTML = gridHtml;
+
+  document.getElementById("portfolio-nichos").innerHTML = nichosHtml;
 }
 
 function renderizarServicos(){
@@ -1424,21 +1499,57 @@ function configurarMenuMobile(){
   });
 }
 
-function configurarFiltrosPortfolio(){
-  const botoes = document.querySelectorAll(".filtro-botao");
-  const itens = document.querySelectorAll(".portfolio-item");
-
-  botoes.forEach(botao => {
+// Carrosséis horizontais do portfólio (um por nicho): setas de navegação e arraste com o mouse
+function configurarCarrosseisPortfolio(){
+  // Setas: avançam ou recuam o trilho na direção clicada
+  document.querySelectorAll(".portfolio-nicho-seta").forEach(botao => {
     botao.addEventListener("click", () => {
-      botoes.forEach(b => b.setAttribute("aria-pressed", "false"));
-      botao.setAttribute("aria-pressed", "true");
-
-      const categoria = botao.dataset.categoria;
-      itens.forEach(item => {
-        const mostrar = categoria === "todos" || item.dataset.categoria === categoria;
-        item.classList.toggle("escondido", !mostrar);
-      });
+      const trilho = document.getElementById(botao.dataset.trilho);
+      const direcao = Number(botao.dataset.direcao);
+      trilho.scrollBy({ left: trilho.clientWidth * 0.8 * direcao, behavior: "smooth" });
     });
+  });
+
+  // Arrastar o trilho com o mouse (como um carrossel de streaming)
+  document.querySelectorAll(".portfolio-trilho").forEach(trilho => {
+    let arrastando = false;
+    let moveuBastante = false;
+    let posicaoInicialX = 0;
+    let scrollInicial = 0;
+
+    trilho.addEventListener("mousedown", (evento) => {
+      arrastando = true;
+      moveuBastante = false;
+      posicaoInicialX = evento.pageX;
+      scrollInicial = trilho.scrollLeft;
+      trilho.classList.add("arrastando");
+    });
+
+    window.addEventListener("mouseup", () => {
+      arrastando = false;
+      trilho.classList.remove("arrastando");
+    });
+
+    trilho.addEventListener("mouseleave", () => {
+      arrastando = false;
+      trilho.classList.remove("arrastando");
+    });
+
+    trilho.addEventListener("mousemove", (evento) => {
+      if(!arrastando) return;
+      evento.preventDefault();
+      const distancia = evento.pageX - posicaoInicialX;
+      if(Math.abs(distancia) > 5) moveuBastante = true;
+      trilho.scrollLeft = scrollInicial - distancia;
+    });
+
+    // Evita que o fim de um arraste seja interpretado como clique (abrindo o vídeo à toa)
+    trilho.addEventListener("click", (evento) => {
+      if(moveuBastante){
+        evento.stopPropagation();
+        evento.preventDefault();
+      }
+    }, true);
   });
 }
 
@@ -1529,7 +1640,7 @@ function configurarFormulario(){
 document.addEventListener("DOMContentLoaded", () => {
   renderizarTudo();
   configurarMenuMobile();
-  configurarFiltrosPortfolio();
+  configurarCarrosseisPortfolio();
   configurarContadores();
   configurarAnimacoesEntrada();
   configurarFormulario();
