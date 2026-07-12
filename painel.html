@@ -971,7 +971,9 @@
         .map(({ id, titulo, contagem }) => {
           const largura = Math.round((contagem / maxContagem) * 100);
           const link = `https://www.youtube.com/watch?v=${encodeURIComponent(id)}`;
-          const thumb = `https://i.ytimg.com/vi/${encodeURIComponent(id)}/mqdefault.jpg`;
+          // "oar2" é a miniatura vertical em alta resolução do YouTube Shorts (sem
+          // as barras pretas laterais que aparecem nas miniaturas padrão 16:9)
+          const thumb = `https://i.ytimg.com/vi/${encodeURIComponent(id)}/oar2.jpg`;
           return `
             <div class="item-video">
               <a href="${link}" target="_blank" rel="noopener">
