@@ -1226,7 +1226,8 @@ function configurarRastreamentoDeCliques(){
 function abrirModalDeVideo(videoId){
   const modal = document.getElementById("video-modal");
   const quadro = document.getElementById("video-modal-quadro");
-  quadro.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0" title="Player de vídeo" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+  // cc_load_policy=0 evita que a legenda automática do YouTube apareça por padrão no vídeo
+  quadro.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&cc_load_policy=0" title="Player de vídeo" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
   modal.hidden = false;
   document.body.style.overflow = "hidden";
 }
