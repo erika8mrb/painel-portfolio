@@ -1173,7 +1173,9 @@ function renderizarPortfolio(){
     // Item com vídeo real do YouTube: mostra a miniatura de verdade, clicável
     if(item.videoId){
       const linkVideo = `https://www.youtube.com/watch?v=${item.videoId}`;
-      const thumb = `https://i.ytimg.com/vi/${item.videoId}/mqdefault.jpg`;
+      // "oar2" é a miniatura vertical em alta resolução do YouTube Shorts (sem
+      // as barras pretas laterais que aparecem nas miniaturas padrão 16:9)
+      const thumb = `https://i.ytimg.com/vi/${item.videoId}/oar2.jpg`;
       return `
         <div class="portfolio-item reveal" data-categoria="${item.categoria}">
           <a class="midia-gradiente midia-portfolio midia-video" href="${linkVideo}" target="_blank" rel="noopener"
