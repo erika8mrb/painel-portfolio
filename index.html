@@ -481,6 +481,12 @@
     display: flex;
     text-decoration: none;
     cursor: pointer;
+    border: none;
+    background: none;
+    padding: 20px;
+    font: inherit;
+    width: 100%;
+    text-align: left;
   }
   .midia-video img{
     position: absolute;
@@ -507,6 +513,57 @@
   .midia-video:hover .midia-video-play{
     transform: translate(-50%, -50%) scale(1.08);
     background: var(--acento-escuro);
+  }
+
+  /* ===================== MODAL DE VÍDEO (lightbox) ===================== */
+  .video-modal{
+    position: fixed;
+    inset: 0;
+    z-index: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(20,17,13,0.85);
+    padding: 32px 16px;
+  }
+  .video-modal[hidden]{ display: none; }
+  .video-modal-quadro{
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    aspect-ratio: 9 / 16;
+    border-radius: var(--raio);
+    overflow: hidden;
+    background: #000;
+    box-shadow: var(--sombra);
+  }
+  .video-modal-quadro iframe{
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+  .video-modal-fechar{
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    color: var(--branco);
+    font-size: 26px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background .2s ease;
+  }
+  .video-modal-fechar:hover{
+    background: rgba(255,255,255,0.3);
   }
   .portfolio-item-titulo{
     margin-top: 12px;
@@ -771,6 +828,14 @@
 <body>
 
 <a class="skip-link" href="#conteudo-principal">Pular para o conteúdo principal</a>
+
+<!-- ===================== MODAL DE VÍDEO (lightbox) =====================
+     Abre por cima do site e roda o vídeo do YouTube incorporado (embed),
+     sem redirecionar o visitante para o youtube.com. -->
+<div class="video-modal" id="video-modal" role="dialog" aria-modal="true" aria-label="Reprodutor de vídeo" hidden>
+  <button class="video-modal-fechar" id="video-modal-fechar" aria-label="Fechar vídeo">&times;</button>
+  <div class="video-modal-quadro" id="video-modal-quadro"></div>
+</div>
 
 <!-- ===================== CABEÇALHO / MENU ===================== -->
 <header class="cabecalho" id="topo">
@@ -1091,10 +1156,46 @@ function configurarRastreamentoDeCliques(){
       registrarEvento("button_click", alvo.dataset.evento, null);
     }
 
-    // Cliques em miniaturas de vídeo do portfólio contam como "vídeo visto"
+    // Cliques em miniaturas de vídeo do portfólio abrem o player no próprio site
+    // (em vez de redirecionar para o youtube.com) e contam como "vídeo visto"
     const video = evento.target.closest("[data-video-id]");
     if(video){
+      abrirModalDeVideo(video.dataset.videoId);
       registrarEvento("video_view", video.dataset.videoId, { title: video.dataset.videoTitulo });
+    }
+  });
+}
+
+// Modal (lightbox) que reproduz o vídeo do YouTube incorporado, sem sair do site
+function abrirModalDeVideo(videoId){
+  const modal = document.getElementById("video-modal");
+  const quadro = document.getElementById("video-modal-quadro");
+  quadro.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0" title="Player de vídeo" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+  modal.hidden = false;
+  document.body.style.overflow = "hidden";
+}
+
+function fecharModalDeVideo(){
+  const modal = document.getElementById("video-modal");
+  document.getElementById("video-modal-quadro").innerHTML = ""; // remove o iframe para parar o vídeo e o som
+  modal.hidden = true;
+  document.body.style.overflow = "";
+}
+
+function configurarModalDeVideo(){
+  document.getElementById("video-modal-fechar").addEventListener("click", fecharModalDeVideo);
+
+  // Fecha ao clicar fora do vídeo (no fundo escurecido)
+  document.getElementById("video-modal").addEventListener("click", (evento) => {
+    if(evento.target.id === "video-modal"){
+      fecharModalDeVideo();
+    }
+  });
+
+  // Fecha com a tecla Esc
+  document.addEventListener("keydown", (evento) => {
+    if(evento.key === "Escape"){
+      fecharModalDeVideo();
     }
   });
 }
@@ -1172,19 +1273,18 @@ function renderizarPortfolio(){
   const gridHtml = CONFIG.portfolioItens.map((item, i) => {
     // Item com vídeo real do YouTube: mostra a miniatura de verdade, clicável
     if(item.videoId){
-      const linkVideo = `https://www.youtube.com/watch?v=${item.videoId}`;
       // "oar2" é a miniatura vertical em alta resolução do YouTube Shorts (sem
       // as barras pretas laterais que aparecem nas miniaturas padrão 16:9)
       const thumb = `https://i.ytimg.com/vi/${item.videoId}/oar2.jpg`;
       return `
         <div class="portfolio-item reveal" data-categoria="${item.categoria}">
-          <a class="midia-gradiente midia-portfolio midia-video" href="${linkVideo}" target="_blank" rel="noopener"
+          <button type="button" class="midia-gradiente midia-portfolio midia-video"
              data-video-id="${item.videoId}" data-video-titulo="${item.titulo}"
              aria-label="Assistir vídeo: ${item.titulo}">
             <img src="${thumb}" alt="Miniatura do vídeo: ${item.titulo}" loading="lazy">
             <span class="midia-video-play" aria-hidden="true">▶</span>
             <span class="portfolio-item-tag">${item.tag}</span>
-          </a>
+          </button>
           <p class="portfolio-item-titulo">${item.titulo}</p>
         </div>
       `;
@@ -1434,6 +1534,7 @@ document.addEventListener("DOMContentLoaded", () => {
   configurarAnimacoesEntrada();
   configurarFormulario();
   configurarRastreamentoDeCliques();
+  configurarModalDeVideo();
   registrarEvento("page_view", "home", null);
 });
 </script>
