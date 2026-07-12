@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Acesso restrito | meu.painel</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/painel.css">
+
+<style>
+  body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+
+  .cartao-login {
+    width: 100%;
+    max-width: 400px;
+    padding: 40px 36px;
+    text-align: center;
+  }
+
+  .logo {
+    font-family: var(--fonte-titulo);
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--grafite);
+    margin-bottom: 28px;
+  }
+
+  .logo .ponto {
+    color: var(--coral);
+  }
+
+  .cartao-login h1 {
+    font-size: 22px;
+    margin-bottom: 8px;
+  }
+
+  .cartao-login p.subtitulo {
+    color: var(--texto-suave);
+    font-size: 14px;
+    margin-bottom: 28px;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .link-esqueci {
+    font-size: 13px;
+    color: var(--texto-suave);
+    text-decoration: none;
+    align-self: flex-end;
+    margin-top: -8px;
+  }
+
+  .link-esqueci:hover {
+    color: var(--coral);
+  }
+
+  .link-voltar {
+    font-size: 13px;
+    color: var(--texto-suave);
+    text-decoration: none;
+    align-self: center;
+  }
+
+  .link-voltar:hover {
+    color: var(--coral);
+  }
+
+  #faixaMensagem {
+    margin-bottom: 20px;
+  }
+</style>
+</head>
+<body>
+
+  <div class="cartao cartao-login">
+    <div class="logo">meu<span class="ponto">.</span>painel</div>
+
+    <!-- ===== Bloco: mensagens de erro/sucesso ===== -->
+    <div id="faixaMensagem"></div>
+
+    <!-- ===== Bloco: formulário de login ===== -->
+    <div id="blocoLogin">
+      <h1>Acesso restrito</h1>
+      <p class="subtitulo">Faça login para ver os números do seu portfólio.</p>
+
+      <form id="formLogin">
+        <div class="campo">
+          <label for="email">E-mail</label>
+          <input type="email" id="email" name="email" required autocomplete="username">
+        </div>
+
+        <div class="campo">
+          <label for="senha">Senha</label>
+          <input type="password" id="senha" name="senha" required autocomplete="current-password">
+        </div>
+
+        <a href="#" class="link-esqueci" id="linkEsqueci">Esqueci minha senha</a>
+
+        <button type="submit" class="botao botao-primario" id="botaoEntrar">Entrar</button>
+      </form>
+    </div>
+
+    <!-- ===== Bloco: recuperação de senha ===== -->
+    <div id="blocoRecuperar" class="oculto">
+      <h1>Recuperar senha</h1>
+      <p class="subtitulo">Digite seu e-mail para receber o link de recuperação.</p>
+
+      <form id="formRecuperar">
+        <div class="campo">
+          <label for="emailRecuperar">E-mail</label>
+          <input type="email" id="emailRecuperar" name="emailRecuperar" required autocomplete="username">
+        </div>
+
+        <button type="submit" class="botao botao-primario" id="botaoRecuperar">Enviar link</button>
+
+        <a href="#" class="link-voltar" id="linkVoltar">Voltar para o login</a>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    // ============================================================
+    // Lógica da tela de login
+    // ============================================================
+
+    const faixaMensagem = document.getElementById('faixaMensagem');
+    const blocoLogin = document.getElementById('blocoLogin');
+    const blocoRecuperar = document.getElementById('blocoRecuperar');
+
+    const formLogin = document.getElementById('formLogin');
+    const botaoEntrar = document.getElementById('botaoEntrar');
+
+    const formRecuperar = document.getElementById('formRecuperar');
+    const botaoRecuperar = document.getElementById('botaoRecuperar');
+
+    // Mostra uma faixa de mensagem (erro ou sucesso)
+    function mostrarMensagem(texto, tipo) {
+      faixaMensagem.innerHTML = `<div class="faixa faixa-${tipo}">${texto}</div>`;
+    }
+
+    function limparMensagem() {
+      faixaMensagem.innerHTML = '';
+    }
+
+    // Se já houver sessão ativa, vai direto para o painel
+    (async function verificarSessaoExistente() {
+      const { data } = await Auth.sb.auth.getSession();
+      if (data.session) {
+        window.location.href = 'painel.html';
+      }
+    })();
+
+    // Envio do formulário de login
+    formLogin.addEventListener('submit', async (evento) => {
+      evento.preventDefault();
+      limparMensagem();
+
+      const email = document.getElementById('email').value.trim();
+      const senha = document.getElementById('senha').value;
+
+      botaoEntrar.disabled = true;
+      botaoEntrar.textContent = 'Entrando...';
+
+      try {
+        await Auth.login(email, senha);
+        window.location.href = 'painel.html';
+      } catch (erro) {
+        mostrarMensagem(erro.message, 'erro');
+        botaoEntrar.disabled = false;
+        botaoEntrar.textContent = 'Entrar';
+      }
+    });
+
+    // Troca para o formulário de recuperação de senha
+    document.getElementById('linkEsqueci').addEventListener('click', (evento) => {
+      evento.preventDefault();
+      limparMensagem();
+      blocoLogin.classList.add('oculto');
+      blocoRecuperar.classList.remove('oculto');
+    });
+
+    // Volta para o formulário de login
+    document.getElementById('linkVoltar').addEventListener('click', (evento) => {
+      evento.preventDefault();
+      limparMensagem();
+      blocoRecuperar.classList.add('oculto');
+      blocoLogin.classList.remove('oculto');
+    });
+
+    // Envio do formulário de recuperação de senha
+    formRecuperar.addEventListener('submit', async (evento) => {
+      evento.preventDefault();
+      limparMensagem();
+
+      const email = document.getElementById('emailRecuperar').value.trim();
+
+      botaoRecuperar.disabled = true;
+      botaoRecuperar.textContent = 'Enviando...';
+
+      try {
+        await Auth.recuperarSenha(email);
+        mostrarMensagem('Enviamos um link de recuperação para o seu e-mail.', 'sucesso');
+      } catch (erro) {
+        mostrarMensagem(erro.message, 'erro');
+      } finally {
+        botaoRecuperar.disabled = false;
+        botaoRecuperar.textContent = 'Enviar link';
+      }
+    });
+  </script>
+</body>
+</html>
