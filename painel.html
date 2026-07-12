@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Painel | meu.painel</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/painel.css">
+
+<!-- Supabase precisa ser carregado ANTES de js/auth.js -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="js/auth.js"></script>
+
+<style>
+  /* O corpo começa invisível e só aparece depois que o guarda de
+     autenticação confirmar que existe uma sessão ativa. */
+  body {
+    visibility: hidden;
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* ---------- Sidebar ---------- */
+
+  .sidebar {
+    width: 260px;
+    flex-shrink: 0;
+    background: var(--branco);
+    border-right: 1px solid var(--borda);
+    display: flex;
+    flex-direction: column;
+    padding: 28px 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 30;
+    transition: transform 0.25s ease;
+  }
+
+  .sidebar-topo .logo {
+    font-family: var(--fonte-titulo);
+    font-size: 20px;
+    font-weight: 600;
+    padding: 0 8px;
+    margin-bottom: 32px;
+  }
+
+  .sidebar-topo .logo .ponto {
+    color: var(--coral);
+  }
+
+  .sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: transparent;
+    border: none;
+    border-radius: var(--raio-sm);
+    padding: 12px 14px;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: var(--fonte-texto);
+    color: var(--texto-suave);
+    text-align: left;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .nav-item svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+
+  .nav-item:hover {
+    background: var(--creme);
+    color: var(--grafite);
+  }
+
+  .nav-item.ativo {
+    background: var(--coral);
+    color: var(--branco);
+  }
+
+  .sidebar-rodape {
+    border-top: 1px solid var(--borda);
+    padding-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .usuario-email {
+    font-size: 13px;
+    color: var(--texto-suave);
+    padding: 0 8px;
+    word-break: break-all;
+  }
+
+  .botao-sair {
+    width: 100%;
+  }
+
+  /* ---------- Overlay mobile ---------- */
+
+  .overlay-mobile {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(26, 24, 22, 0.4);
+    z-index: 20;
+  }
+
+  .overlay-mobile.visivel {
+    display: block;
+  }
+
+  /* ---------- Área de conteúdo ---------- */
+
+  .conteudo {
+    margin-left: 260px;
+    flex: 1;
+    padding: 32px 40px 60px;
+    max-width: 1200px;
+  }
+
+  .conteudo-header {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .conteudo-header h1 {
+    font-size: 26px;
+    flex: 1;
+  }
+
+  .botao-menu-mobile {
+    display: none;
+    background: var(--branco);
+    border: 1px solid var(--borda);
+    border-radius: var(--raio-sm);
+    width: 40px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .botao-menu-mobile svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* ---------- Filtro de período ---------- */
+
+  .filtro-periodo {
+    display: flex;
+    gap: 6px;
+    background: var(--branco);
+    border: 1px solid var(--borda);
+    border-radius: var(--raio-sm);
+    padding: 4px;
+  }
+
+  .filtro-btn {
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--texto-suave);
+    font-family: var(--fonte-texto);
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .filtro-btn:hover {
+    color: var(--grafite);
+  }
+
+  .filtro-btn.ativo {
+    background: var(--coral);
+    color: var(--branco);
+  }
+
+  /* ---------- Mensagens de carregamento / erro ---------- */
+
+  .area-mensagem:empty {
+    display: none;
+  }
+
+  .area-mensagem {
+    margin-bottom: 20px;
+  }
+
+  /* ---------- Cartões de número (visão geral) ---------- */
+
+  .grade-cartoes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .cartao-numero {
+    padding: 22px;
+  }
+
+  .cartao-numero.destaque {
+    background: var(--coral);
+    border-color: var(--coral);
+  }
+
+  .cartao-numero.destaque .cartao-numero-valor,
+  .cartao-numero.destaque .cartao-numero-rotulo {
+    color: var(--branco);
+  }
+
+  .cartao-numero-valor {
+    font-family: var(--fonte-titulo);
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 1.1;
+    margin-bottom: 6px;
+  }
+
+  .cartao-numero-rotulo {
+    font-size: 13px;
+    color: var(--texto-suave);
+    font-weight: 500;
+  }
+
+  /* ---------- Cartão de destaque (cliques para contato) ---------- */
+
+  .cartao-destaque-contato {
+    padding: 24px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .cartao-destaque-contato .valor-grande {
+    font-family: var(--fonte-titulo);
+    font-size: 40px;
+    font-weight: 600;
+    color: var(--coral);
+    line-height: 1;
+  }
+
+  .cartao-destaque-contato .texto-destaque h3 {
+    font-size: 16px;
+    margin-bottom: 4px;
+  }
+
+  .cartao-destaque-contato .texto-destaque p {
+    font-size: 13px;
+    color: var(--texto-suave);
+    margin: 0;
+  }
+
+  /* ---------- Gráfico de barras (visitas por dia) ---------- */
+
+  .cartao-grafico {
+    padding: 24px;
+  }
+
+  .cartao-grafico h3 {
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+
+  .grafico-barras {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    height: 160px;
+  }
+
+  .barra-coluna {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100%;
+  }
+
+  .barra-dia {
+    position: relative;
+    width: 100%;
+    max-width: 26px;
+    background: var(--coral);
+    border-radius: 6px 6px 0 0;
+    min-height: 3px;
+    transition: background 0.15s ease;
+    cursor: default;
+  }
+
+  .barra-dia:hover {
+    background: var(--coral-escuro);
+  }
+
+  .barra-dia:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--grafite);
+    color: var(--branco);
+    padding: 5px 9px;
+    border-radius: 6px;
+    font-size: 11px;
+    white-space: nowrap;
+    margin-bottom: 6px;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  .barra-label {
+    font-size: 10px;
+    color: var(--texto-suave);
+    margin-top: 6px;
+  }
+
+  /* ---------- Blocos da aba Portfólio ---------- */
+
+  .grade-portfolio {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 16px;
+  }
+
+  .bloco-portfolio {
+    padding: 24px;
+  }
+
+  .bloco-portfolio h3 {
+    font-size: 16px;
+    margin-bottom: 18px;
+  }
+
+  .texto-vazio {
+    color: var(--texto-suave);
+    font-size: 14px;
+    font-style: italic;
+    margin: 0;
+  }
+
+  /* Vídeos mais vistos */
+
+  .item-video {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .item-video:last-child {
+    margin-bottom: 0;
+  }
+
+  .item-video img {
+    width: 96px;
+    height: 54px;
+    object-fit: cover;
+    border-radius: 8px;
+    flex-shrink: 0;
+    background: var(--creme);
+  }
+
+  .item-video-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .item-video-titulo {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--grafite);
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 6px;
+  }
+
+  .item-video-titulo:hover {
+    color: var(--coral);
+  }
+
+  /* Barra horizontal (vídeos e botões) */
+
+  .item-barra-fundo {
+    background: var(--creme);
+    border-radius: 999px;
+    height: 8px;
+    overflow: hidden;
+  }
+
+  .item-barra-preenchimento {
+    background: var(--coral);
+    height: 100%;
+    border-radius: 999px;
+  }
+
+  .item-barra-contagem {
+    font-size: 11px;
+    color: var(--texto-suave);
+    margin-top: 4px;
+    display: block;
+  }
+
+  /* Botões mais clicados */
+
+  .item-botao {
+    margin-bottom: 14px;
+  }
+
+  .item-botao:last-child {
+    margin-bottom: 0;
+  }
+
+  .item-botao-cabecalho {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-bottom: 5px;
+    gap: 8px;
+  }
+
+  .item-botao-nome {
+    font-weight: 600;
+    color: var(--grafite);
+  }
+
+  .item-botao-valor {
+    color: var(--texto-suave);
+    flex-shrink: 0;
+  }
+
+  /* Cliques para contato */
+
+  .lista-contato {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .item-contato {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    background: var(--creme);
+    border-radius: var(--raio-sm);
+  }
+
+  .item-contato-nome {
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .item-contato-valor {
+    font-family: var(--fonte-titulo);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--coral);
+  }
+
+  /* Mensagens recebidas */
+
+  .bloco-mensagens {
+    grid-column: 1 / -1;
+  }
+
+  .lista-mensagens {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .cartao-mensagem {
+    border: 1px solid var(--borda);
+    border-radius: var(--raio-sm);
+    overflow: hidden;
+  }
+
+  .mensagem-cabecalho {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    background: var(--branco);
+    border: none;
+    text-align: left;
+  }
+
+  .mensagem-cabecalho .icone-expandir {
+    width: 16px;
+    height: 16px;
+    margin-left: auto;
+    flex-shrink: 0;
+    color: var(--texto-suave);
+    transition: transform 0.15s ease;
+  }
+
+  .mensagem-cabecalho[aria-expanded="true"] .icone-expandir {
+    transform: rotate(180deg);
+  }
+
+  .selo {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    padding: 4px 9px;
+    border-radius: 999px;
+    flex-shrink: 0;
+  }
+
+  .selo-contact {
+    background: rgba(212, 87, 42, 0.12);
+    color: var(--coral-escuro);
+  }
+
+  .selo-popup {
+    background: rgba(45, 122, 79, 0.12);
+    color: var(--sucesso);
+  }
+
+  .mensagem-nome {
+    font-weight: 600;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .mensagem-data {
+    font-size: 12px;
+    color: var(--texto-suave);
+    margin-left: auto;
+    white-space: nowrap;
+  }
+
+  .mensagem-detalhe {
+    padding: 0 16px 16px;
+    background: var(--branco);
+    border-top: 1px solid var(--borda);
+    font-size: 13px;
+  }
+
+  .mensagem-detalhe p {
+    margin: 10px 0 0;
+    color: var(--grafite);
+  }
+
+  .mensagem-detalhe p strong {
+    color: var(--texto-suave);
+    font-weight: 600;
+  }
+
+  .mensagem-acoes {
+    display: flex;
+    gap: 10px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+  }
+
+  .mensagem-acoes .botao {
+    padding: 9px 16px;
+    font-size: 13px;
+  }
+
+  /* ---------- Responsivo ---------- */
+
+  @media (max-width: 900px) {
+    .sidebar {
+      transform: translateX(-100%);
+      box-shadow: var(--sombra-hover);
+    }
+
+    .sidebar.aberta {
+      transform: translateX(0);
+    }
+
+    .conteudo {
+      margin-left: 0;
+      padding: 24px 20px 60px;
+    }
+
+    .botao-menu-mobile {
+      display: flex;
+    }
+
+    .conteudo-header h1 {
+      flex-basis: 100%;
+      order: 2;
+    }
+
+    .filtro-periodo {
+      order: 3;
+      flex-basis: 100%;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ================= Sidebar ================= -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-topo">
+      <div class="logo">meu<span class="ponto">.</span>painel</div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button class="nav-item ativo" data-tab="menu-principal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 11.5L12 4l9 7.5"></path>
+          <path d="M5 10v10h5v-6h4v6h5V10"></path>
+        </svg>
+        <span>Menu Principal</span>
+      </button>
+      <button class="nav-item" data-tab="portfolio">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="4" y="12" width="4" height="8"></rect>
+          <rect x="10" y="7" width="4" height="13"></rect>
+          <rect x="16" y="3" width="4" height="17"></rect>
+        </svg>
+        <span>Portfólio</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-rodape">
+      <div class="usuario-email" id="usuarioEmail">carregando...</div>
+      <button class="botao botao-secundario botao-sair" id="botaoSair">Sair</button>
+    </div>
+  </aside>
+
+  <div class="overlay-mobile" id="overlayMobile"></div>
+
+  <!-- ================= Conteúdo ================= -->
+  <main class="conteudo">
+    <header class="conteudo-header">
+      <button class="botao-menu-mobile" id="botaoMenuMobile" aria-label="Abrir menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+
+      <h1 id="tituloPagina">Menu Principal</h1>
+
+      <div class="filtro-periodo">
+        <button class="filtro-btn ativo" data-periodo="todos">Tudo</button>
+        <button class="filtro-btn" data-periodo="7">7d</button>
+        <button class="filtro-btn" data-periodo="30">30d</button>
+        <button class="filtro-btn" data-periodo="90">90d</button>
+      </div>
+    </header>
+
+    <div class="area-mensagem" id="areaMensagem"></div>
+
+    <!-- ================= Aba: Menu Principal ================= -->
+    <section id="painelMenuPrincipal" class="painel-tab">
+      <p style="color: var(--texto-suave); margin-bottom: 20px;">Olá! Aqui estão os números do seu portfólio.</p>
+
+      <div class="grade-cartoes">
+        <div class="cartao cartao-numero destaque">
+          <div class="cartao-numero-valor" id="numVisitas">0</div>
+          <div class="cartao-numero-rotulo">Visitas</div>
+        </div>
+        <div class="cartao cartao-numero">
+          <div class="cartao-numero-valor" id="numVisitantes">0</div>
+          <div class="cartao-numero-rotulo">Visitantes únicos</div>
+        </div>
+        <div class="cartao cartao-numero">
+          <div class="cartao-numero-valor" id="numCliques">0</div>
+          <div class="cartao-numero-rotulo">Cliques em botões</div>
+        </div>
+        <div class="cartao cartao-numero">
+          <div class="cartao-numero-valor" id="numVideos">0</div>
+          <div class="cartao-numero-rotulo">Vídeos vistos</div>
+        </div>
+        <div class="cartao cartao-numero">
+          <div class="cartao-numero-valor" id="numMensagens">0</div>
+          <div class="cartao-numero-rotulo">Mensagens</div>
+        </div>
+      </div>
+
+      <div class="cartao cartao-destaque-contato">
+        <div class="valor-grande" id="numContato">0</div>
+        <div class="texto-destaque">
+          <h3>Clicaram para entrar em contato</h3>
+          <p>Conta quem clicou em WhatsApp, e-mail, Instagram ou no botão de enviar o formulário.</p>
+        </div>
+      </div>
+
+      <div class="cartao cartao-grafico">
+        <h3>Visitas nos últimos 14 dias</h3>
+        <div class="grafico-barras" id="graficoVisitas"></div>
+      </div>
+    </section>
+
+    <!-- ================= Aba: Portfólio ================= -->
+    <section id="painelPortfolio" class="painel-tab oculto">
+      <div class="grade-portfolio">
+
+        <div class="cartao bloco-portfolio">
+          <h3>Vídeos mais vistos</h3>
+          <div id="listaVideos"></div>
+        </div>
+
+        <div class="cartao bloco-portfolio">
+          <h3>Botões mais clicados</h3>
+          <div id="listaBotoes"></div>
+        </div>
+
+        <div class="cartao bloco-portfolio">
+          <h3>Cliques para contato</h3>
+          <div id="listaContato"></div>
+        </div>
+
+        <div class="cartao bloco-portfolio bloco-mensagens">
+          <h3>Mensagens recebidas</h3>
+          <div class="lista-mensagens" id="listaMensagens"></div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // ============================================================
+    // Estado em memória (cache) — carregado uma vez ao entrar
+    // ============================================================
+    let cacheEventos = [];
+    let cacheLeads = [];
+    let periodoAtual = 'todos';
+
+    // ------------------------------------------------------------
+    // Utilitários
+    // ------------------------------------------------------------
+
+    // Evita XSS ao inserir texto vindo de formulários públicos (leads)
+    function escaparHtml(texto) {
+      const div = document.createElement('div');
+      div.textContent = texto ?? '';
+      return div.innerHTML;
+    }
+
+    function somenteDigitos(texto) {
+      return (texto || '').replace(/\D/g, '');
+    }
+
+    function formatarNumero(valor) {
+      return valor.toLocaleString('pt-BR');
+    }
+
+    function formatarData(iso) {
+      return new Date(iso).toLocaleDateString('pt-BR', {
+        day: '2-digit', month: '2-digit', year: 'numeric',
+        hour: '2-digit', minute: '2-digit',
+      });
+    }
+
+    // Troca "meu_botao" por "Meu Botao"
+    function formatarNomeLegivel(nome) {
+      return (nome || '')
+        .replace(/_/g, ' ')
+        .replace(/\b\w/g, (letra) => letra.toUpperCase());
+    }
+
+    function definirTexto(id, valor) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = valor;
+    }
+
+    // Verifica se uma data ISO está dentro do período selecionado
+    function dentroDoPeriodo(dataISO, periodo) {
+      if (periodo === 'todos') return true;
+      const dias = parseInt(periodo, 10);
+      const limite = new Date();
+      limite.setDate(limite.getDate() - dias);
+      return new Date(dataISO) >= limite;
+    }
+
+    function mostrarMensagemArea(texto, tipo) {
+      const area = document.getElementById('areaMensagem');
+      area.innerHTML = texto ? `<div class="faixa faixa-${tipo}">${texto}</div>` : '';
+    }
+
+    // ------------------------------------------------------------
+    // Busca no Supabase com paginação (limite de 1000 por consulta)
+    // ------------------------------------------------------------
+    async function buscarTudo(tabela) {
+      const TAMANHO_BLOCO = 1000;
+      let inicio = 0;
+      let resultado = [];
+
+      while (true) {
+        const { data, error } = await Auth.sb
+          .from(tabela)
+          .select('*')
+          .order('created_at', { ascending: false })
+          .range(inicio, inicio + TAMANHO_BLOCO - 1);
+
+        if (error) throw error;
+
+        resultado = resultado.concat(data);
+
+        if (data.length < TAMANHO_BLOCO) break;
+        inicio += TAMANHO_BLOCO;
+      }
+
+      return resultado;
+    }
+
+    // ------------------------------------------------------------
+    // Agrupamentos para a aba Portfólio
+    // ------------------------------------------------------------
+
+    function agruparVideos(eventos) {
+      const mapa = new Map();
+      eventos
+        .filter((e) => e.event_type === 'video_view' && e.event_name)
+        .forEach((e) => {
+          const id = e.event_name;
+          if (!mapa.has(id)) {
+            mapa.set(id, { contagem: 0, titulo: e.metadata?.title || id });
+          }
+          mapa.get(id).contagem++;
+        });
+
+      return Array.from(mapa.entries())
+        .map(([id, info]) => ({ id, ...info }))
+        .sort((a, b) => b.contagem - a.contagem);
+    }
+
+    function agruparBotoes(eventos) {
+      const mapa = new Map();
+      eventos
+        .filter((e) => e.event_type === 'button_click' && e.event_name)
+        .forEach((e) => {
+          mapa.set(e.event_name, (mapa.get(e.event_name) || 0) + 1);
+        });
+
+      return Array.from(mapa.entries())
+        .map(([nome, contagem]) => ({ nome, contagem }))
+        .sort((a, b) => b.contagem - a.contagem);
+    }
+
+    function agruparContato(eventos) {
+      const mapa = new Map();
+      eventos
+        .filter((e) => e.event_type === 'button_click' && e.event_name?.startsWith('contact_'))
+        .forEach((e) => {
+          mapa.set(e.event_name, (mapa.get(e.event_name) || 0) + 1);
+        });
+
+      return Array.from(mapa.entries())
+        .map(([nome, contagem]) => ({ nome, contagem }))
+        .sort((a, b) => b.contagem - a.contagem);
+    }
+
+    // ------------------------------------------------------------
+    // Renderização: aba Menu Principal
+    // ------------------------------------------------------------
+
+    function renderMenuPrincipal(eventosFiltrados, leadsFiltrados) {
+      const visitas = eventosFiltrados.filter((e) => e.event_type === 'page_view');
+      const visitantesUnicos = new Set(visitas.map((e) => e.session_id)).size;
+      const cliques = eventosFiltrados.filter((e) => e.event_type === 'button_click');
+      const videos = eventosFiltrados.filter((e) => e.event_type === 'video_view');
+      const contato = cliques.filter((e) => e.event_name?.startsWith('contact_'));
+
+      definirTexto('numVisitas', formatarNumero(visitas.length));
+      definirTexto('numVisitantes', formatarNumero(visitantesUnicos));
+      definirTexto('numCliques', formatarNumero(cliques.length));
+      definirTexto('numVideos', formatarNumero(videos.length));
+      definirTexto('numMensagens', formatarNumero(leadsFiltrados.length));
+      definirTexto('numContato', formatarNumero(contato.length));
+
+      renderGraficoVisitas();
+    }
+
+    // Gráfico dos últimos 14 dias — janela fixa, independente do filtro de período
+    function renderGraficoVisitas() {
+      const container = document.getElementById('graficoVisitas');
+      const dias = [];
+      const hoje = new Date();
+
+      for (let i = 13; i >= 0; i--) {
+        const data = new Date(hoje);
+        data.setDate(data.getDate() - i);
+        dias.push(data);
+      }
+
+      const contagens = dias.map((data) => {
+        const chave = data.toISOString().slice(0, 10);
+        const contagem = cacheEventos.filter(
+          (e) => e.event_type === 'page_view' && e.created_at.slice(0, 10) === chave
+        ).length;
+        return { data, contagem };
+      });
+
+      const maxContagem = Math.max(...contagens.map((c) => c.contagem), 1);
+
+      if (cacheEventos.length === 0) {
+        container.innerHTML = '<p class="texto-vazio">Nenhuma visita registrada ainda.</p>';
+        return;
+      }
+
+      container.innerHTML = contagens
+        .map(({ data, contagem }) => {
+          const altura = Math.round((contagem / maxContagem) * 100);
+          const dataFormatada = data.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+          const rotuloVisitas = contagem === 1 ? 'visita' : 'visitas';
+          return `
+            <div class="barra-coluna">
+              <div class="barra-dia" style="height:${altura}%" data-tooltip="${dataFormatada}: ${contagem} ${rotuloVisitas}"></div>
+              <div class="barra-label">${dataFormatada}</div>
+            </div>
+          `;
+        })
+        .join('');
+    }
+
+    // ------------------------------------------------------------
+    // Renderização: aba Portfólio
+    // ------------------------------------------------------------
+
+    function renderPortfolio(eventosFiltrados, leadsFiltrados) {
+      renderVideos(agruparVideos(eventosFiltrados));
+      renderBotoes(agruparBotoes(eventosFiltrados));
+      renderContato(agruparContato(eventosFiltrados));
+      renderMensagens(leadsFiltrados);
+    }
+
+    function renderVideos(videos) {
+      const container = document.getElementById('listaVideos');
+
+      if (videos.length === 0) {
+        container.innerHTML = '<p class="texto-vazio">Nenhum vídeo visualizado ainda.</p>';
+        return;
+      }
+
+      const maxContagem = videos[0].contagem;
+
+      container.innerHTML = videos
+        .map(({ id, titulo, contagem }) => {
+          const largura = Math.round((contagem / maxContagem) * 100);
+          const link = `https://www.youtube.com/watch?v=${encodeURIComponent(id)}`;
+          const thumb = `https://i.ytimg.com/vi/${encodeURIComponent(id)}/mqdefault.jpg`;
+          return `
+            <div class="item-video">
+              <a href="${link}" target="_blank" rel="noopener">
+                <img src="${thumb}" alt="Miniatura do vídeo" loading="lazy">
+              </a>
+              <div class="item-video-info">
+                <a class="item-video-titulo" href="${link}" target="_blank" rel="noopener">${escaparHtml(titulo)}</a>
+                <div class="item-barra-fundo">
+                  <div class="item-barra-preenchimento" style="width:${largura}%"></div>
+                </div>
+                <span class="item-barra-contagem">${formatarNumero(contagem)} visualizaç${contagem === 1 ? 'ão' : 'ões'}</span>
+              </div>
+            </div>
+          `;
+        })
+        .join('');
+    }
+
+    function renderBotoes(botoes) {
+      const container = document.getElementById('listaBotoes');
+
+      if (botoes.length === 0) {
+        container.innerHTML = '<p class="texto-vazio">Nenhum clique registrado ainda.</p>';
+        return;
+      }
+
+      const maxContagem = botoes[0].contagem;
+
+      container.innerHTML = botoes
+        .map(({ nome, contagem }) => {
+          const largura = Math.round((contagem / maxContagem) * 100);
+          return `
+            <div class="item-botao">
+              <div class="item-botao-cabecalho">
+                <span class="item-botao-nome">${escaparHtml(formatarNomeLegivel(nome))}</span>
+                <span class="item-botao-valor">${formatarNumero(contagem)}</span>
+              </div>
+              <div class="item-barra-fundo">
+                <div class="item-barra-preenchimento" style="width:${largura}%"></div>
+              </div>
+            </div>
+          `;
+        })
+        .join('');
+    }
+
+    function renderContato(canais) {
+      const container = document.getElementById('listaContato');
+
+      if (canais.length === 0) {
+        container.innerHTML = '<p class="texto-vazio">Nenhum clique para contato ainda.</p>';
+        return;
+      }
+
+      container.innerHTML = `
+        <div class="lista-contato">
+          ${canais
+            .map(
+              ({ nome, contagem }) => `
+                <div class="item-contato">
+                  <span class="item-contato-nome">${escaparHtml(formatarNomeLegivel(nome.replace(/^contact_/, '')))}</span>
+                  <span class="item-contato-valor">${formatarNumero(contagem)}</span>
+                </div>
+              `
+            )
+            .join('')}
+        </div>
+      `;
+    }
+
+    function renderMensagens(leads) {
+      const container = document.getElementById('listaMensagens');
+
+      if (leads.length === 0) {
+        container.innerHTML = '<p class="texto-vazio">Nenhuma mensagem por enquanto.</p>';
+        return;
+      }
+
+      const ordenados = [...leads].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+      container.innerHTML = ordenados
+        .map((lead, indice) => {
+          const telefoneDigitos = lead.phone ? somenteDigitos(lead.phone) : '';
+          const origemLegivel = lead.source === 'popup' ? 'Popup' : 'Contato';
+
+          return `
+            <div class="cartao-mensagem">
+              <button class="mensagem-cabecalho" data-toggle="${indice}" aria-expanded="false">
+                <span class="selo selo-${lead.source === 'popup' ? 'popup' : 'contact'}">${origemLegivel}</span>
+                <span class="mensagem-nome">${escaparHtml(lead.name || 'Sem nome')}</span>
+                <span class="mensagem-data">${formatarData(lead.created_at)}</span>
+                <svg class="icone-expandir" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </button>
+              <div class="mensagem-detalhe oculto" id="detalheMensagem${indice}">
+                <p><strong>E-mail:</strong> ${escaparHtml(lead.email || 'não informado')}</p>
+                ${lead.phone ? `<p><strong>Telefone:</strong> ${escaparHtml(lead.phone)}</p>` : ''}
+                ${lead.brand ? `<p><strong>Marca:</strong> ${escaparHtml(lead.brand)}</p>` : ''}
+                ${lead.budget ? `<p><strong>Orçamento:</strong> ${escaparHtml(lead.budget)}</p>` : ''}
+                ${lead.message ? `<p><strong>Mensagem:</strong> ${escaparHtml(lead.message)}</p>` : ''}
+                <div class="mensagem-acoes">
+                  ${lead.email ? `<a class="botao botao-secundario" href="mailto:${encodeURIComponent(lead.email)}">Responder por e-mail</a>` : ''}
+                  ${telefoneDigitos ? `<a class="botao botao-primario" href="https://wa.me/${telefoneDigitos}" target="_blank" rel="noopener">WhatsApp</a>` : ''}
+                </div>
+              </div>
+            </div>
+          `;
+        })
+        .join('');
+
+      // Liga o clique de expandir/colapsar em cada cartão
+      container.querySelectorAll('[data-toggle]').forEach((botao) => {
+        botao.addEventListener('click', () => {
+          const indice = botao.getAttribute('data-toggle');
+          const detalhe = document.getElementById('detalheMensagem' + indice);
+          const aberto = !detalhe.classList.contains('oculto');
+          detalhe.classList.toggle('oculto');
+          botao.setAttribute('aria-expanded', String(!aberto));
+        });
+      });
+    }
+
+    // ------------------------------------------------------------
+    // Refiltra e redesenha as duas abas (sem buscar de novo no banco)
+    // ------------------------------------------------------------
+    function atualizarTudo(periodo) {
+      const eventosFiltrados = cacheEventos.filter((e) => dentroDoPeriodo(e.created_at, periodo));
+      const leadsFiltrados = cacheLeads.filter((l) => dentroDoPeriodo(l.created_at, periodo));
+      renderMenuPrincipal(eventosFiltrados, leadsFiltrados);
+      renderPortfolio(eventosFiltrados, leadsFiltrados);
+    }
+
+    // ------------------------------------------------------------
+    // Interação: filtro de período
+    // ------------------------------------------------------------
+    document.querySelectorAll('.filtro-btn').forEach((botao) => {
+      botao.addEventListener('click', () => {
+        document.querySelectorAll('.filtro-btn').forEach((b) => b.classList.remove('ativo'));
+        botao.classList.add('ativo');
+        periodoAtual = botao.dataset.periodo;
+        atualizarTudo(periodoAtual);
+      });
+    });
+
+    // ------------------------------------------------------------
+    // Interação: troca de abas
+    // ------------------------------------------------------------
+    const nomesAba = {
+      'menu-principal': 'Menu Principal',
+      portfolio: 'Portfólio',
+    };
+
+    document.querySelectorAll('.nav-item').forEach((item) => {
+      item.addEventListener('click', () => {
+        document.querySelectorAll('.nav-item').forEach((i) => i.classList.remove('ativo'));
+        item.classList.add('ativo');
+
+        document.querySelectorAll('.painel-tab').forEach((painel) => painel.classList.add('oculto'));
+        const aba = item.dataset.tab;
+        const idPainel = aba === 'menu-principal' ? 'painelMenuPrincipal' : 'painelPortfolio';
+        document.getElementById(idPainel).classList.remove('oculto');
+        document.getElementById('tituloPagina').textContent = nomesAba[aba];
+
+        fecharSidebarMobile();
+      });
+    });
+
+    // ------------------------------------------------------------
+    // Interação: gaveta do menu no celular
+    // ------------------------------------------------------------
+    const sidebar = document.getElementById('sidebar');
+    const overlayMobile = document.getElementById('overlayMobile');
+
+    function abrirSidebarMobile() {
+      sidebar.classList.add('aberta');
+      overlayMobile.classList.add('visivel');
+    }
+
+    function fecharSidebarMobile() {
+      sidebar.classList.remove('aberta');
+      overlayMobile.classList.remove('visivel');
+    }
+
+    document.getElementById('botaoMenuMobile').addEventListener('click', abrirSidebarMobile);
+    overlayMobile.addEventListener('click', fecharSidebarMobile);
+
+    // ------------------------------------------------------------
+    // Início: guarda de autenticação + carregamento dos dados
+    // ------------------------------------------------------------
+    (async function iniciar() {
+      const usuario = await Auth.checkAuth();
+      if (!usuario) return; // checkAuth já redirecionou para login.html
+
+      definirTexto('usuarioEmail', usuario.email);
+      document.getElementById('botaoSair').addEventListener('click', () => Auth.logout());
+
+      // Só revela a tela depois que a sessão foi confirmada
+      document.body.style.visibility = 'visible';
+
+      mostrarMensagemArea('Carregando seus dados...', 'info');
+
+      try {
+        [cacheEventos, cacheLeads] = await Promise.all([
+          buscarTudo('portfolio_events'),
+          buscarTudo('portfolio_leads'),
+        ]);
+        mostrarMensagemArea('', '');
+        atualizarTudo(periodoAtual);
+      } catch (erro) {
+        console.error(erro);
+        mostrarMensagemArea('Não foi possível carregar os dados agora. Tente novamente em instantes.', 'erro');
+        // Mesmo com erro, renderiza os blocos vazios para não deixar a tela quebrada
+        atualizarTudo(periodoAtual);
+      }
+    })();
+  </script>
+</body>
+</html>
