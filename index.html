@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Erika Barreiros | Criadora de Conteúdo UGC</title>
+<meta name="description" content="Erika Barreiros, criadora de conteúdo UGC. Vídeos, fotos e resenhas autênticas para marcas que querem conquistar a confiança do público consumidor.">
+
+<!-- Fontes do Google Fonts: Italiana (assinatura/nome), Noto Serif Display (títulos editoriais, Regular + Italic)
+     e Montserrat (corpo, botões, categorias). "The Seasons" do guia de marca é uma fonte paga e não está
+     disponível no Google Fonts, então usei a Italiana como substituta gratuita com o mesmo espírito elegante
+     e editorial em caixa-alta. A Noto Serif Display aqui só existe no corte normal (o Google Fonts não
+     distribui a variação "ExtraCondensed"), por isso o efeito condensado do guia foi aproximado com
+     espaçamento entre letras mais fechado. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Italiana&family=Noto+Serif+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  /* ===================== RESET E BASE ===================== */
+  :root{
+    --creme: #f3eee9;
+    --creme-escuro: #e7ddd2;
+    --tinta: #14110d;
+    --tinta-suave: #4a463f;
+    /* Tons neutros da identidade: substituem o azul e o laranja vibrantes por
+       um grafite quase preto (uso equivalente ao azul, em botões e destaques)
+       e um bronze acinzentado (uso equivalente ao laranja, em detalhes e selos) */
+    --neutro-escuro: #2a2722;
+    --neutro-escuro2: #171512;
+    --acento: #9c8365;
+    --acento-escuro: #7a6248;
+    --branco: #ffffff;
+    --raio: 20px;
+    --raio-peq: 12px;
+    --sombra: 0 20px 45px -25px rgba(20,17,13,0.35);
+    --sombra-suave: 0 10px 30px -18px rgba(20,17,13,0.25);
+  }
+
+  *, *::before, *::after{ box-sizing: border-box; }
+
+  html{
+    scroll-behavior: smooth;
+  }
+
+  body{
+    margin: 0;
+    background: var(--creme);
+    color: var(--tinta);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  img{ max-width: 100%; display: block; }
+
+  h1, h2, h3, h4{
+    font-family: 'Noto Serif Display', serif;
+    color: var(--tinta);
+    margin: 0 0 .5em;
+    line-height: 1.15;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  /* Guia tipográfico: o itálico é usado só como destaque dentro do título,
+     mantendo o mesmo tamanho e a mesma cor do restante da frase */
+  h1 em, h2 em, h3 em{
+    font-style: italic;
+    font-weight: 400;
+  }
+
+  p{ margin: 0 0 1em; color: var(--tinta-suave); }
+
+  a{ color: inherit; text-decoration: none; }
+
+  ul{ list-style: none; margin: 0; padding: 0; }
+
+  button, input, textarea{ font-family: inherit; }
+
+  .container{
+    width: 100%;
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  section{ padding: 96px 0; }
+
+  .rotulo{
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--acento-escuro);
+    background: rgba(156,131,101,0.16);
+    padding: 6px 14px;
+    border-radius: 999px;
+    margin-bottom: 18px;
+  }
+
+  .titulo-secao{
+    font-size: clamp(28px, 4.2vw, 44px);
+    max-width: 640px;
+  }
+
+  .descricao-secao{
+    max-width: 560px;
+    font-size: 17px;
+  }
+
+  /* Foco visível para navegação por teclado */
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible{
+    outline: 3px solid var(--tinta);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  .skip-link{
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    background: var(--neutro-escuro);
+    color: var(--branco);
+    padding: 12px 20px;
+    z-index: 999;
+    border-radius: 0 0 10px 0;
+  }
+  .skip-link:focus{ left: 0; }
+
+  /* Blocos de gradiente que simulam fotos/vídeos.
+     EDITE AQUI: quando tiver fotos e vídeos reais, troque cada <div class="midia-gradiente">
+     por uma tag <img src="sua-foto.jpg" alt="descrição da foto"> ou <video>, mantendo a mesma
+     classe de tamanho (ex: midia-sobre, midia-portfolio) para preservar o layout. A capa (hero)
+     usa a classe separada "hero-fundo", que já ocupa toda a tela: para trocar por uma foto real,
+     troque a <div id="hero-fundo"> por uma tag <img> posicionada com "position:absolute; inset:0;
+     object-fit:cover;" no lugar do background em gradiente. */
+  .midia-gradiente{
+    border-radius: var(--raio);
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--sombra-suave);
+  }
+  .midia-gradiente::after{
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.18), transparent 55%);
+  }
+
+  /* ===================== CABEÇALHO ===================== */
+  .cabecalho{
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 200;
+    background: rgba(243,238,233,0.88);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(20,17,13,0.08);
+  }
+
+  .cabecalho-interno{
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 78px;
+  }
+
+  .nav-desktop{ display: flex; align-items: center; gap: 34px; }
+  .nav-desktop a{
+    font-size: 13.5px;
+    font-weight: 500;
+    letter-spacing: .2px;
+    position: relative;
+    padding: 4px 0;
+  }
+  .nav-desktop a::after{
+    content: '';
+    position: absolute;
+    left: 0; bottom: -2px;
+    width: 0; height: 2px;
+    background: var(--acento);
+    transition: width .25s ease;
+  }
+  .nav-desktop a:hover::after,
+  .nav-desktop a:focus-visible::after{ width: 100%; }
+
+  .botao{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--neutro-escuro);
+    color: var(--branco);
+    font-weight: 600;
+    font-size: 14px;
+    padding: 13px 26px;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
+    box-shadow: var(--sombra-suave);
+  }
+  .botao:hover{ background: var(--neutro-escuro2); transform: translateY(-2px); }
+
+  .botao.botao-acento{ background: var(--acento); }
+  .botao.botao-acento:hover{ background: var(--acento-escuro); }
+
+  /* Botões usados sobre a foto de capa (fundo escuro), com mais contraste */
+  .botao.botao-capa-principal{ background: var(--creme); color: var(--tinta); }
+  .botao.botao-capa-principal:hover{ background: var(--branco); }
+  .botao.botao-capa-secundario{
+    background: transparent;
+    color: var(--branco);
+    border: 1.5px solid rgba(255,255,255,0.7);
+    box-shadow: none;
+  }
+  .botao.botao-capa-secundario:hover{ background: rgba(255,255,255,0.12); }
+
+  .botao.botao-contorno{
+    background: transparent;
+    color: var(--tinta);
+    border: 1.5px solid var(--tinta);
+    box-shadow: none;
+  }
+  .botao.botao-contorno:hover{ background: var(--tinta); color: var(--branco); }
+
+  /* Botão hambúrguer (só aparece no celular) */
+  .hamburguer{
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 42px; height: 42px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+  }
+  .hamburguer span{
+    display: block;
+    width: 24px; height: 2.5px;
+    background: var(--tinta);
+    border-radius: 2px;
+    transition: transform .3s ease, opacity .3s ease;
+  }
+  .hamburguer[aria-expanded="true"] span:nth-child(1){ transform: translateY(7.5px) rotate(45deg); }
+  .hamburguer[aria-expanded="true"] span:nth-child(2){ opacity: 0; }
+  .hamburguer[aria-expanded="true"] span:nth-child(3){ transform: translateY(-7.5px) rotate(-45deg); }
+
+  .nav-mobile{
+    display: none;
+    flex-direction: column;
+    background: var(--creme);
+    border-top: 1px solid rgba(20,17,13,0.08);
+    padding: 12px 24px 28px;
+  }
+  .nav-mobile.aberto{ display: flex; }
+  .nav-mobile a{
+    padding: 14px 4px;
+    font-size: 17px;
+    font-weight: 600;
+    border-bottom: 1px solid rgba(20,17,13,0.08);
+  }
+  .nav-mobile .botao{ margin-top: 16px; width: 100%; }
+
+  /* ===================== HERO / CAPA =====================
+     Layout inspirado em capa editorial: bloco de fundo em tela cheia (simulando
+     foto), com o nome em destaque no centro, cargo logo abaixo, botões de ação
+     e uma barra inferior com redes sociais e localização, como em uma capa de
+     portfólio de moda. */
+  .hero{
+    position: relative;
+    display: flex;
+    min-height: 100vh;
+    overflow: hidden;
+    color: var(--branco);
+  }
+  .hero-fundo{
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+  }
+  .hero-fundo::after{
+    content: '';
+    position: absolute;
+    inset: 0;
+    /* Camada escura sobre o gradiente, simulando o tratamento de foto do modelo de referência */
+    background: linear-gradient(180deg, rgba(20,17,13,0.35) 0%, rgba(20,17,13,0.55) 55%, rgba(20,17,13,0.8) 100%);
+  }
+  .hero-conteudo{
+    width: 100%;
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 148px 24px 40px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .hero-meio{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Centraliza o bloco (nome, cargo, botões) no espaço acima da barra inferior */
+    margin: auto 0;
+  }
+  /* Nome da capa: agora é a imagem exportada do Canva (fonte The Seasons),
+     então este wrapper só cuida do espaçamento, não mais de fonte/cor. */
+  .hero-nome{
+    margin: 0 0 18px;
+  }
+  .hero-nome-img{
+    width: clamp(260px, 46vw, 760px);
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 4px 26px rgba(0,0,0,0.4));
+  }
+  .hero-cargo{
+    font-family: 'Noto Serif Display', serif;
+    font-style: italic;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    font-size: clamp(14px, 1.8vw, 19px);
+    color: rgba(255,255,255,0.9);
+    margin: 0 0 36px;
+  }
+  .hero-acoes{ display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; }
+  .hero-rodape-mini{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-top: 32px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .hero-redes{ display: flex; align-items: center; gap: 14px; }
+  .hero-social, .hero-local{
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--branco);
+  }
+  .hero-social svg{ width: 21px; height: 21px; flex-shrink: 0; }
+  .hero-local svg{ width: 18px; height: 18px; flex-shrink: 0; }
+  .hero-social{
+    padding: 8px;
+    margin: -8px;
+    border-radius: 50%;
+    transition: opacity .2s ease;
+  }
+  .hero-social:hover, .hero-social:focus-visible{ opacity: .7; }
+
+  /* ===================== FAIXA DE MARCAS ===================== */
+  .marcas{
+    padding: 44px 0;
+    background: var(--tinta);
+  }
+  .marcas-titulo{
+    text-align: center;
+    color: rgba(243,238,233,0.6);
+    font-size: 12px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 26px;
+  }
+  .marcas-lista{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 20px 48px;
+  }
+  .marcas-lista li{
+    font-family: 'Noto Serif Display', serif;
+    font-size: 21px;
+    font-weight: 500;
+    color: var(--creme);
+    opacity: .82;
+  }
+
+  /* ===================== SOBRE ===================== */
+  .sobre-grid{
+    display: grid;
+    grid-template-columns: .85fr 1.15fr;
+    gap: 64px;
+    align-items: center;
+  }
+  .midia-sobre{ aspect-ratio: 1 / 1; width: 100%; }
+  .sobre-texto p{ font-size: 16.5px; }
+  .sobre-lista{ margin-top: 24px; display: grid; gap: 12px; }
+  .sobre-lista li{
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 15px;
+    color: var(--tinta-suave);
+    font-weight: 500;
+  }
+  .sobre-lista li::before{
+    content: '✓';
+    color: var(--branco);
+    background: var(--neutro-escuro);
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* ===================== PORTFÓLIO ===================== */
+  .portfolio{ background: var(--creme-escuro); }
+  .portfolio-cabecalho{ margin-bottom: 40px; }
+  .filtros{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 40px;
+  }
+  .filtro-botao{
+    background: var(--branco);
+    border: 1.5px solid transparent;
+    color: var(--tinta);
+    font-weight: 600;
+    font-size: 14px;
+    padding: 10px 20px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all .2s ease;
+  }
+  .filtro-botao:hover{ border-color: var(--acento); }
+  .filtro-botao[aria-pressed="true"]{
+    background: var(--tinta);
+    color: var(--branco);
+  }
+
+  .portfolio-grid{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .portfolio-item{
+    border-radius: var(--raio);
+    overflow: hidden;
+    box-shadow: var(--sombra-suave);
+    transition: opacity .35s ease, transform .35s ease;
+  }
+  .portfolio-item.escondido{
+    display: none;
+  }
+  .midia-portfolio{
+    aspect-ratio: 4 / 5;
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    padding: 20px;
+  }
+  .portfolio-item-tag{
+    position: relative; /* garante que fique acima da miniatura do vídeo */
+    background: rgba(20,17,13,0.55);
+    color: var(--branco);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    backdrop-filter: blur(4px);
+  }
+  .midia-video{
+    display: flex;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .midia-video img{
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .midia-video-play{
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: rgba(20,17,13,0.55);
+    color: var(--branco);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    backdrop-filter: blur(4px);
+    transition: transform .2s ease, background .2s ease;
+  }
+  .midia-video:hover .midia-video-play{
+    transform: translate(-50%, -50%) scale(1.08);
+    background: var(--acento-escuro);
+  }
+  .portfolio-item-titulo{
+    margin-top: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--tinta);
+  }
+
+  /* ===================== SERVIÇOS ===================== */
+  .servicos-grid{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 44px;
+  }
+  .servico-card{
+    background: var(--branco);
+    border-radius: var(--raio);
+    padding: 32px 28px;
+    box-shadow: var(--sombra-suave);
+    border-top: 3px solid var(--neutro-escuro);
+    transition: transform .25s ease, box-shadow .25s ease;
+  }
+  .servico-card:nth-child(3n+2){ border-top-color: var(--acento); }
+  .servico-card:nth-child(3n){ border-top-color: var(--tinta-suave); }
+  .servico-card:hover{ transform: translateY(-6px); box-shadow: var(--sombra); }
+  .servico-icone{
+    width: 48px; height: 48px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--neutro-escuro), var(--acento));
+    margin-bottom: 20px;
+  }
+  .servico-card h3{ font-size: 19px; margin-bottom: 10px; }
+  .servico-card p{ font-size: 14.5px; margin: 0; }
+
+  /* ===================== NÚMEROS ===================== */
+  .numeros{ background: var(--tinta); color: var(--creme); }
+  .numeros .titulo-secao, .numeros .descricao-secao{ color: var(--creme); }
+  .numeros .rotulo{ background: rgba(156,131,101,0.24); color: var(--acento); }
+  .numeros-grid{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    margin-top: 48px;
+  }
+  .numero-card{ text-align: center; padding: 12px; }
+  .numero-valor{
+    font-family: 'Noto Serif Display', serif;
+    font-size: clamp(34px, 5vw, 50px);
+    font-weight: 600;
+    color: var(--branco);
+  }
+  .numero-valor span{ color: var(--acento); }
+  .numero-rotulo{
+    margin-top: 8px;
+    font-size: 14px;
+    color: rgba(243,238,233,0.68);
+    font-weight: 500;
+  }
+
+  /* ===================== DEPOIMENTOS ===================== */
+  .depoimentos-grid{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 44px;
+  }
+  .depoimento-card{
+    background: var(--branco);
+    border-radius: var(--raio);
+    padding: 30px 26px;
+    box-shadow: var(--sombra-suave);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .depoimento-aspas{
+    font-family: 'Noto Serif Display', serif;
+    font-size: 40px;
+    color: var(--acento);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .depoimento-texto{
+    font-style: italic;
+    color: var(--tinta);
+    font-size: 15.5px;
+    flex-grow: 1;
+  }
+  .depoimento-autor{
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(20,17,13,0.1);
+  }
+  .depoimento-nome{ font-weight: 700; font-size: 14.5px; }
+  .depoimento-empresa{ font-size: 13px; color: var(--tinta-suave); }
+
+  /* ===================== CONTATO ===================== */
+  .contato{ background: var(--creme-escuro); }
+  .contato-grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+    align-items: start;
+  }
+  .formulario{
+    background: var(--branco);
+    padding: 36px;
+    border-radius: var(--raio);
+    box-shadow: var(--sombra-suave);
+  }
+  .campo{ margin-bottom: 20px; }
+  .campo label{
+    display: block;
+    font-size: 13.5px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .campo input, .campo textarea{
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: var(--raio-peq);
+    border: 1.5px solid rgba(20,17,13,0.15);
+    background: var(--creme);
+    color: var(--tinta);
+    font-size: 15px;
+    resize: vertical;
+  }
+  .campo input:focus, .campo textarea:focus{
+    border-color: var(--tinta);
+    outline: none;
+  }
+  .mensagem-confirmacao{
+    display: none;
+    background: rgba(20,17,13,0.06);
+    border: 1.5px solid var(--tinta);
+    color: var(--tinta);
+    padding: 14px 18px;
+    border-radius: var(--raio-peq);
+    font-weight: 600;
+    font-size: 14.5px;
+    margin-bottom: 18px;
+  }
+  .mensagem-confirmacao.visivel{ display: block; }
+
+  .contato-direto h3{ font-size: 20px; margin-bottom: 18px; }
+  .contato-canais{ display: grid; gap: 14px; }
+  .contato-canal{
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--branco);
+    padding: 18px 20px;
+    border-radius: var(--raio-peq);
+    box-shadow: var(--sombra-suave);
+    font-weight: 600;
+    font-size: 15px;
+    transition: transform .2s ease;
+  }
+  .contato-canal:hover{ transform: translateX(4px); }
+  .contato-canal-icone{
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: var(--neutro-escuro);
+    color: var(--branco);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px;
+    flex-shrink: 0;
+  }
+  .contato-canal:nth-child(2) .contato-canal-icone{ background: var(--acento); }
+  .contato-canal:nth-child(3) .contato-canal-icone{ background: var(--tinta-suave); }
+
+  /* ===================== RODAPÉ ===================== */
+  .rodape{
+    background: var(--tinta);
+    color: rgba(243,238,233,0.7);
+    padding: 56px 0 28px;
+  }
+  .rodape-topo{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 24px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid rgba(243,238,233,0.14);
+  }
+  .rodape-logo{
+    font-family: 'Italiana', serif;
+    font-size: 20px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--creme);
+  }
+  .rodape-redes{ display: flex; gap: 14px; }
+  .rodape-redes a{
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(243,238,233,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    color: var(--creme);
+    transition: background .2s ease, border-color .2s ease;
+  }
+  .rodape-redes a:hover{ background: var(--neutro-escuro); border-color: var(--neutro-escuro); }
+  .rodape-baixo{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding-top: 24px;
+    font-size: 13px;
+  }
+  .rodape-baixo a{ text-decoration: underline; }
+
+  /* ===================== ANIMAÇÃO DE ENTRADA ===================== */
+  .reveal{
+    opacity: 0;
+    transform: translateY(26px);
+    transition: opacity .8s ease, transform .8s ease;
+  }
+  .reveal.visivel{ opacity: 1; transform: translateY(0); }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
+    .reveal{ transition: none; opacity: 1; transform: none; }
+  }
+
+  /* ===================== RESPONSIVIDADE ===================== */
+  @media (max-width: 1000px){
+    .sobre-grid{ grid-template-columns: 1fr; }
+    .midia-sobre{ aspect-ratio: 16/9; }
+    .portfolio-grid{ grid-template-columns: repeat(2, 1fr); }
+    .servicos-grid{ grid-template-columns: repeat(2, 1fr); }
+    .numeros-grid{ grid-template-columns: repeat(2, 1fr); }
+    .depoimentos-grid{ grid-template-columns: 1fr 1fr; }
+    .contato-grid{ grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 760px){
+    section{ padding: 68px 0; }
+    .nav-desktop{ display: none; }
+    .hamburguer{ display: flex; position: absolute; right: 24px; top: 50%; transform: translateY(-50%); }
+    .hero-conteudo{ padding-top: 118px; }
+    .hero-acoes{ flex-direction: column; width: 100%; }
+    .hero-acoes .botao{ width: 100%; }
+    .hero-rodape-mini{ flex-direction: column; align-items: flex-start; gap: 14px; }
+    .portfolio-grid{ grid-template-columns: 1fr; }
+    .servicos-grid{ grid-template-columns: 1fr; }
+    .numeros-grid{ grid-template-columns: repeat(2, 1fr); }
+    .depoimentos-grid{ grid-template-columns: 1fr; }
+    .rodape-topo{ flex-direction: column; align-items: flex-start; }
+    .rodape-baixo{ flex-direction: column; }
+  }
+
+  @media (max-width: 420px){
+    .container{ padding: 0 18px; }
+    .numeros-grid{ grid-template-columns: 1fr 1fr; gap: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#conteudo-principal">Pular para o conteúdo principal</a>
+
+<!-- ===================== CABEÇALHO / MENU ===================== -->
+<header class="cabecalho" id="topo">
+  <div class="container cabecalho-interno">
+    <nav class="nav-desktop" aria-label="Navegação principal" id="nav-desktop"></nav>
+
+    <button class="hamburguer" id="botao-hamburguer" aria-label="Abrir menu de navegação" aria-expanded="false" aria-controls="menu-mobile">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <nav class="nav-mobile" id="menu-mobile" aria-label="Navegação móvel"></nav>
+</header>
+
+<main id="conteudo-principal">
+
+  <!-- ===================== HERO / CAPA ===================== -->
+  <section class="hero" id="hero" aria-labelledby="hero-titulo">
+    <div class="hero-fundo" id="hero-fundo"></div>
+    <div class="hero-conteudo" id="hero-conteudo"></div>
+  </section>
+
+  <!-- ===================== FAIXA DE MARCAS ===================== -->
+  <section class="marcas" id="marcas" aria-label="Marcas que já confiaram no trabalho">
+    <div class="container">
+      <p class="marcas-titulo">Marcas que já confiaram no meu conteúdo</p>
+      <ul class="marcas-lista" id="marcas-lista"></ul>
+    </div>
+  </section>
+
+  <!-- ===================== SOBRE ===================== -->
+  <section class="sobre" id="sobre" aria-labelledby="sobre-titulo">
+    <div class="container sobre-grid" id="sobre-conteudo"></div>
+  </section>
+
+  <!-- ===================== PORTFÓLIO ===================== -->
+  <section class="portfolio" id="portfolio" aria-labelledby="portfolio-titulo">
+    <div class="container">
+      <div class="portfolio-cabecalho reveal">
+        <p class="rotulo">Portfólio</p>
+        <h2 class="titulo-secao" id="portfolio-titulo">Trabalhos em <em>diferentes</em> nichos</h2>
+        <p class="descricao-secao">Alguns exemplos de conteúdo criado para marcas parceiras. Use os filtros para ver por nicho de atuação.</p>
+      </div>
+      <div class="filtros" id="portfolio-filtros" role="group" aria-label="Filtrar portfólio por nicho"></div>
+      <div class="portfolio-grid" id="portfolio-grid"></div>
+    </div>
+  </section>
+
+  <!-- ===================== SERVIÇOS ===================== -->
+  <section class="servicos" id="servicos" aria-labelledby="servicos-titulo">
+    <div class="container">
+      <div class="reveal">
+        <p class="rotulo">Serviços</p>
+        <h2 class="titulo-secao" id="servicos-titulo">O que eu entrego para a <em>sua</em> marca</h2>
+        <p class="descricao-secao">Conteúdo pensado para conectar, gerar confiança e converter, do jeito que o seu público realmente consome.</p>
+      </div>
+      <div class="servicos-grid" id="servicos-grid"></div>
+    </div>
+  </section>
+
+  <!-- ===================== NÚMEROS / RESULTADOS ===================== -->
+  <section class="numeros" id="numeros" aria-labelledby="numeros-titulo">
+    <div class="container">
+      <div class="reveal">
+        <p class="rotulo">Resultados</p>
+        <h2 class="titulo-secao" id="numeros-titulo">Números que mostram <em>impacto</em> real</h2>
+        <p class="descricao-secao">Estes são os indicadores que acompanho de perto para garantir que o conteúdo entrega resultado, não só estética.</p>
+      </div>
+      <div class="numeros-grid" id="numeros-grid"></div>
+    </div>
+  </section>
+
+  <!-- ===================== DEPOIMENTOS ===================== -->
+  <section class="depoimentos" id="depoimentos" aria-labelledby="depoimentos-titulo">
+    <div class="container">
+      <div class="reveal">
+        <p class="rotulo">Depoimentos</p>
+        <h2 class="titulo-secao" id="depoimentos-titulo">O que dizem as marcas <em>parceiras</em></h2>
+        <p class="descricao-secao">A confiança de quem já trabalhou comigo é o meu melhor cartão de visita.</p>
+      </div>
+      <div class="depoimentos-grid" id="depoimentos-grid"></div>
+    </div>
+  </section>
+
+  <!-- ===================== CONTATO ===================== -->
+  <section class="contato" id="contato" aria-labelledby="contato-titulo">
+    <div class="container">
+      <div class="reveal" style="margin-bottom: 44px;">
+        <p class="rotulo">Contato</p>
+        <h2 class="titulo-secao" id="contato-titulo">Vamos criar conteúdo <em>juntas</em>?</h2>
+        <p class="descricao-secao">Me conta um pouco sobre a sua marca e o que você precisa. Respondo rapidinho.</p>
+      </div>
+      <div class="contato-grid" id="contato-conteudo"></div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===================== RODAPÉ ===================== -->
+<footer class="rodape" id="rodape-final">
+  <div class="container">
+    <div class="rodape-topo">
+      <div class="rodape-logo" id="rodape-logo"></div>
+      <div class="rodape-redes" id="rodape-redes"></div>
+    </div>
+    <div class="rodape-baixo">
+      <span id="rodape-copyright"></span>
+      <a href="#topo">Voltar ao topo</a>
+    </div>
+  </div>
+</footer>
+
+<!-- Supabase (usado só para registrar visitas, cliques e mensagens no painel administrativo) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="js/auth.js"></script>
+
+<script>
+/* =====================================================================
+   CONFIGURAÇÃO DO SITE
+   Todo o conteúdo do site (textos, listas, contatos) está organizado
+   aqui embaixo. Para editar qualquer coisa no site, basta alterar os
+   valores deste objeto. Não é necessário mexer no HTML ou no CSS.
+===================================================================== */
+
+const CONFIG = {
+
+  // EDITE AQUI: dados principais de contato e identidade
+  perfil: {
+    nomeCompleto: "Erika Barreiros",
+    primeiroNome: "Erika",
+    profissao: "Criadora de Conteúdo UGC",
+    email: "erika333ugc@gmail.com",
+    telefoneExibicao: "(13) 99191-3671",
+    telefoneNumeros: "13991913671",
+    whatsappLink: "https://wa.me/5513991913671",
+    instagramHandle: "@TESTE",
+    instagramLink: "https://instagram.com/TESTE",
+    // EDITE AQUI: troque pelo seu usuário real do TikTok
+    tiktokHandle: "@TESTE",
+    tiktokLink: "https://tiktok.com/@TESTE",
+    localizacao: "Santos, Brasil"
+  },
+
+  // EDITE AQUI: links do menu (o "href" precisa apontar para o id de cada seção)
+  navegacao: [
+    { texto: "Sobre", href: "#sobre" },
+    { texto: "Portfólio", href: "#portfolio" },
+    { texto: "Serviços", href: "#servicos" },
+    { texto: "Resultados", href: "#numeros" },
+    { texto: "Depoimentos", href: "#depoimentos" },
+    { texto: "Contato", href: "#contato" }
+  ],
+
+  // EDITE AQUI: textos da capa (hero), no estilo de capa de portfólio editorial
+  hero: {
+    tituloParte1: "Erika",
+    tituloParte2: "Barreiros",
+    cargo: "Criadora de Conteúdo UGC",
+    // EDITE AQUI: nome exportado do Canva com a fonte The Seasons (PNG com fundo transparente).
+    // Para trocar por uma nova versão, exporte de novo no Canva com fundo transparente, recorte a
+    // margem em branco ao redor do texto (para não sobrar espaço vazio) e troque o nome do arquivo aqui.
+    imagemNome: "nome-erika-barreiros-recortado.png",
+    textoBotaoPrincipal: "Fale comigo",
+    textoBotaoSecundario: "Ver portfólio",
+    // Descrição usada no atributo aria-label do bloco de gradiente que simula a foto de capa
+    descricaoMidia: "Foto de capa de Erika Barreiros, criadora de conteúdo UGC"
+  },
+
+  // EDITE AQUI: marcas com quem já trabalhou (troque pelos nomes reais das suas parcerias)
+  marcas: [
+    "Bellaskin", "Nutrivida", "Tecnofácil", "Petlove+", "Casa Clara", "Vitaplena"
+  ],
+
+  // EDITE AQUI: texto da seção Sobre
+  sobre: {
+    titulo: "A pessoa por trás da <em>câmera</em>",
+    paragrafos: [
+      "Sou a Erika, e o meu jeito de criar conteúdo é simples: eu testo de verdade, entendo o produto e só então conto para o meu público por que ele faz sentido, ou não, na rotina de quem assiste.",
+      "Minha comunicação é próxima, calorosa e direta, sem tom de especialista distante. Isso cria uma conexão genuína com quem consome o conteúdo, e é exatamente essa confiança que se transforma em resultado para a marca parceira."
+    ],
+    lista: [
+      "Roteiro, captação e edição feitos com cuidado do início ao fim",
+      "Linguagem acolhedora, próxima e fácil de entender",
+      "Entrega dentro do prazo combinado, com organização e profissionalismo",
+      "Conteúdo pensado para performar em anúncios e também de forma orgânica"
+    ],
+    descricaoMidia: "Foto de Erika Barreiros sorrindo, transmitindo confiança e proximidade"
+  },
+
+  // EDITE AQUI: categorias de filtro do portfólio
+  portfolioCategorias: [
+    { chave: "todos", texto: "Todos" },
+    { chave: "skincare", texto: "Skincare & Beleza" },
+    { chave: "tecnologia", texto: "Tecnologia" },
+    { chave: "consumo", texto: "Consumo & Reviews" },
+    { chave: "pet", texto: "Pet" },
+    { chave: "bem-estar", texto: "Bem-Estar" },
+    { chave: "casa", texto: "Casa & Organização" }
+  ],
+
+  // EDITE AQUI: trabalhos do portfólio. "categoria" precisa bater com a "chave" definida acima.
+  // Itens com "videoId" mostram a miniatura real do vídeo no YouTube (clicável) em vez do
+  // bloco de gradiente, e cada clique é contado como "vídeo visto" no painel administrativo.
+  portfolioItens: [
+    { titulo: "Booster", categoria: "skincare", tag: "Vídeo UGC", videoId: "BlJFdNolLYs" },
+    { titulo: "Modelador de Cachos", categoria: "skincare", tag: "Vídeo UGC", videoId: "LDBl2BJ2zpM" },
+    { titulo: "Unboxing de dispositivo de beleza importado", categoria: "skincare", tag: "Unboxing" },
+    { titulo: "Primeiros passos com inteligência artificial no dia a dia", categoria: "tecnologia", tag: "Vídeo UGC" },
+    { titulo: "Aplicativo de organização financeira, vale a pena?", categoria: "tecnologia", tag: "Reels" },
+    { titulo: "Comparativo de compra: dois marketplaces, um produto", categoria: "consumo", tag: "Comparativo" },
+    { titulo: "Review completo após 30 dias de uso", categoria: "consumo", tag: "Resenha", videoId: "ibEEUU8oDDs" },
+    { titulo: "Cuidados diários com Bulldog Francês", categoria: "pet", tag: "Vídeo UGC" },
+    { titulo: "Banho a Seco", categoria: "pet", tag: "Vídeo UGC", videoId: "3Tg3g_0h7sM" },
+    { titulo: "Suplementação após os 50, o que mudou na minha rotina", categoria: "bem-estar", tag: "Vídeo UGC", videoId: "vBai7y2ph64" },
+    { titulo: "Organização de closet em cinco passos simples", categoria: "casa", tag: "Fotos de produto" },
+    { titulo: "Produtos organizadores que realmente funcionam", categoria: "casa", tag: "Reels" }
+  ],
+
+  // EDITE AQUI: serviços oferecidos
+  servicos: [
+    { titulo: "Vídeo UGC para Anúncios", descricao: "Vídeos autênticos, roteirizados para performar em campanhas de tráfego pago no Meta Ads e TikTok Ads." },
+    { titulo: "Reels para Redes Sociais", descricao: "Conteúdo dinâmico e nativo de plataforma, pensado para reter atenção e gerar engajamento orgânico." },
+    { titulo: "Fotos de Produto", descricao: "Imagens limpas e bem compostas, prontas para e-commerce, catálogo e redes sociais da marca." },
+    { titulo: "Unboxing e Primeira Impressão", descricao: "Experiência real de abrir e usar o produto pela primeira vez, gerando desejo e curiosidade genuína." },
+    { titulo: "Reviews e Comparativos", descricao: "Resenhas sinceras e comparativos de compra que ajudam o consumidor a decidir com confiança." },
+    { titulo: "Roteiro e Copywriting", descricao: "Textos e roteiros que comunicam o diferencial do produto na linguagem certa para o público certo." }
+  ],
+
+  // EDITE AQUI: números e resultados (o contador conta automaticamente até este valor)
+  numeros: [
+    { valor: 8500, sufixo: "+", label: "Comunidade engajada" },
+    { valor: 150, sufixo: " mil+", label: "Visualizações por mês" },
+    { valor: 18, sufixo: "+", label: "Marcas atendidas" },
+    { valor: 6.8, sufixo: "%", label: "Taxa média de engajamento" }
+  ],
+
+  // EDITE AQUI: depoimentos de clientes e marcas
+  depoimentos: [
+    { texto: "O conteúdo entregue foi além do esperado. A Erika entendeu o produto e comunicou exatamente o que a nossa cliente precisava ouvir.", nome: "Camila Duarte", empresa: "Gerente de Marketing, marca de cosméticos parceira" },
+    { texto: "Profissionalismo do início ao fim. Prazo cumprido, comunicação clara e um vídeo que converteu muito bem nos anúncios.", nome: "Rafael Nogueira", empresa: "Coordenador de E-commerce, loja de tecnologia parceira" },
+    { texto: "A forma calorosa como ela apresenta o produto criou uma conexão imediata com o nosso público. Já fechamos a próxima parceria.", nome: "Juliana Prado", empresa: "Fundadora, pet shop parceiro" }
+  ],
+
+  // EDITE AQUI: textos e assunto padrão do formulário de contato
+  formulario: {
+    assuntoEmail: "Contato via site - proposta de parceria",
+    textoConfirmacao: "Mensagem pronta! Se o seu e-mail não abrir automaticamente, me chame direto pelo WhatsApp."
+  },
+
+  anoFundacao: 2024
+};
+
+/* Paleta de gradientes usada nos blocos que simulam fotos e vídeos.
+   EDITE AQUI: pode ajustar as cores ou adicionar novas combinações. */
+const GRADIENTES = [
+  "linear-gradient(160deg, #4a4438, #17140f)",
+  "linear-gradient(160deg, #6b5d47, #24201a)",
+  "linear-gradient(160deg, #57493a, #14110d)",
+  "linear-gradient(160deg, #3a352c, #9c8365)",
+  "linear-gradient(160deg, #7a6248, #1c1a17)",
+  "linear-gradient(160deg, #5a5040, #2a2722)"
+];
+
+/* Ícones usados na barra inferior da capa (SVG embutido, sem bibliotecas externas) */
+const ICONE_INSTAGRAM = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1"/></svg>`;
+const ICONE_TIKTOK = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.6 3c.4 2.2 1.8 3.9 4 4.3v3.1a7.6 7.6 0 0 1-4-1.2v6.6a5.9 5.9 0 1 1-5.9-5.9c.2 0 .5 0 .7.1v3.2a2.8 2.8 0 1 0 2 2.7V3h3.2z"/></svg>`;
+const ICONE_LOCAL = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 21s-7-7.1-7-12a7 7 0 1 1 14 0c0 4.9-7 12-7 12z"/><circle cx="12" cy="9" r="2.4"/></svg>`;
+
+/* =====================================================================
+   RASTREAMENTO (ANALYTICS)
+   Registra visitas, cliques e mensagens no Supabase para aparecerem
+   no painel administrativo (painel.html). Usa o mesmo cliente Supabase
+   criado em js/auth.js (window.Auth.sb), só que aqui sem exigir login,
+   já que o formulário é público.
+   Tudo é protegido por try/catch: se o Supabase falhar (sem internet,
+   bloqueador de anúncios, etc.), o site continua funcionando normalmente.
+===================================================================== */
+
+function obterSessionId(){
+  const CHAVE = "ugc_session_id";
+  let id = sessionStorage.getItem(CHAVE);
+  if(!id){
+    id = (window.crypto && crypto.randomUUID)
+      ? crypto.randomUUID()
+      : `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`;
+    sessionStorage.setItem(CHAVE, id);
+  }
+  return id;
+}
+
+async function registrarEvento(tipo, nome, metadata){
+  try{
+    await window.Auth.sb.from("portfolio_events").insert({
+      event_type: tipo,
+      event_name: nome,
+      session_id: obterSessionId(),
+      page_path: window.location.pathname,
+      metadata: metadata || null
+    });
+  }catch(erro){
+    console.warn("Não foi possível registrar evento:", erro);
+  }
+}
+
+async function registrarLead(lead){
+  try{
+    await window.Auth.sb.from("portfolio_leads").insert(lead);
+  }catch(erro){
+    console.warn("Não foi possível registrar mensagem:", erro);
+  }
+}
+
+// Delega o clique de qualquer elemento marcado com data-evento="..."
+function configurarRastreamentoDeCliques(){
+  document.addEventListener("click", (evento) => {
+    const alvo = evento.target.closest("[data-evento]");
+    if(alvo){
+      registrarEvento("button_click", alvo.dataset.evento, null);
+    }
+
+    // Cliques em miniaturas de vídeo do portfólio contam como "vídeo visto"
+    const video = evento.target.closest("[data-video-id]");
+    if(video){
+      registrarEvento("video_view", video.dataset.videoId, { title: video.dataset.videoTitulo });
+    }
+  });
+}
+
+/* =====================================================================
+   RENDERIZAÇÃO DO CONTEÚDO
+===================================================================== */
+
+function renderizarCabecalho(){
+  const linksHtml = CONFIG.navegacao.map(item =>
+    `<a href="${item.href}">${item.texto}</a>`
+  ).join("");
+
+  document.getElementById("nav-desktop").innerHTML =
+    linksHtml + `<a href="#contato" class="botao" data-evento="nav_fale_comigo">Fale comigo</a>`;
+
+  document.getElementById("menu-mobile").innerHTML =
+    linksHtml + `<a href="#contato" class="botao" data-evento="nav_fale_comigo">Fale comigo</a>`;
+}
+
+function renderizarHero(){
+  const fundo = document.getElementById("hero-fundo");
+  fundo.setAttribute("role", "img");
+  fundo.setAttribute("aria-label", CONFIG.hero.descricaoMidia);
+  fundo.style.background = GRADIENTES[0];
+
+  document.getElementById("hero-conteudo").innerHTML = `
+    <div class="hero-meio reveal">
+      <h1 class="hero-nome" id="hero-titulo">
+        <img class="hero-nome-img" src="${CONFIG.hero.imagemNome}" alt="${CONFIG.hero.tituloParte1} ${CONFIG.hero.tituloParte2}">
+      </h1>
+      <p class="hero-cargo">${CONFIG.hero.cargo}</p>
+      <div class="hero-acoes">
+        <a href="#contato" class="botao botao-capa-principal" data-evento="hero_fale_comigo">${CONFIG.hero.textoBotaoPrincipal}</a>
+        <a href="#portfolio" class="botao botao-capa-secundario" data-evento="hero_ver_portfolio">${CONFIG.hero.textoBotaoSecundario}</a>
+      </div>
+    </div>
+    <div class="hero-rodape-mini reveal">
+      <div class="hero-redes">
+        <a class="hero-social" href="${CONFIG.perfil.instagramLink}" target="_blank" rel="noopener" aria-label="Instagram: ${CONFIG.perfil.instagramHandle}" data-evento="contact_instagram">${ICONE_INSTAGRAM}</a>
+        <a class="hero-social" href="${CONFIG.perfil.tiktokLink}" target="_blank" rel="noopener" aria-label="TikTok: ${CONFIG.perfil.tiktokHandle}" data-evento="social_tiktok">${ICONE_TIKTOK}</a>
+      </div>
+      <span class="hero-local">${ICONE_LOCAL}${CONFIG.perfil.localizacao}</span>
+    </div>
+  `;
+}
+
+function renderizarMarcas(){
+  document.getElementById("marcas-lista").innerHTML = CONFIG.marcas.map(marca =>
+    `<li>${marca}</li>`
+  ).join("");
+}
+
+function renderizarSobre(){
+  const paragrafosHtml = CONFIG.sobre.paragrafos.map(p => `<p>${p}</p>`).join("");
+  const listaHtml = CONFIG.sobre.lista.map(item => `<li>${item}</li>`).join("");
+
+  document.getElementById("sobre-conteudo").innerHTML = `
+    <div class="midia-gradiente midia-sobre reveal" role="img" aria-label="${CONFIG.sobre.descricaoMidia}" style="background:${GRADIENTES[2]}"></div>
+    <div class="sobre-texto reveal">
+      <p class="rotulo">Sobre mim</p>
+      <h2 id="sobre-titulo" class="titulo-secao">${CONFIG.sobre.titulo}</h2>
+      ${paragrafosHtml}
+      <ul class="sobre-lista">${listaHtml}</ul>
+    </div>
+  `;
+}
+
+function renderizarPortfolio(){
+  const filtrosHtml = CONFIG.portfolioCategorias.map((cat, i) =>
+    `<button class="filtro-botao" data-categoria="${cat.chave}" data-evento="filtro_${cat.chave}" aria-pressed="${i === 0 ? "true" : "false"}">${cat.texto}</button>`
+  ).join("");
+  document.getElementById("portfolio-filtros").innerHTML = filtrosHtml;
+
+  const gridHtml = CONFIG.portfolioItens.map((item, i) => {
+    // Item com vídeo real do YouTube: mostra a miniatura de verdade, clicável
+    if(item.videoId){
+      const linkVideo = `https://www.youtube.com/watch?v=${item.videoId}`;
+      const thumb = `https://i.ytimg.com/vi/${item.videoId}/mqdefault.jpg`;
+      return `
+        <div class="portfolio-item reveal" data-categoria="${item.categoria}">
+          <a class="midia-gradiente midia-portfolio midia-video" href="${linkVideo}" target="_blank" rel="noopener"
+             data-video-id="${item.videoId}" data-video-titulo="${item.titulo}"
+             aria-label="Assistir vídeo: ${item.titulo}">
+            <img src="${thumb}" alt="Miniatura do vídeo: ${item.titulo}" loading="lazy">
+            <span class="midia-video-play" aria-hidden="true">▶</span>
+            <span class="portfolio-item-tag">${item.tag}</span>
+          </a>
+          <p class="portfolio-item-titulo">${item.titulo}</p>
+        </div>
+      `;
+    }
+    // Item sem vídeo ainda: mantém o bloco de gradiente (placeholder)
+    return `
+      <div class="portfolio-item reveal" data-categoria="${item.categoria}">
+        <div class="midia-gradiente midia-portfolio" role="img" aria-label="Exemplo de trabalho: ${item.titulo}" style="background:${GRADIENTES[i % GRADIENTES.length]}">
+          <span class="portfolio-item-tag">${item.tag}</span>
+        </div>
+        <p class="portfolio-item-titulo">${item.titulo}</p>
+      </div>
+    `;
+  }).join("");
+  document.getElementById("portfolio-grid").innerHTML = gridHtml;
+}
+
+function renderizarServicos(){
+  document.getElementById("servicos-grid").innerHTML = CONFIG.servicos.map(s => `
+    <div class="servico-card reveal">
+      <div class="servico-icone" aria-hidden="true"></div>
+      <h3>${s.titulo}</h3>
+      <p>${s.descricao}</p>
+    </div>
+  `).join("");
+}
+
+function renderizarNumeros(){
+  document.getElementById("numeros-grid").innerHTML = CONFIG.numeros.map(n => `
+    <div class="numero-card reveal">
+      <p class="numero-valor">
+        <span class="numero-contador" data-valor="${n.valor}" data-sufixo="${n.sufixo}">0</span>
+      </p>
+      <p class="numero-rotulo">${n.label}</p>
+    </div>
+  `).join("");
+}
+
+function renderizarDepoimentos(){
+  document.getElementById("depoimentos-grid").innerHTML = CONFIG.depoimentos.map(d => `
+    <div class="depoimento-card reveal">
+      <p class="depoimento-aspas" aria-hidden="true">"</p>
+      <p class="depoimento-texto">${d.texto}</p>
+      <div class="depoimento-autor">
+        <p class="depoimento-nome">${d.nome}</p>
+        <p class="depoimento-empresa">${d.empresa}</p>
+      </div>
+    </div>
+  `).join("");
+}
+
+function renderizarContato(){
+  document.getElementById("contato-conteudo").innerHTML = `
+    <form class="formulario reveal" id="formulario-contato" novalidate>
+      <div class="mensagem-confirmacao" id="mensagem-confirmacao" role="status">${CONFIG.formulario.textoConfirmacao}</div>
+      <div class="campo">
+        <label for="campo-nome">Nome</label>
+        <input type="text" id="campo-nome" name="nome" required autocomplete="name">
+      </div>
+      <div class="campo">
+        <label for="campo-email">E-mail</label>
+        <input type="email" id="campo-email" name="email" required autocomplete="email">
+      </div>
+      <div class="campo">
+        <label for="campo-mensagem">Mensagem</label>
+        <textarea id="campo-mensagem" name="mensagem" rows="5" required></textarea>
+      </div>
+      <button type="submit" class="botao" style="width:100%;">Enviar mensagem</button>
+    </form>
+    <div class="contato-direto reveal">
+      <h3>Prefere falar direto?</h3>
+      <div class="contato-canais">
+        <a class="contato-canal" href="${CONFIG.perfil.whatsappLink}" target="_blank" rel="noopener" data-evento="contact_whatsapp">
+          <span class="contato-canal-icone" aria-hidden="true">W</span>
+          WhatsApp: ${CONFIG.perfil.telefoneExibicao}
+        </a>
+        <a class="contato-canal" href="mailto:${CONFIG.perfil.email}" data-evento="contact_email">
+          <span class="contato-canal-icone" aria-hidden="true">@</span>
+          ${CONFIG.perfil.email}
+        </a>
+        <a class="contato-canal" href="${CONFIG.perfil.instagramLink}" target="_blank" rel="noopener" data-evento="contact_instagram">
+          <span class="contato-canal-icone" aria-hidden="true">IG</span>
+          Instagram ${CONFIG.perfil.instagramHandle}
+        </a>
+      </div>
+    </div>
+  `;
+}
+
+function renderizarRodape(){
+  document.getElementById("rodape-logo").textContent = CONFIG.perfil.nomeCompleto;
+
+  document.getElementById("rodape-redes").innerHTML = `
+    <a href="${CONFIG.perfil.instagramLink}" target="_blank" rel="noopener" aria-label="Instagram de ${CONFIG.perfil.nomeCompleto}" data-evento="contact_instagram">IG</a>
+    <a href="${CONFIG.perfil.whatsappLink}" target="_blank" rel="noopener" aria-label="WhatsApp de ${CONFIG.perfil.nomeCompleto}" data-evento="contact_whatsapp">W</a>
+    <a href="mailto:${CONFIG.perfil.email}" aria-label="E-mail de ${CONFIG.perfil.nomeCompleto}" data-evento="contact_email">@</a>
+  `;
+
+  const anoAtual = new Date().getFullYear();
+  document.getElementById("rodape-copyright").textContent =
+    `© ${anoAtual} ${CONFIG.perfil.nomeCompleto}. Todos os direitos reservados.`;
+}
+
+function renderizarTudo(){
+  renderizarCabecalho();
+  renderizarHero();
+  renderizarMarcas();
+  renderizarSobre();
+  renderizarPortfolio();
+  renderizarServicos();
+  renderizarNumeros();
+  renderizarDepoimentos();
+  renderizarContato();
+  renderizarRodape();
+}
+
+/* =====================================================================
+   COMPORTAMENTOS (menu, filtros, contador, animações, formulário)
+===================================================================== */
+
+function configurarMenuMobile(){
+  const botao = document.getElementById("botao-hamburguer");
+  const menu = document.getElementById("menu-mobile");
+
+  botao.addEventListener("click", () => {
+    const aberto = menu.classList.toggle("aberto");
+    botao.setAttribute("aria-expanded", String(aberto));
+    botao.setAttribute("aria-label", aberto ? "Fechar menu de navegação" : "Abrir menu de navegação");
+  });
+
+  menu.querySelectorAll("a").forEach(link => {
+    link.addEventListener("click", () => {
+      menu.classList.remove("aberto");
+      botao.setAttribute("aria-expanded", "false");
+      botao.setAttribute("aria-label", "Abrir menu de navegação");
+    });
+  });
+}
+
+function configurarFiltrosPortfolio(){
+  const botoes = document.querySelectorAll(".filtro-botao");
+  const itens = document.querySelectorAll(".portfolio-item");
+
+  botoes.forEach(botao => {
+    botao.addEventListener("click", () => {
+      botoes.forEach(b => b.setAttribute("aria-pressed", "false"));
+      botao.setAttribute("aria-pressed", "true");
+
+      const categoria = botao.dataset.categoria;
+      itens.forEach(item => {
+        const mostrar = categoria === "todos" || item.dataset.categoria === categoria;
+        item.classList.toggle("escondido", !mostrar);
+      });
+    });
+  });
+}
+
+function configurarContadores(){
+  const contadores = document.querySelectorAll(".numero-contador");
+
+  const animarContador = (elemento) => {
+    const valorFinal = parseFloat(elemento.dataset.valor);
+    const sufixo = elemento.dataset.sufixo || "";
+    const ehDecimal = !Number.isInteger(valorFinal);
+    const duracao = 1600;
+    let inicio = null;
+
+    function passo(timestamp){
+      if(!inicio) inicio = timestamp;
+      const progresso = Math.min((timestamp - inicio) / duracao, 1);
+      const valorAtual = progresso * valorFinal;
+      elemento.textContent = (ehDecimal ? valorAtual.toFixed(1) : Math.floor(valorAtual)) + sufixo;
+      if(progresso < 1){
+        requestAnimationFrame(passo);
+      } else {
+        elemento.textContent = (ehDecimal ? valorFinal.toFixed(1) : valorFinal) + sufixo;
+      }
+    }
+    requestAnimationFrame(passo);
+  };
+
+  const observador = new IntersectionObserver((entradas, obs) => {
+    entradas.forEach(entrada => {
+      if(entrada.isIntersecting){
+        animarContador(entrada.target);
+        obs.unobserve(entrada.target);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  contadores.forEach(c => observador.observe(c));
+}
+
+function configurarAnimacoesEntrada(){
+  const elementos = document.querySelectorAll(".reveal");
+
+  const observador = new IntersectionObserver((entradas, obs) => {
+    entradas.forEach(entrada => {
+      if(entrada.isIntersecting){
+        entrada.target.classList.add("visivel");
+        obs.unobserve(entrada.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  elementos.forEach(el => observador.observe(el));
+}
+
+function configurarFormulario(){
+  const form = document.getElementById("formulario-contato");
+  const confirmacao = document.getElementById("mensagem-confirmacao");
+
+  form.addEventListener("submit", (evento) => {
+    evento.preventDefault();
+
+    const nome = document.getElementById("campo-nome").value.trim();
+    const email = document.getElementById("campo-email").value.trim();
+    const mensagem = document.getElementById("campo-mensagem").value.trim();
+
+    if(!nome || !email || !mensagem){
+      return;
+    }
+
+    const corpo = `Nome: ${nome}%0AE-mail: ${email}%0A%0AMensagem:%0A${mensagem}`;
+    const linkMailto = `mailto:${CONFIG.perfil.email}?subject=${encodeURIComponent(CONFIG.formulario.assuntoEmail)}&body=${corpo}`;
+
+    window.location.href = linkMailto;
+
+    // Registra a mensagem e o clique no painel administrativo
+    registrarLead({ name: nome, email: email, message: mensagem, source: "contact" });
+    registrarEvento("button_click", "contact_form", null);
+
+    confirmacao.classList.add("visivel");
+    form.reset();
+  });
+}
+
+/* =====================================================================
+   INICIALIZAÇÃO
+===================================================================== */
+
+document.addEventListener("DOMContentLoaded", () => {
+  renderizarTudo();
+  configurarMenuMobile();
+  configurarFiltrosPortfolio();
+  configurarContadores();
+  configurarAnimacoesEntrada();
+  configurarFormulario();
+  configurarRastreamentoDeCliques();
+  registrarEvento("page_view", "home", null);
+});
+</script>
+
+</body>
+</html>
