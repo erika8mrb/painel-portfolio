@@ -1094,7 +1094,7 @@ const CONFIG = {
   // bloco de gradiente, e cada clique é contado como "vídeo visto" no painel administrativo.
   portfolioItens: [
     { titulo: "Booster", categoria: "skincare", tag: "Vídeo UGC", videoId: "BlJFdNolLYs" },
-    { titulo: "Modelador de Cachos", categoria: "skincare", tag: "Vídeo UGC", videoId: "iOT6lIM1MkA" },
+    { titulo: "Modelador de Cachos", categoria: "skincare", tag: "Vídeo UGC", videoId: "iOT6lIM1MkA", capa: "imagens/capa-modelador-de-cachos.jpg" },
     { titulo: "Unboxing de dispositivo de beleza importado", categoria: "skincare", tag: "Unboxing" },
     { titulo: "Primeiros passos com inteligência artificial no dia a dia", categoria: "tecnologia", tag: "Vídeo UGC" },
     { titulo: "Aplicativo de organização financeira, vale a pena?", categoria: "tecnologia", tag: "Reels" },
@@ -1345,9 +1345,11 @@ function renderizarPortfolio(){
     const nicho = nomeDoNicho[item.categoria] || "";
     // Item com vídeo real do YouTube: mostra a miniatura de verdade, clicável
     if(item.videoId){
-      // "oar2" é a miniatura vertical em alta resolução do YouTube Shorts (sem
-      // as barras pretas laterais que aparecem nas miniaturas padrão 16:9)
-      const thumb = `https://i.ytimg.com/vi/${item.videoId}/oar2.jpg`;
+      // "capa" permite fixar uma imagem própria (em vez de depender da miniatura
+      // automática do YouTube, que pode mudar ou demorar a processar).
+      // Sem "capa" definida, cai no "oar2": miniatura vertical em alta resolução
+      // do YouTube Shorts (sem as barras pretas laterais da miniatura padrão 16:9).
+      const thumb = item.capa || `https://i.ytimg.com/vi/${item.videoId}/oar2.jpg`;
       return `
         <div class="portfolio-item" data-categoria="${item.categoria}">
           <button type="button" class="midia-gradiente midia-portfolio midia-video"
