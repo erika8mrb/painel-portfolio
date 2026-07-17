@@ -1067,13 +1067,14 @@ const CONFIG = {
   sobre: {
     titulo: "A pessoa por trás da <em>câmera</em>",
     paragrafos: [
-      "Sou a Erika, tenho 53 anos, e o meu jeito de criar conteúdo é simples: eu testo de verdade, entendo o produto e só então conto para o meu público por que ele faz sentido, ou não, na rotina de quem assiste.",
-      "Minha comunicação é próxima, calorosa e direta, sem tom de especialista distante. Isso cria uma conexão genuína com quem consome o conteúdo, e é exatamente essa confiança que se transforma em resultado para a marca parceira."
+      "Sou a Erika, tenho 53 anos, e o meu jeito de criar conteúdo nasceu antes das câmeras. Eu testo de verdade, entendo o produto e só então conto para o meu público por que ele faz sentido, ou não, na rotina de quem assiste.",
+      "Por quase 27 anos administrei minha própria confecção de moda feminina e fitness, cuidando de produção, logística e gestão, e também das fotos e vídeos que vendiam a marca. Essa vivência me ensinou, na prática, o que uma marca precisa para vender de verdade, e é isso que eu trago para cada vídeo que faço hoje.",
+      "Minha comunicação é próxima, calorosa e direta, sem tom de especialista distante. Isso cria uma conexão genuína com quem consome o conteúdo, e é exatamente essa confiança, de amiga para amiga, que se transforma em resultado para a marca parceira."
     ],
     lista: [
       "Roteiro, captação e edição feitos com cuidado do início ao fim",
       "Linguagem acolhedora, próxima e fácil de entender",
-      "Entrega dentro do prazo combinado, com organização e profissionalismo",
+      "Quase 3 décadas de vivência em gestão de negócio, o que traz organização, prazo e visão de marca para cada entrega",
       "Conteúdo pensado para performar em anúncios e também de forma orgânica"
     ],
     descricaoMidia: "Foto de Erika Barreiros sorrindo, transmitindo confiança e proximidade"
@@ -1102,7 +1103,8 @@ const CONFIG = {
     { titulo: "Review completo após 30 dias de uso", categoria: "consumo", tag: "Resenha", videoId: "ibEEUU8oDDs" },
     { titulo: "Cuidados diários com Bulldog Francês", categoria: "pet", tag: "Vídeo UGC" },
     { titulo: "Banho a Seco", categoria: "pet", tag: "Vídeo UGC", videoId: "3Tg3g_0h7sM" },
-    { titulo: "Suplementação após os 50, o que mudou na minha rotina", categoria: "bem-estar", tag: "Vídeo UGC", videoId: "vBai7y2ph64" },
+    { titulo: "CREATINA GROWTH", categoria: "bem-estar", tag: "Vídeo UGC", videoId: "vBai7y2ph64" },
+    { titulo: "Omega 3 VHITA", categoria: "bem-estar", tag: "Vídeo UGC", videoId: "28js5oXUjwA", capa: "imagens/capa-omega-3.jpg" },
     { titulo: "Organização de closet em cinco passos simples", categoria: "casa", tag: "Fotos de produto" },
     { titulo: "Produtos organizadores que realmente funcionam", categoria: "casa", tag: "Reels" }
   ],
@@ -1277,7 +1279,9 @@ function renderizarHero(){
   const fundo = document.getElementById("hero-fundo");
   fundo.setAttribute("role", "img");
   fundo.setAttribute("aria-label", CONFIG.hero.descricaoMidia);
-  fundo.style.background = GRADIENTES[0];
+  fundo.style.backgroundImage = "url('imagens/foto-banner.png')";
+  fundo.style.backgroundSize = "cover";
+  fundo.style.backgroundPosition = "center 30%";
 
   document.getElementById("hero-conteudo").innerHTML = `
     <div class="hero-meio reveal">
