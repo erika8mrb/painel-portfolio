@@ -297,7 +297,10 @@
     width: 100%;
     max-width: 1160px;
     margin: 0 auto;
-    padding: 148px 24px 40px;
+    /* Padding inferior maior que o padrão pra sobrar espaço acima da barra
+       de marcas flutuante (título + esteira, ~95px de altura), sem cobrir o
+       rodapé mini do Hero. */
+    padding: 148px 24px 132px;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -310,6 +313,10 @@
     align-items: center;
     /* Centraliza o bloco (nome, cargo, botões) no espaço acima da barra inferior */
     margin: auto 0;
+    /* Precisa de largura definida: sem isso, com align-items:center, o bloco encolhe
+       pro tamanho do conteúdo mais largo (o texto do cargo) e deixa ele e os botões
+       (que usam width:100% no celular) vazarem pra fora da tela em vez de quebrar linha. */
+    width: 100%;
   }
   /* Nome da capa: agora é a imagem exportada do Canva (fonte The Seasons),
      então este wrapper só cuida do espaçamento, não mais de fonte/cor. */
@@ -317,7 +324,7 @@
     margin: 0 0 18px;
   }
   .hero-nome-img{
-    width: clamp(260px, 46vw, 760px);
+    width: clamp(260px, 85vw, 760px);
     height: auto;
     display: block;
     filter: drop-shadow(0 4px 26px rgba(0,0,0,0.4));
@@ -327,10 +334,11 @@
     font-style: italic;
     font-weight: 400;
     text-transform: uppercase;
-    letter-spacing: 5px;
-    font-size: clamp(14px, 1.8vw, 19px);
+    letter-spacing: 3px;
+    font-size: clamp(13px, 1.6vw, 19px);
     color: rgba(255,255,255,0.9);
-    margin: 0 0 36px;
+    margin: 0 0 30px;
+    max-width: 100%;
   }
   .hero-acoes{ display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; }
   .hero-rodape-mini{
@@ -361,67 +369,172 @@
   .hero-social:hover, .hero-social:focus-visible{ opacity: .7; }
 
   /* ===================== FAIXA DE MARCAS ===================== */
+  /* Barra flutuante grudada na base do Hero: bem fina e discreta, em vidro escuro.
+     Fundo escuro em vez de branco porque os arquivos de logo (sem o fundo colorido
+     original) trazem marcas em branco (Medicube, Vhita, Growth) que ficariam
+     invisíveis num fundo claro — o escuro é o único tom que deixa toda a leva
+     (marcas brancas, coloridas e a doTERRA invertida pra branco) legível junto. */
   .marcas{
-    padding: 44px 0;
-    background: var(--tinta);
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    z-index: 2;
+    padding: 14px 0 12px;
+    background: rgba(20,17,13,0.55);
+    backdrop-filter: blur(16px) saturate(150%);
+    -webkit-backdrop-filter: blur(16px) saturate(150%);
+    border-top: 1px solid rgba(255,255,255,0.14);
+    overflow: hidden;
   }
+  /* Texto discreto acima da esteira: pequeno, translúcido, bem espaçado —
+     só um lembrete sutil de credibilidade, sem competir com o Hero. */
   .marcas-titulo{
     text-align: center;
-    color: rgba(243,238,233,0.6);
-    font-size: 12px;
-    letter-spacing: 2.5px;
+    color: rgba(255,255,255,0.55);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 2.4px;
     text-transform: uppercase;
-    font-weight: 700;
-    margin-bottom: 26px;
+    margin: 0 0 10px;
+  }
+  /* Esteira: janela de largura total da tela, com as bordas esmaecidas
+     pra a lista de logos entrar/sair suavemente ao invés de cortar seco. */
+  .marcas-esteira{
+    overflow: hidden;
+    width: 100%;
+    -webkit-mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
   }
   .marcas-lista{
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
     align-items: center;
-    gap: 20px 48px;
+    width: max-content;
+    gap: 22px;
+    animation: rolarMarcas 32s linear infinite;
   }
-  .marcas-lista li{
-    font-family: 'Noto Serif Display', serif;
-    font-size: 21px;
-    font-weight: 500;
-    color: var(--creme);
-    opacity: .82;
+  .marcas:hover .marcas-lista{ animation-play-state: paused; }
+  .marcas-separador{
+    flex: 0 0 auto;
+    font-size: 9px;
+    color: var(--acento);
+    opacity: .7;
+  }
+  .marcas-item{
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 46px;
+  }
+  .marcas-item img{
+    /* Altura fixa e igual pra todas as logos, então nenhuma marca parece
+       maior ou menor que as outras dentro do cartão — a largura fica livre
+       (sem largura fixa no item), já que agora cada logo foi recortada só
+       com a marca em si, sem fundo/cartão, e as proporções variam bem mais
+       entre elas. Cores originais de cada marca, sem escala de cinza. */
+    height: 36px;
+    width: auto;
+    max-width: 210px;
+    object-fit: contain;
+  }
+  /* doTERRA: arte original é um wordmark neutro cinza-escuro/preto, sem cor de
+     marca — em vez de ficar quase invisível no fundo escuro da barra, inverte
+     pra branco (mesmo tratamento que a própria doTERRA usa em fundos escuros). */
+  .marcas-item img.logo-inverter{
+    filter: invert(1) brightness(1.4);
+  }
+  @keyframes rolarMarcas{
+    from{ transform: translateX(0); }
+    to{ transform: translateX(-20%); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .marcas-lista{ animation: none; }
   }
 
   /* ===================== SOBRE ===================== */
+  .sobre{ position: relative; overflow: hidden; }
+  .sobre::before{
+    content: '';
+    position: absolute;
+    width: 560px; height: 560px;
+    top: -180px; left: -220px;
+    background: radial-gradient(circle, rgba(156,131,101,0.14), transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
   .sobre-grid{
+    position: relative;
+    z-index: 1;
     display: grid;
-    grid-template-columns: .85fr 1.15fr;
-    gap: 64px;
+    grid-template-columns: 1.4fr .8fr;
+    gap: 56px;
     align-items: center;
   }
-  .midia-sobre{ aspect-ratio: 1 / 1; width: 100%; }
-  .sobre-texto p{ font-size: 16.5px; }
-  .sobre-lista{ margin-top: 24px; display: grid; gap: 12px; }
-  .sobre-lista li{
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    font-size: 15px;
-    color: var(--tinta-suave);
-    font-weight: 500;
+
+  .sobre-midia{
+    position: relative;
+    isolation: isolate;
   }
-  .sobre-lista li::before{
-    content: '✓';
-    color: var(--branco);
-    background: var(--neutro-escuro);
-    width: 20px; height: 20px;
+  .sobre-midia::before{
+    content: '';
+    position: absolute;
+    z-index: -1;
+    width: 88%; height: 88%;
+    top: -9%; right: -12%;
+    background: radial-gradient(circle, rgba(156,131,101,0.32), transparent 70%);
+    filter: blur(34px);
     border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 12px;
-    flex-shrink: 0;
-    margin-top: 2px;
+  }
+  .sobre-foto{
+    display: block;
+    width: 100%;
+    height: auto;
+    transition: transform .5s ease;
+  }
+  .sobre-midia:hover .sobre-foto{ transform: translateY(-6px); }
+  .sobre-midia.reveal{ transform: scale(0.94) rotate(-1.4deg); }
+  .sobre-midia.reveal.visivel{ transform: scale(1) rotate(0deg); }
+
+  .sobre-saudacao{
+    font-family: 'Noto Serif Display', serif;
+    font-weight: 600;
+    font-size: clamp(32px, 4.6vw, 54px);
+    line-height: 1.12;
+    margin: 0 0 16px;
+    max-width: 100%;
+  }
+  .sobre-saudacao em{
+    font-style: italic;
+    font-weight: 600;
+    color: var(--acento-escuro);
+  }
+  .sobre-subtitulo{
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--tinta-suave);
+    margin: 0 0 34px;
+  }
+  .sobre-texto-corpo p{
+    font-size: 16.5px;
+    line-height: 1.85;
+    max-width: 540px;
+  }
+  .sobre-texto-corpo strong{
+    font-style: italic;
+    font-weight: 600;
+    color: var(--tinta);
   }
 
   /* ===================== PORTFÓLIO ===================== */
   .portfolio{ background: var(--creme-escuro); }
   .portfolio-cabecalho{ margin-bottom: 40px; }
+  /* Palavra "nichos" em destaque no título, mesmo tratamento usado em "juntos" no Contato */
+  #portfolio-titulo em.destaque{
+    color: var(--acento-escuro);
+    font-weight: 600;
+    font-size: 1.22em;
+  }
 
   /* Botões de filtro por nicho + setas, acima do carrossel único de vídeos */
   .portfolio-carrossel-cabecalho{
@@ -494,7 +607,7 @@
   .portfolio-trilho::-webkit-scrollbar{ display: none; }
   .portfolio-trilho.arrastando{ cursor: grabbing; scroll-snap-type: none; }
 
-  .portfolio-item{
+  .portfolio-item, .produto-item{
     flex: 0 0 auto;
     width: 220px;
     scroll-snap-align: start;
@@ -502,13 +615,41 @@
     overflow: hidden;
     box-shadow: var(--sombra-suave);
   }
+  .midia-produto{ aspect-ratio: 4 / 5; width: 100%; display: flex; align-items: flex-end; padding: 20px; }
+
+  /* Selo com o nome da marca, fixo no canto superior esquerdo do vídeo */
+  .portfolio-item-marca{
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    z-index: 3;
+    background: rgba(255,255,255,0.92);
+    color: var(--tinta);
+    font-size: 9.5px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    padding: 5px 11px;
+    border-radius: 999px;
+  }
+  /* Faixa com título + nicho, sobreposta na parte inferior do vídeo */
+  .portfolio-item-overlay{
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 3;
+    padding: 44px 18px 16px;
+    background: linear-gradient(to top, rgba(20,17,13,0.82), rgba(20,17,13,0.35) 65%, transparent);
+    text-align: left;
+  }
   .portfolio-item-categoria{
-    margin: 2px 0 0;
+    margin: 4px 0 0;
     font-size: 11px;
     font-weight: 700;
     letter-spacing: .06em;
     text-transform: uppercase;
-    color: var(--tinta-suave);
+    color: rgba(255,255,255,0.75);
   }
   .midia-portfolio{
     aspect-ratio: 9 / 16;
@@ -520,19 +661,21 @@
   .midia-portfolio img{ -webkit-user-drag: none; }
   .portfolio-item-tag{
     position: relative; /* garante que fique acima da miniatura do vídeo */
-    background: rgba(20,17,13,0.55);
-    color: var(--branco);
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: .5px;
-    padding: 6px 12px;
+    z-index: 3;
+    background: rgba(255,255,255,0.92);
+    color: var(--tinta);
+    font-size: 9.5px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    padding: 5px 11px;
     border-radius: 999px;
-    backdrop-filter: blur(4px);
+    transition: opacity .2s ease;
   }
   .midia-video{
     display: flex;
     text-decoration: none;
-    cursor: pointer;
+    cursor: url('imagens/cursor-iphone.png') 18 32, pointer;
     border: none;
     background: none;
     padding: 20px;
@@ -547,6 +690,20 @@
     height: 100%;
     object-fit: cover;
   }
+  .midia-video-preview{
+    position: absolute;
+    /* Desloca o player pra cima e deixa mais alto que o card: assim a barra com o nome
+       do vídeo/foto do canal (topo) e a barra preta de legenda (embaixo), que o YouTube
+       mostra fixas no player, ficam escondidas para fora da área visível do card
+       (cortadas pelo overflow:hidden do card, dos dois lados). */
+    top: -48px;
+    left: 0;
+    width: 100%;
+    height: calc(100% + 96px);
+    border: none;
+    z-index: 2;
+    pointer-events: none; /* clique continua indo pro botão, abrindo o modal em tela cheia */
+  }
   .midia-video-play{
     position: absolute;
     top: 50%; left: 50%;
@@ -560,11 +717,15 @@
     justify-content: center;
     font-size: 18px;
     backdrop-filter: blur(4px);
-    transition: transform .2s ease, background .2s ease;
+    transition: transform .2s ease, background .2s ease, opacity .2s ease;
+    z-index: 3;
   }
   .midia-video:hover .midia-video-play{
     transform: translate(-50%, -50%) scale(1.08);
     background: var(--acento-escuro);
+  }
+  .midia-video.pre-visualizando .midia-video-play{
+    opacity: 0;
   }
 
   /* ===================== MODAL DE VÍDEO (lightbox) ===================== */
@@ -618,20 +779,17 @@
     background: rgba(255,255,255,0.3);
   }
   .portfolio-item-titulo{
-    margin-top: 12px;
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--tinta);
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--branco);
   }
 
   /* ===================== SERVIÇOS ===================== */
-  .servicos-grid{
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-    margin-top: 44px;
-  }
   .servico-card{
+    flex: 0 0 auto;
+    width: 290px;
+    scroll-snap-align: start;
     background: var(--branco);
     border-radius: var(--raio);
     padding: 32px 28px;
@@ -714,19 +872,61 @@
   .depoimento-empresa{ font-size: 13px; color: var(--tinta-suave); }
 
   /* ===================== CONTATO ===================== */
-  .contato{ background: var(--creme-escuro); }
+  .contato{ background: var(--creme-escuro); position: relative; overflow: hidden; }
+  .contato::before{
+    content: '';
+    position: absolute;
+    width: 560px; height: 560px;
+    bottom: -220px; right: -200px;
+    background: radial-gradient(circle, rgba(156,131,101,0.14), transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  /* Título "Vamos criar conteúdo juntos?": mesmo peso de fonte do título do Sobre
+     (font-weight 600, em vez do 500 padrão dos títulos), com a palavra de destaque
+     maior e em cor diferente do resto da frase — foge da regra geral (itálico
+     mantém tamanho/cor da frase) só aqui, a pedido dela. */
+  #contato-titulo{
+    font-weight: 600;
+    max-width: none;
+    white-space: nowrap;
+    font-size: clamp(18px, 5.6vw, 44px);
+  }
+  #contato-titulo em{
+    color: var(--acento-escuro);
+    font-weight: 600;
+    font-size: 1.22em;
+  }
   .contato-grid{
+    position: relative;
+    z-index: 1;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 56px;
     align-items: start;
   }
   .formulario{
+    position: relative;
+    isolation: isolate;
     background: var(--branco);
     padding: 36px;
     border-radius: var(--raio);
     box-shadow: var(--sombra-suave);
+    transition: transform .5s ease;
   }
+  .formulario::before{
+    content: '';
+    position: absolute;
+    z-index: -1;
+    width: 88%; height: 88%;
+    top: -9%; left: -10%;
+    background: radial-gradient(circle, rgba(156,131,101,0.32), transparent 70%);
+    filter: blur(34px);
+    border-radius: 50%;
+  }
+  .formulario:hover{ transform: translateY(-6px); }
+  .formulario.reveal{ transform: scale(0.94) rotate(-1deg); }
+  .formulario.reveal.visivel{ transform: scale(1) rotate(0deg); }
   .campo{ margin-bottom: 20px; }
   .campo label{
     display: block;
@@ -782,9 +982,9 @@
     background: var(--neutro-escuro);
     color: var(--branco);
     display: flex; align-items: center; justify-content: center;
-    font-size: 17px;
     flex-shrink: 0;
   }
+  .contato-canal-icone svg{ width: 19px; height: 19px; }
   .contato-canal:nth-child(2) .contato-canal-icone{ background: var(--acento); }
   .contato-canal:nth-child(3) .contato-canal-icone{ background: var(--tinta-suave); }
 
@@ -805,10 +1005,11 @@
   }
   .rodape-logo{
     font-family: 'Italiana', serif;
-    font-size: 20px;
-    letter-spacing: 1.5px;
+    font-weight: 700;
+    font-size: clamp(30px, 5.4vw, 42px);
+    letter-spacing: 2px;
     text-transform: uppercase;
-    color: var(--creme);
+    color: #fff;
   }
   .rodape-redes{ display: flex; gap: 14px; }
   .rodape-redes a{
@@ -816,20 +1017,58 @@
     border-radius: 50%;
     border: 1.5px solid rgba(243,238,233,0.3);
     display: flex; align-items: center; justify-content: center;
-    font-size: 16px;
     color: var(--creme);
     transition: background .2s ease, border-color .2s ease;
   }
+  .rodape-redes a svg{ width: 18px; height: 18px; }
   .rodape-redes a:hover{ background: var(--neutro-escuro); border-color: var(--neutro-escuro); }
   .rodape-baixo{
     display: flex;
     justify-content: space-between;
+    align-items: center;
     flex-wrap: wrap;
     gap: 12px;
     padding-top: 24px;
     font-size: 13px;
   }
-  .rodape-baixo a{ text-decoration: underline; }
+  .rodape-baixo strong{
+    color: var(--creme);
+    font-weight: 700;
+    letter-spacing: .02em;
+  }
+  /* Botão discreto de "voltar ao topo", na divisa entre a seção de contato (fundo
+     claro) e o rodapé (fundo escuro) */
+  .voltar-topo-wrap{
+    display: flex;
+    justify-content: center;
+    margin-top: 48px;
+  }
+  .link-topo{
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+    color: var(--tinta-suave);
+    text-decoration: none;
+  }
+  .link-topo-icone{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(20,17,13,0.15);
+    transition: background .2s ease, border-color .2s ease, color .2s ease;
+  }
+  .link-topo:hover .link-topo-icone{ background: var(--tinta); border-color: var(--tinta); color: var(--branco); }
+  .link-topo-icone svg{ width: 15px; height: 15px; }
+  .link-topo-texto{
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+  }
 
   /* ===================== ANIMAÇÃO DE ENTRADA ===================== */
   .reveal{
@@ -846,9 +1085,9 @@
 
   /* ===================== RESPONSIVIDADE ===================== */
   @media (max-width: 1000px){
-    .sobre-grid{ grid-template-columns: 1fr; }
-    .midia-sobre{ aspect-ratio: 16/9; }
-    .servicos-grid{ grid-template-columns: repeat(2, 1fr); }
+    .sobre-grid{ grid-template-columns: 1fr; gap: 44px; text-align: center; }
+    .sobre-midia{ max-width: 440px; margin: 0 auto 32px; }
+    .sobre-texto-corpo{ text-align: left; max-width: 480px; margin-left: auto; margin-right: auto; }
     .numeros-grid{ grid-template-columns: repeat(2, 1fr); }
     .depoimentos-grid{ grid-template-columns: 1fr 1fr; }
     .contato-grid{ grid-template-columns: 1fr; }
@@ -859,10 +1098,8 @@
     .nav-desktop{ display: none; }
     .hamburguer{ display: flex; position: absolute; right: 24px; top: 50%; transform: translateY(-50%); }
     .hero-conteudo{ padding-top: 118px; }
-    .hero-acoes{ flex-direction: column; width: 100%; }
-    .hero-acoes .botao{ width: 100%; }
+    .hero-acoes .botao{ padding: 10px 18px; font-size: 12.5px; }
     .hero-rodape-mini{ flex-direction: column; align-items: flex-start; gap: 14px; }
-    .servicos-grid{ grid-template-columns: 1fr; }
     .numeros-grid{ grid-template-columns: repeat(2, 1fr); }
     .depoimentos-grid{ grid-template-columns: 1fr; }
     .rodape-topo{ flex-direction: column; align-items: flex-start; }
@@ -907,13 +1144,13 @@
   <section class="hero" id="hero" aria-labelledby="hero-titulo">
     <div class="hero-fundo" id="hero-fundo"></div>
     <div class="hero-conteudo" id="hero-conteudo"></div>
-  </section>
 
-  <!-- ===================== FAIXA DE MARCAS ===================== -->
-  <section class="marcas" id="marcas" aria-label="Marcas que já confiaram no trabalho">
-    <div class="container">
-      <p class="marcas-titulo">Marcas que já confiaram no meu conteúdo</p>
-      <ul class="marcas-lista" id="marcas-lista"></ul>
+    <!-- Barra de marcas flutuante (glassmorphism), grudada na base do Hero -->
+    <div class="marcas" id="marcas" aria-label="Marcas que já confiaram no trabalho">
+      <p class="marcas-titulo">Marcas já divulgadas</p>
+      <div class="marcas-esteira">
+        <ul class="marcas-lista" id="marcas-lista"></ul>
+      </div>
     </div>
   </section>
 
@@ -927,14 +1164,20 @@
     <div class="container">
       <div class="portfolio-cabecalho reveal">
         <p class="rotulo">Portfólio</p>
-        <h2 class="titulo-secao" id="portfolio-titulo">Trabalhos em <em>diferentes</em> nichos</h2>
-        <p class="descricao-secao">Alguns exemplos de conteúdo criado para marcas parceiras, organizados por nicho de atuação.</p>
+        <h2 class="titulo-secao" id="portfolio-titulo">Trabalhos em <em>diferentes</em> <em class="destaque">nichos</em></h2>
+        <p class="descricao-secao">Alguns exemplos de conteúdo criado para marcas parceiras.</p>
       </div>
       <div class="portfolio-carrossel-cabecalho reveal">
         <div class="filtros" id="portfolio-filtros" role="group" aria-label="Filtrar portfólio por nicho"></div>
         <div class="portfolio-carrossel-setas" id="portfolio-setas"></div>
       </div>
       <div class="portfolio-trilho" id="trilho-portfolio"></div>
+
+      <div class="portfolio-carrossel-cabecalho reveal" style="justify-content:flex-start; gap:20px; margin-top:56px;">
+        <p class="rotulo" style="margin:0;">Fotos de Produtos</p>
+        <div class="portfolio-carrossel-setas" id="produtos-setas" style="margin-left:auto;"></div>
+      </div>
+      <div class="portfolio-trilho" id="trilho-produtos"></div>
     </div>
   </section>
 
@@ -946,31 +1189,10 @@
         <h2 class="titulo-secao" id="servicos-titulo">O que eu entrego para a <em>sua</em> marca</h2>
         <p class="descricao-secao">Conteúdo pensado para conectar, gerar confiança e converter, do jeito que o seu público realmente consome.</p>
       </div>
-      <div class="servicos-grid" id="servicos-grid"></div>
-    </div>
-  </section>
-
-  <!-- ===================== NÚMEROS / RESULTADOS ===================== -->
-  <section class="numeros" id="numeros" aria-labelledby="numeros-titulo">
-    <div class="container">
-      <div class="reveal">
-        <p class="rotulo">Resultados</p>
-        <h2 class="titulo-secao" id="numeros-titulo">Números que mostram <em>impacto</em> real</h2>
-        <p class="descricao-secao">Estes são os indicadores que acompanho de perto para garantir que o conteúdo entrega resultado, não só estética.</p>
+      <div class="portfolio-carrossel-cabecalho reveal" style="justify-content:flex-end; margin-top:22px;">
+        <div class="portfolio-carrossel-setas" id="servicos-setas"></div>
       </div>
-      <div class="numeros-grid" id="numeros-grid"></div>
-    </div>
-  </section>
-
-  <!-- ===================== DEPOIMENTOS ===================== -->
-  <section class="depoimentos" id="depoimentos" aria-labelledby="depoimentos-titulo">
-    <div class="container">
-      <div class="reveal">
-        <p class="rotulo">Depoimentos</p>
-        <h2 class="titulo-secao" id="depoimentos-titulo">O que dizem as marcas <em>parceiras</em></h2>
-        <p class="descricao-secao">A confiança de quem já trabalhou comigo é o meu melhor cartão de visita.</p>
-      </div>
-      <div class="depoimentos-grid" id="depoimentos-grid"></div>
+      <div class="portfolio-trilho" id="trilho-servicos"></div>
     </div>
   </section>
 
@@ -979,10 +1201,18 @@
     <div class="container">
       <div class="reveal" style="margin-bottom: 44px;">
         <p class="rotulo">Contato</p>
-        <h2 class="titulo-secao" id="contato-titulo">Vamos criar conteúdo <em>juntas</em>?</h2>
+        <h2 class="titulo-secao" id="contato-titulo">Vamos criar conteúdo <em>juntos</em>?</h2>
         <p class="descricao-secao">Me conta um pouco sobre a sua marca e o que você precisa. Respondo rapidinho.</p>
       </div>
       <div class="contato-grid" id="contato-conteudo"></div>
+      <div class="voltar-topo-wrap">
+        <a href="#topo" class="link-topo">
+          <span class="link-topo-icone" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+          </span>
+          <span class="link-topo-texto">Voltar ao topo</span>
+        </a>
+      </div>
     </div>
   </section>
 
@@ -997,7 +1227,6 @@
     </div>
     <div class="rodape-baixo">
       <span id="rodape-copyright"></span>
-      <a href="#topo">Voltar ao topo</a>
     </div>
   </div>
 </footer>
@@ -1038,8 +1267,6 @@ const CONFIG = {
     { texto: "Sobre", href: "#sobre" },
     { texto: "Portfólio", href: "#portfolio" },
     { texto: "Serviços", href: "#servicos" },
-    { texto: "Resultados", href: "#numeros" },
-    { texto: "Depoimentos", href: "#depoimentos" },
     { texto: "Contato", href: "#contato" }
   ],
 
@@ -1058,33 +1285,35 @@ const CONFIG = {
     descricaoMidia: "Foto de capa de Erika Barreiros, criadora de conteúdo UGC"
   },
 
-  // EDITE AQUI: marcas com quem já trabalhou (troque pelos nomes reais das suas parcerias)
+  // EDITE AQUI: marcas com quem já trabalhou. Cada uma precisa do "logo" (caminho do
+  // arquivo em imagens/marcas/) e de um "nome" (usado no texto alternativo da imagem).
   marcas: [
-    "Bellaskin", "Nutrivida", "Tecnofácil", "Petlove+", "Casa Clara", "Vitaplena"
+    { nome: "Kiss New York", logo: "imagens/marcas/kissnewyork.png" },
+    { nome: "Vhita", logo: "imagens/marcas/vhita.png" },
+    { nome: "Growth Supplements", logo: "imagens/marcas/growth.png" },
+    { nome: "3 Corações", logo: "imagens/marcas/3coracoes.png" },
+    { nome: "doTERRA", logo: "imagens/marcas/doterra.png", inverterCor: true },
+    { nome: "Pet Society", logo: "imagens/marcas/petsociety.png" },
+    { nome: "Medicube", logo: "imagens/marcas/medicube.png" }
   ],
 
   // EDITE AQUI: texto da seção Sobre
   sobre: {
-    titulo: "A pessoa por trás da <em>câmera</em>",
+    nome: "Erika",
+    saudacao: "Oie, eu sou a <em>Erika</em>!",
+    subtitulo: "Conteúdo que gera confiança",
     paragrafos: [
-      "Sou a Erika, tenho 53 anos, e o meu jeito de criar conteúdo nasceu antes das câmeras. Eu testo de verdade, entendo o produto e só então conto para o meu público por que ele faz sentido, ou não, na rotina de quem assiste.",
-      "Por quase 27 anos administrei minha própria confecção de moda feminina e fitness, cuidando de produção, logística e gestão, e também das fotos e vídeos que vendiam a marca. Essa vivência me ensinou, na prática, o que uma marca precisa para vender de verdade, e é isso que eu trago para cada vídeo que faço hoje.",
-      "Minha comunicação é próxima, calorosa e direta, sem tom de especialista distante. Isso cria uma conexão genuína com quem consome o conteúdo, e é exatamente essa confiança, de amiga para amiga, que se transforma em resultado para a marca parceira."
+      "Sou a Erika, 53 anos, casada, mãe de pet. Antes de estar na frente das câmeras, passei quase 27 anos à frente da minha própria confecção de moda. Cuidei de produção, logística, gestão e também das fotos e vídeos que vendiam a marca. Foi ali que aprendi, na prática, o que faz um conteúdo vender de verdade.",
+      "<strong>Hoje uso essa vivência pra criar vídeos que soam como conselho de amiga, não como propaganda. É assim que se conquista confiança de verdade, e é confiança que converte em resultado pra marca.</strong>"
     ],
-    lista: [
-      "Roteiro, captação e edição feitos com cuidado do início ao fim",
-      "Linguagem acolhedora, próxima e fácil de entender",
-      "Quase 3 décadas de vivência em gestão de negócio, o que traz organização, prazo e visão de marca para cada entrega",
-      "Conteúdo pensado para performar em anúncios e também de forma orgânica"
-    ],
-    descricaoMidia: "Foto de Erika Barreiros sorrindo, transmitindo confiança e proximidade"
+    imagem: "imagens/foto-sobre-pets.png",
+    descricaoImagem: "Erika Barreiros sorrindo ao lado de seus dois cachorros de estimação"
   },
 
   // EDITE AQUI: nichos usados nos botões de filtro do portfólio
   portfolioCategorias: [
     { chave: "skincare", texto: "Skincare & Beleza" },
     { chave: "tecnologia", texto: "Tecnologia" },
-    { chave: "consumo", texto: "Consumo & Reviews" },
     { chave: "pet", texto: "Pet" },
     { chave: "bem-estar", texto: "Bem-Estar" },
     { chave: "casa", texto: "Casa & Organização" }
@@ -1094,19 +1323,29 @@ const CONFIG = {
   // Itens com "videoId" mostram a miniatura real do vídeo no YouTube (clicável) em vez do
   // bloco de gradiente, e cada clique é contado como "vídeo visto" no painel administrativo.
   portfolioItens: [
-    { titulo: "Booster", categoria: "skincare", tag: "Vídeo UGC", videoId: "BlJFdNolLYs" },
-    { titulo: "Modelador de Cachos", categoria: "skincare", tag: "Vídeo UGC", videoId: "iOT6lIM1MkA", capa: "imagens/capa-modelador-de-cachos.jpg" },
-    { titulo: "Unboxing de dispositivo de beleza importado", categoria: "skincare", tag: "Unboxing" },
-    { titulo: "Primeiros passos com inteligência artificial no dia a dia", categoria: "tecnologia", tag: "Vídeo UGC" },
-    { titulo: "Aplicativo de organização financeira, vale a pena?", categoria: "tecnologia", tag: "Reels" },
-    { titulo: "Comparativo de compra: dois marketplaces, um produto", categoria: "consumo", tag: "Comparativo" },
-    { titulo: "Review completo após 30 dias de uso", categoria: "consumo", tag: "Resenha", videoId: "ibEEUU8oDDs" },
-    { titulo: "Cuidados diários com Bulldog Francês", categoria: "pet", tag: "Vídeo UGC" },
-    { titulo: "Banho a Seco", categoria: "pet", tag: "Vídeo UGC", videoId: "3Tg3g_0h7sM" },
-    { titulo: "CREATINA GROWTH", categoria: "bem-estar", tag: "Vídeo UGC", videoId: "vBai7y2ph64" },
-    { titulo: "Omega 3 VHITA", categoria: "bem-estar", tag: "Vídeo UGC", videoId: "28js5oXUjwA", capa: "imagens/capa-omega-3.jpg" },
-    { titulo: "Organização de closet em cinco passos simples", categoria: "casa", tag: "Fotos de produto" },
-    { titulo: "Produtos organizadores que realmente funcionam", categoria: "casa", tag: "Reels" }
+    { titulo: "Modelador de Cachos", categoria: "skincare", tag: "Vídeo UGC", marca: "KISS NEW YORK", videoId: "iOT6lIM1MkA", capa: "imagens/capa-modelador-de-cachos.jpg" },
+    { titulo: "Banho a Seco Pet Society", categoria: "pet", tag: "Vídeo UGC", marca: "PET SOCIETY", videoId: "B34NZrVWbs4" },
+    { titulo: "Omega 3 VHITA", categoria: "bem-estar", tag: "Vídeo UGC", marca: "VHITA", videoId: "28js5oXUjwA", capa: "imagens/capa-omega-3.jpg" },
+    { titulo: "Cappuccino 3 Corações Havanna", categoria: "casa", tag: "Vídeo UGC", marca: "3 CORAÇÕES", videoId: "gmP9A3INoNM" },
+    { titulo: "Unboxing Óleos Essenciais", categoria: "bem-estar", tag: "Vídeo UGC", marca: "DOTERRA", videoId: "5zeC5P23Glk" },
+    { titulo: "CREATINA GROWTH", categoria: "bem-estar", tag: "Vídeo UGC", marca: "GROWTH", videoId: "vBai7y2ph64" },
+    // Espaços reservados (sem vídeo ainda) pra manter o carrossel com a mesma aparência
+    // de antes. EDITE AQUI: quando mandar um vídeo novo, é só trocar um destes objetos
+    // pelo formato completo (titulo, categoria, tag, videoId) na posição desejada.
+    { titulo: "Em breve", categoria: "em-breve", tag: "Novo conteúdo em breve" },
+    { titulo: "Em breve", categoria: "em-breve", tag: "Novo conteúdo em breve" }
+  ],
+
+  // EDITE AQUI: fotos de produto (still de produto). Troque cada "titulo" pela legenda
+  // desejada e, quando tiver a foto real, adicione "imagem: 'imagens/sua-foto.jpg'" no
+  // objeto correspondente para substituir o bloco de gradiente pela foto de verdade.
+  fotosProdutos: [
+    { titulo: "Medicube", imagem: "imagens/produto-boosterpro.jpg" },
+    { titulo: "Três Corações", imagem: "imagens/produto-cappuccino.jpg" },
+    { titulo: "doTERRA", imagem: "imagens/produto-claricalm-doterra.jpg" },
+    { titulo: "Pet Society", imagem: "imagens/produto-petsociety-dogs.jpg" },
+    { titulo: "Kiss New York", imagem: "imagens/produto-kissny.jpg" },
+    { titulo: "Pet Society", imagem: "imagens/produto-petsociety.jpg" }
   ],
 
   // EDITE AQUI: serviços oferecidos
@@ -1158,6 +1397,10 @@ const GRADIENTES = [
 const ICONE_INSTAGRAM = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1"/></svg>`;
 const ICONE_TIKTOK = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.6 3c.4 2.2 1.8 3.9 4 4.3v3.1a7.6 7.6 0 0 1-4-1.2v6.6a5.9 5.9 0 1 1-5.9-5.9c.2 0 .5 0 .7.1v3.2a2.8 2.8 0 1 0 2 2.7V3h3.2z"/></svg>`;
 const ICONE_LOCAL = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 21s-7-7.1-7-12a7 7 0 1 1 14 0c0 4.9-7 12-7 12z"/><circle cx="12" cy="9" r="2.4"/></svg>`;
+// Logo oficial do WhatsApp (silhueta do balão de fala + fone), em currentColor pra sempre
+// herdar a cor do site em vez do verde oficial da marca — mantém a identidade visual.
+const ICONE_WHATSAPP = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.2-.7.8-.8.9-.1.2-.3.2-.6.1-.2-.1-1-.4-1.9-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.2 0-.4.1-.5.1-.1.2-.3.4-.4.1-.2.2-.3.2-.5.1-.2 0-.4 0-.5 0-.1-.6-1.5-.8-2-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.2-.9.9-.9 2.2s1 2.6 1.1 2.7c.1.2 1.9 3 4.7 4.1.7.3 1.2.4 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.5-.6 1.8-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/></svg>`;
+const ICONE_EMAIL = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/></svg>`;
 /* Setas usadas na navegação dos carrosséis de portfólio por nicho */
 const ICONE_SETA_ESQUERDA = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>`;
 const ICONE_SETA_DIREITA = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>`;
@@ -1224,21 +1467,182 @@ function configurarRastreamentoDeCliques(){
   });
 }
 
-// Modal (lightbox) que reproduz o vídeo do YouTube incorporado, sem sair do site
+// Modal (lightbox) que reproduz o vídeo do YouTube incorporado, sem sair do site.
+// Usa a API do player (não só parâmetro de URL) pra conseguir forçar a legenda
+// desligada de verdade — ver desligarLegenda() acima.
+let playerDoModal = null;
 function abrirModalDeVideo(videoId){
   const modal = document.getElementById("video-modal");
   const quadro = document.getElementById("video-modal-quadro");
-  // cc_load_policy=0 evita que a legenda automática do YouTube apareça por padrão no vídeo
-  quadro.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&cc_load_policy=0" title="Player de vídeo" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+  quadro.innerHTML = "";
+  const suporte = document.createElement("div");
+  quadro.appendChild(suporte);
   modal.hidden = false;
   document.body.style.overflow = "hidden";
+
+  carregarApiYouTube().then(() => {
+    // Se o modal já foi fechado antes da API terminar de carregar, não cria o player.
+    if(modal.hidden) return;
+    playerDoModal = new YT.Player(suporte, {
+      videoId: videoId,
+      playerVars: {
+        autoplay: 1, rel: 0, modestbranding: 1, iv_load_policy: 3,
+        cc_load_policy: 0, playsinline: 1
+      },
+      events: {
+        onReady: (evento) => {
+          desligarLegenda(evento.target);
+          evento.target.playVideo();
+        },
+        onStateChange: (evento) => {
+          if(evento.data === YT.PlayerState.PLAYING) desligarLegenda(evento.target);
+        }
+      }
+    });
+  });
 }
 
 function fecharModalDeVideo(){
   const modal = document.getElementById("video-modal");
-  document.getElementById("video-modal-quadro").innerHTML = ""; // remove o iframe para parar o vídeo e o som
+  if(playerDoModal){
+    playerDoModal.destroy();
+    playerDoModal = null;
+  }
+  document.getElementById("video-modal-quadro").innerHTML = ""; // remove o player para parar o vídeo e o som
   modal.hidden = true;
   document.body.style.overflow = "";
+}
+
+// Enquanto o cursor estiver dentro da seção de portfólio, todos os vídeos tocam
+// uma prévia sem som direto nos cards (não precisa passar o mouse em cada um).
+// O modal continua abrindo normalmente no clique.
+// Carrega a API oficial do player do YouTube uma única vez. Ela permite controlar o
+// player por JavaScript (não só por parâmetro de URL), o que é necessário pra forçar
+// a legenda desligada de verdade — via URL sozinho o YouTube às vezes reativa a legenda
+// automaticamente quando o vídeo está mudo.
+let promessaApiYouTube = null;
+function carregarApiYouTube(){
+  if(promessaApiYouTube) return promessaApiYouTube;
+  promessaApiYouTube = new Promise((resolve) => {
+    if(window.YT && window.YT.Player){
+      resolve();
+      return;
+    }
+    const scriptAnterior = window.onYouTubeIframeAPIReady;
+    window.onYouTubeIframeAPIReady = () => {
+      if(typeof scriptAnterior === "function") scriptAnterior();
+      resolve();
+    };
+    const script = document.createElement("script");
+    script.src = "https://www.youtube.com/iframe_api";
+    document.head.appendChild(script);
+  });
+  return promessaApiYouTube;
+}
+
+// Força a legenda desligada de verdade num player da API do YouTube. Usado tanto na
+// prévia sem som dos cards quanto no player do modal — via parâmetro de URL sozinho
+// (cc_load_policy=0) o YouTube às vezes reativa a legenda automaticamente.
+function desligarLegenda(player){
+  try{ player.unloadModule("captions"); } catch(e){}
+  try{ player.setOption("captions", "track", {}); } catch(e){}
+}
+
+function configurarPreviewDeVideoNoHover(){
+  const botoes = Array.from(document.querySelectorAll(".midia-video"));
+  const previews = new Map();
+
+  function iniciarPreview(botao){
+    if(previews.has(botao)) return;
+    const videoId = botao.dataset.videoId;
+    const suporte = document.createElement("div");
+    botao.appendChild(suporte);
+    previews.set(botao, { player: null, elemento: suporte });
+    botao.classList.add("pre-visualizando");
+
+    // A API já foi carregada com antecedência (chamada logo no início da página),
+    // então na prática o player cria e toca na hora, sem espera perceptível.
+    carregarApiYouTube().then(() => {
+      // Se o mouse já saiu antes da API terminar de carregar, não cria o player.
+      if(!previews.has(botao)) return;
+      const player = new YT.Player(suporte, {
+        videoId: videoId,
+        playerVars: {
+          autoplay: 1, mute: 1, controls: 0, loop: 1, playlist: videoId,
+          modestbranding: 1, rel: 0, playsinline: 1, iv_load_policy: 3,
+          disablekb: 1, fs: 0, cc_load_policy: 0
+        },
+        events: {
+          onReady: (evento) => {
+            desligarLegenda(evento.target);
+            evento.target.mute();
+            evento.target.playVideo();
+            evento.target.getIframe().classList.add("midia-video-preview");
+          },
+          onStateChange: (evento) => {
+            if(evento.data === YT.PlayerState.PLAYING) desligarLegenda(evento.target);
+          }
+        }
+      });
+      const atual = previews.get(botao);
+      if(atual) atual.player = player;
+    });
+  }
+
+  function pararPreview(botao){
+    const preview = previews.get(botao);
+    if(preview){
+      if(preview.player){
+        preview.player.destroy();
+      } else {
+        preview.elemento.remove();
+      }
+      previews.delete(botao);
+    }
+    botao.classList.remove("pre-visualizando");
+  }
+
+  // mouseenter/mouseleave só disparam quando o mouse realmente se move para dentro
+  // ou fora da seção. Se a página rolar até o portfólio com o cursor parado, esses
+  // eventos nunca acontecem. Por isso conferimos a posição do cursor a cada movimento
+  // E a cada rolagem, comparando com a área da seção na tela.
+  const secaoPortfolio = document.getElementById("portfolio");
+  let dentroDaSecao = false;
+  let ultimoX = -1;
+  let ultimoY = -1;
+
+  function atualizarEstado(){
+    if(ultimoX === -1) return;
+    const retangulo = secaoPortfolio.getBoundingClientRect();
+    const dentro = ultimoX >= retangulo.left && ultimoX <= retangulo.right &&
+                   ultimoY >= retangulo.top && ultimoY <= retangulo.bottom;
+    if(dentro && !dentroDaSecao){
+      dentroDaSecao = true;
+      botoes.forEach(iniciarPreview);
+    } else if(!dentro && dentroDaSecao){
+      dentroDaSecao = false;
+      botoes.forEach(pararPreview);
+    }
+  }
+
+  document.addEventListener("mousemove", (evento) => {
+    ultimoX = evento.clientX;
+    ultimoY = evento.clientY;
+    atualizarEstado();
+  });
+  window.addEventListener("scroll", atualizarEstado, { passive: true });
+}
+
+// O cabeçalho (#topo) é "position:fixed", e navegadores não rolam de forma confiável
+// até um elemento fixo pelo link "#topo" — por isso o botão de voltar ao topo usa
+// scroll direto por JavaScript em vez de depender só do link âncora.
+function configurarVoltarAoTopo(){
+  document.querySelectorAll(".link-topo").forEach(link => {
+    link.addEventListener("click", (evento) => {
+      evento.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  });
 }
 
 function configurarModalDeVideo(){
@@ -1305,22 +1709,42 @@ function renderizarHero(){
 }
 
 function renderizarMarcas(){
-  document.getElementById("marcas-lista").innerHTML = CONFIG.marcas.map(marca =>
-    `<li>${marca}</li>`
-  ).join("");
+  // A lista é repetida várias vezes (só a 1ª cópia é "real" pra leitor de tela,
+  // as outras são aria-hidden) pra criar o efeito de esteira infinita. Com só
+  // 2 cópias, se uma volta da lista (largura de 1 cópia) for mais estreita que
+  // a tela, sobra um vão em branco perto do fim de cada ciclo — com poucas
+  // logos e sem cartão de fundo, isso acontecia. Repetindo REPETICOES vezes e
+  // andando sempre 1/REPETICOES da largura total por ciclo, garante-se que
+  // sempre há conteúdo de sobra cobrindo até telas bem largas.
+  const REPETICOES = 5;
+  const item = (marca, duplicado) => `
+    <li class="marcas-item"${duplicado ? ' aria-hidden="true"' : ""}>
+      <img src="${marca.logo}" alt="${duplicado ? "" : marca.nome}" loading="lazy"${marca.inverterCor ? ' class="logo-inverter"' : ""}>
+    </li>
+    <li class="marcas-separador" aria-hidden="true">&#9670;</li>
+  `;
+  const copias = Array.from({ length: REPETICOES }, (_, i) =>
+    CONFIG.marcas.map(marca => item(marca, i > 0)).join("")
+  );
+  document.getElementById("marcas-lista").innerHTML = copias.join("");
 }
 
 function renderizarSobre(){
   const paragrafosHtml = CONFIG.sobre.paragrafos.map(p => `<p>${p}</p>`).join("");
-  const listaHtml = CONFIG.sobre.lista.map(item => `<li>${item}</li>`).join("");
 
   document.getElementById("sobre-conteudo").innerHTML = `
-    <div class="midia-gradiente midia-sobre reveal" role="img" aria-label="${CONFIG.sobre.descricaoMidia}" style="background:${GRADIENTES[2]}"></div>
-    <div class="sobre-texto reveal">
-      <p class="rotulo">Sobre mim</p>
-      <h2 id="sobre-titulo" class="titulo-secao">${CONFIG.sobre.titulo}</h2>
-      ${paragrafosHtml}
-      <ul class="sobre-lista">${listaHtml}</ul>
+    <div class="sobre-midia reveal">
+      <img class="sobre-foto" src="${CONFIG.sobre.imagem}" alt="${CONFIG.sobre.descricaoImagem}" loading="lazy">
+    </div>
+    <div class="sobre-texto-bloco">
+      <div class="reveal">
+        <p class="rotulo">Sobre mim</p>
+        <h2 id="sobre-titulo" class="sobre-saudacao">${CONFIG.sobre.saudacao}</h2>
+        <p class="sobre-subtitulo">${CONFIG.sobre.subtitulo}</p>
+      </div>
+      <div class="sobre-texto-corpo reveal" style="transition-delay:.12s">
+        ${paragrafosHtml}
+      </div>
     </div>
   `;
 }
@@ -1360,11 +1784,13 @@ function renderizarPortfolio(){
              data-video-id="${item.videoId}" data-video-titulo="${item.titulo}"
              aria-label="Assistir vídeo: ${item.titulo}">
             <img src="${thumb}" alt="Miniatura do vídeo: ${item.titulo}" loading="lazy" draggable="false">
+            ${item.marca ? `<span class="portfolio-item-marca">${item.marca}</span>` : ""}
             <span class="midia-video-play" aria-hidden="true">▶</span>
-            <span class="portfolio-item-tag">${item.tag}</span>
+            <div class="portfolio-item-overlay">
+              <p class="portfolio-item-titulo">${item.titulo}</p>
+              <p class="portfolio-item-categoria">${nicho}</p>
+            </div>
           </button>
-          <p class="portfolio-item-titulo">${item.titulo}</p>
-          <p class="portfolio-item-categoria">${nicho}</p>
         </div>
       `;
     }
@@ -1372,10 +1798,11 @@ function renderizarPortfolio(){
     return `
       <div class="portfolio-item" data-categoria="${item.categoria}">
         <div class="midia-gradiente midia-portfolio" role="img" aria-label="Exemplo de trabalho: ${item.titulo}" style="background:${GRADIENTES[i % GRADIENTES.length]}">
-          <span class="portfolio-item-tag">${item.tag}</span>
+          <div class="portfolio-item-overlay">
+            <p class="portfolio-item-titulo">${item.titulo}</p>
+            <p class="portfolio-item-categoria">${item.tag}</p>
+          </div>
         </div>
-        <p class="portfolio-item-titulo">${item.titulo}</p>
-        <p class="portfolio-item-categoria">${nicho}</p>
       </div>
     `;
   }).join("");
@@ -1384,13 +1811,45 @@ function renderizarPortfolio(){
 }
 
 function renderizarServicos(){
-  document.getElementById("servicos-grid").innerHTML = CONFIG.servicos.map(s => `
+  document.getElementById("servicos-setas").innerHTML = `
+    <button type="button" class="portfolio-carrossel-seta" data-trilho="trilho-servicos" data-direcao="-1" aria-label="Ver itens anteriores">${ICONE_SETA_ESQUERDA}</button>
+    <button type="button" class="portfolio-carrossel-seta" data-trilho="trilho-servicos" data-direcao="1" aria-label="Ver mais itens">${ICONE_SETA_DIREITA}</button>
+  `;
+
+  document.getElementById("trilho-servicos").innerHTML = CONFIG.servicos.map(s => `
     <div class="servico-card reveal">
       <div class="servico-icone" aria-hidden="true"></div>
       <h3>${s.titulo}</h3>
       <p>${s.descricao}</p>
     </div>
   `).join("");
+}
+
+function renderizarFotosProdutos(){
+  document.getElementById("produtos-setas").innerHTML = `
+    <button type="button" class="portfolio-carrossel-seta" data-trilho="trilho-produtos" data-direcao="-1" aria-label="Ver itens anteriores">${ICONE_SETA_ESQUERDA}</button>
+    <button type="button" class="portfolio-carrossel-seta" data-trilho="trilho-produtos" data-direcao="1" aria-label="Ver mais itens">${ICONE_SETA_DIREITA}</button>
+  `;
+
+  document.getElementById("trilho-produtos").innerHTML = CONFIG.fotosProdutos.map((foto, i) => {
+    if(foto.imagem){
+      return `
+        <div class="produto-item reveal">
+          <div class="midia-gradiente midia-produto" role="img" aria-label="${foto.titulo}">
+            <img src="${foto.imagem}" alt="${foto.titulo}" loading="lazy" draggable="false" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">
+            <span class="portfolio-item-tag">${foto.titulo}</span>
+          </div>
+        </div>
+      `;
+    }
+    return `
+      <div class="produto-item reveal">
+        <div class="midia-gradiente midia-produto" role="img" aria-label="${foto.titulo}" style="background:${GRADIENTES[i % GRADIENTES.length]}">
+          <span class="portfolio-item-tag">${foto.titulo}</span>
+        </div>
+      </div>
+    `;
+  }).join("");
 }
 
 function renderizarNumeros(){
@@ -1439,15 +1898,15 @@ function renderizarContato(){
       <h3>Prefere falar direto?</h3>
       <div class="contato-canais">
         <a class="contato-canal" href="${CONFIG.perfil.whatsappLink}" target="_blank" rel="noopener" data-evento="contact_whatsapp">
-          <span class="contato-canal-icone" aria-hidden="true">W</span>
+          <span class="contato-canal-icone" aria-hidden="true">${ICONE_WHATSAPP}</span>
           WhatsApp: ${CONFIG.perfil.telefoneExibicao}
         </a>
         <a class="contato-canal" href="mailto:${CONFIG.perfil.email}" data-evento="contact_email">
-          <span class="contato-canal-icone" aria-hidden="true">@</span>
+          <span class="contato-canal-icone" aria-hidden="true">${ICONE_EMAIL}</span>
           ${CONFIG.perfil.email}
         </a>
         <a class="contato-canal" href="${CONFIG.perfil.instagramLink}" target="_blank" rel="noopener" data-evento="contact_instagram">
-          <span class="contato-canal-icone" aria-hidden="true">IG</span>
+          <span class="contato-canal-icone" aria-hidden="true">${ICONE_INSTAGRAM}</span>
           Instagram ${CONFIG.perfil.instagramHandle}
         </a>
       </div>
@@ -1459,14 +1918,15 @@ function renderizarRodape(){
   document.getElementById("rodape-logo").textContent = CONFIG.perfil.nomeCompleto;
 
   document.getElementById("rodape-redes").innerHTML = `
-    <a href="${CONFIG.perfil.instagramLink}" target="_blank" rel="noopener" aria-label="Instagram de ${CONFIG.perfil.nomeCompleto}" data-evento="contact_instagram">IG</a>
-    <a href="${CONFIG.perfil.whatsappLink}" target="_blank" rel="noopener" aria-label="WhatsApp de ${CONFIG.perfil.nomeCompleto}" data-evento="contact_whatsapp">W</a>
-    <a href="mailto:${CONFIG.perfil.email}" aria-label="E-mail de ${CONFIG.perfil.nomeCompleto}" data-evento="contact_email">@</a>
+    <a href="${CONFIG.perfil.instagramLink}" target="_blank" rel="noopener" aria-label="Instagram de ${CONFIG.perfil.nomeCompleto}" data-evento="contact_instagram">${ICONE_INSTAGRAM}</a>
+    <a href="${CONFIG.perfil.whatsappLink}" target="_blank" rel="noopener" aria-label="WhatsApp de ${CONFIG.perfil.nomeCompleto}" data-evento="contact_whatsapp">${ICONE_WHATSAPP}</a>
+    <a href="${CONFIG.perfil.tiktokLink}" target="_blank" rel="noopener" aria-label="TikTok de ${CONFIG.perfil.nomeCompleto}" data-evento="social_tiktok">${ICONE_TIKTOK}</a>
+    <a href="mailto:${CONFIG.perfil.email}" aria-label="E-mail de ${CONFIG.perfil.nomeCompleto}" data-evento="contact_email">${ICONE_EMAIL}</a>
   `;
 
   const anoAtual = new Date().getFullYear();
-  document.getElementById("rodape-copyright").textContent =
-    `© ${anoAtual} ${CONFIG.perfil.nomeCompleto}. Todos os direitos reservados.`;
+  document.getElementById("rodape-copyright").innerHTML =
+    `© ${anoAtual} <strong>${CONFIG.perfil.nomeCompleto}</strong>. Todos os direitos reservados.`;
 }
 
 function renderizarTudo(){
@@ -1475,9 +1935,11 @@ function renderizarTudo(){
   renderizarMarcas();
   renderizarSobre();
   renderizarPortfolio();
+  renderizarFotosProdutos();
   renderizarServicos();
-  renderizarNumeros();
-  renderizarDepoimentos();
+  // Números e Depoimentos ficam desativados até ter dados reais (ver CONFIG.numeros
+  // e CONFIG.depoimentos) — as seções e funções renderizarNumeros()/renderizarDepoimentos()
+  // continuam no código pra reativar depois.
   renderizarContato();
   renderizarRodape();
 }
@@ -1663,6 +2125,7 @@ function configurarFormulario(){
 ===================================================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
+  carregarApiYouTube(); // começa a carregar em segundo plano, antes de qualquer hover
   renderizarTudo();
   configurarMenuMobile();
   configurarFiltrosPortfolio();
@@ -1672,6 +2135,8 @@ document.addEventListener("DOMContentLoaded", () => {
   configurarFormulario();
   configurarRastreamentoDeCliques();
   configurarModalDeVideo();
+  configurarVoltarAoTopo();
+  configurarPreviewDeVideoNoHover();
   registrarEvento("page_view", "home", null);
 });
 </script>
