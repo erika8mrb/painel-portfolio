@@ -1103,8 +1103,24 @@
     .nav-desktop{ display: none; }
     .hamburguer{ display: flex; position: absolute; right: 24px; top: 50%; transform: translateY(-50%); }
     .hero-conteudo{ padding-top: 118px; }
+    /* No celular, 85vw deixava o nome quase ponta a ponta, sem respiro nas laterais
+       e sem parecer uma composição centralizada — só mais larga. Reduzido pra dar
+       uma margem visível dos dois lados, mantendo a mesma centralização de sempre. */
+    .hero-nome-img{ width: clamp(230px, 76vw, 420px); }
+    /* Força aceleração por GPU só no mobile: sem isso, a combinação de animação
+       contínua + backdrop-filter (blur) do .marcas costuma engasgar no Safari
+       mobile, fazendo a esteira de marcas parecer travada em vez de rolar fluida. */
+    .marcas-lista{
+      will-change: transform;
+      transform: translateZ(0);
+      -webkit-transform: translateZ(0);
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
     .hero-acoes .botao{ padding: 10px 18px; font-size: 12.5px; }
-    .hero-rodape-mini{ flex-direction: column; align-items: flex-start; gap: 14px; }
+    /* .hero-rodape-mini herda do desktop: display:flex + justify-content:space-between,
+       então ícones (1º filho, .hero-redes) ficam à esquerda e localização (2º filho,
+       .hero-local) à direita — igual ao desktop, sem precisar empilhar em coluna. */
     .numeros-grid{ grid-template-columns: repeat(2, 1fr); }
     .depoimentos-grid{ grid-template-columns: 1fr; }
     .rodape-topo{ flex-direction: column; align-items: flex-start; }
