@@ -6,6 +6,11 @@
 <title>Erika Barreiros | Criadora de Conteúdo UGC</title>
 <meta name="description" content="Erika Barreiros, criadora de conteúdo UGC. Vídeos, fotos e resenhas autênticas para marcas que querem conquistar a confiança do público consumidor.">
 
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="imagens/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="imagens/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="imagens/apple-touch-icon.png">
+
 <!-- Fontes do Google Fonts: Italiana (assinatura/nome), Noto Serif Display (títulos editoriais, Regular + Italic)
      e Montserrat (corpo, botões, categorias). "The Seasons" do guia de marca é uma fonte paga e não está
      disponível no Google Fonts, então usei a Italiana como substituta gratuita com o mesmo espírito elegante
@@ -1254,11 +1259,11 @@ const CONFIG = {
     telefoneExibicao: "(13) 99191-3671",
     telefoneNumeros: "13991913671",
     whatsappLink: "https://wa.me/5513991913671",
-    instagramHandle: "@TESTE",
-    instagramLink: "https://instagram.com/TESTE",
+    instagramHandle: "@erikabarreiros.ugc",
+    instagramLink: "https://www.instagram.com/erikabarreiros.ugc/",
     // EDITE AQUI: troque pelo seu usuário real do TikTok
-    tiktokHandle: "@TESTE",
-    tiktokLink: "https://tiktok.com/@TESTE",
+    tiktokHandle: "@erikabarreir",
+    tiktokLink: "https://www.tiktok.com/@erikabarreir",
     localizacao: "Santos, Brasil"
   },
 
@@ -1306,7 +1311,7 @@ const CONFIG = {
       "Sou a Erika, 53 anos, casada, mãe de pet. Antes de estar na frente das câmeras, passei quase 27 anos à frente da minha própria confecção de moda. Cuidei de produção, logística, gestão e também das fotos e vídeos que vendiam a marca. Foi ali que aprendi, na prática, o que faz um conteúdo vender de verdade.",
       "<strong>Hoje uso essa vivência pra criar vídeos que soam como conselho de amiga, não como propaganda. É assim que se conquista confiança de verdade, e é confiança que converte em resultado pra marca.</strong>"
     ],
-    imagem: "imagens/foto-sobre-pets.png",
+    imagem: "imagens/foto-sobre-pets-eueospet.png",
     descricaoImagem: "Erika Barreiros sorrindo ao lado de seus dois cachorros de estimação"
   },
 
@@ -1326,13 +1331,13 @@ const CONFIG = {
     { titulo: "Modelador de Cachos", categoria: "skincare", tag: "Vídeo UGC", marca: "KISS NEW YORK", videoId: "iOT6lIM1MkA", capa: "imagens/capa-modelador-de-cachos.jpg" },
     { titulo: "Banho a Seco Pet Society", categoria: "pet", tag: "Vídeo UGC", marca: "PET SOCIETY", videoId: "B34NZrVWbs4" },
     { titulo: "Omega 3 VHITA", categoria: "bem-estar", tag: "Vídeo UGC", marca: "VHITA", videoId: "28js5oXUjwA", capa: "imagens/capa-omega-3.jpg" },
-    { titulo: "Cappuccino 3 Corações Havanna", categoria: "casa", tag: "Vídeo UGC", marca: "3 CORAÇÕES", videoId: "gmP9A3INoNM" },
+    { titulo: "Cappuccino 3 Corações Havanna", categoria: "casa", tag: "Vídeo UGC", marca: "3 CORAÇÕES", videoId: "WwwM0wkflYA" },
     { titulo: "Unboxing Óleos Essenciais", categoria: "bem-estar", tag: "Vídeo UGC", marca: "DOTERRA", videoId: "5zeC5P23Glk" },
     { titulo: "CREATINA GROWTH", categoria: "bem-estar", tag: "Vídeo UGC", marca: "GROWTH", videoId: "vBai7y2ph64" },
     // Espaços reservados (sem vídeo ainda) pra manter o carrossel com a mesma aparência
     // de antes. EDITE AQUI: quando mandar um vídeo novo, é só trocar um destes objetos
     // pelo formato completo (titulo, categoria, tag, videoId) na posição desejada.
-    { titulo: "Em breve", categoria: "em-breve", tag: "Novo conteúdo em breve" },
+    { titulo: "Booster Pro", categoria: "skincare", tag: "Vídeo UGC", marca: "MEDICUBE", videoId: "_mEa3oESgUA" },
     { titulo: "Em breve", categoria: "em-breve", tag: "Novo conteúdo em breve" }
   ],
 
@@ -1899,7 +1904,7 @@ function renderizarContato(){
       <div class="contato-canais">
         <a class="contato-canal" href="${CONFIG.perfil.whatsappLink}" target="_blank" rel="noopener" data-evento="contact_whatsapp">
           <span class="contato-canal-icone" aria-hidden="true">${ICONE_WHATSAPP}</span>
-          WhatsApp: ${CONFIG.perfil.telefoneExibicao}
+          ${CONFIG.perfil.telefoneExibicao}
         </a>
         <a class="contato-canal" href="mailto:${CONFIG.perfil.email}" data-evento="contact_email">
           <span class="contato-canal-icone" aria-hidden="true">${ICONE_EMAIL}</span>
@@ -1907,7 +1912,7 @@ function renderizarContato(){
         </a>
         <a class="contato-canal" href="${CONFIG.perfil.instagramLink}" target="_blank" rel="noopener" data-evento="contact_instagram">
           <span class="contato-canal-icone" aria-hidden="true">${ICONE_INSTAGRAM}</span>
-          Instagram ${CONFIG.perfil.instagramHandle}
+          ${CONFIG.perfil.instagramHandle}
         </a>
       </div>
     </div>
