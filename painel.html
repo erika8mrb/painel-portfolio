@@ -1057,12 +1057,14 @@
       container.innerHTML = ordenados
         .map((lead, indice) => {
           const telefoneDigitos = lead.phone ? somenteDigitos(lead.phone) : '';
-          const origemLegivel = lead.source === 'popup' ? 'Popup' : 'Contato';
+          // 'modal' = veio do popup de captura; qualquer outro valor (incluindo o
+          // legado 'contact', de antes da correção do fluxo) é o formulário do rodapé.
+          const origemLegivel = lead.source === 'modal' ? 'Modal' : 'Rodapé';
 
           return `
             <div class="cartao-mensagem">
               <button class="mensagem-cabecalho" data-toggle="${indice}" aria-expanded="false">
-                <span class="selo selo-${lead.source === 'popup' ? 'popup' : 'contact'}">${origemLegivel}</span>
+                <span class="selo selo-${lead.source === 'modal' ? 'popup' : 'contact'}">${origemLegivel}</span>
                 <span class="mensagem-nome">${escaparHtml(lead.name || 'Sem nome')}</span>
                 <span class="mensagem-data">${formatarData(lead.created_at)}</span>
                 <svg class="icone-expandir" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

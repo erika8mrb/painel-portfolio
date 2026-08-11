@@ -36,7 +36,7 @@ create table if not exists public.portfolio_leads (
   brand text,
   budget text,
   message text,
-  source text,                     -- 'contact' | 'popup'
+  source text,                     -- 'rodape' | 'modal' (valor legado antigo: 'contact')
   created_at timestamptz not null default now()
 );
 
@@ -66,21 +66,26 @@ create policy "authenticated pode ler leads"
 -- ------------------------------------------------------------
 -- IMPORTANTE — sobre a escrita (INSERT) dos eventos e leads:
 --
--- Este arquivo NÃO cria policies de INSERT para o papel "anon".
--- Isso é proposital: a chave anon é pública (fica exposta no HTML
--- do site do portfólio), então se qualquer visitante pudesse
--- inserir diretamente pelo navegador, alguém mal-intencionado
--- poderia forjar visitas, cliques e mensagens falsas.
+-- O ideal seria um servidor (function/edge function ou rota de
+-- backend) usando a service_role key pra gravar eventos e leads,
+-- em vez do navegador inserir direto com a chave anon (pública).
+-- Mas o site é hospedado como estático no GitHub Pages, sem
+-- servidor nenhum — então essa opção não está disponível aqui.
 --
--- A forma correta de registrar eventos e leads vindos do site
--- público é através de um servidor (uma function/edge function
--- ou uma rota de backend) que usa a service_role key do Supabase
--- (a chave secreta, nunca exposta no navegador) para inserir os
--- dados. O navegador do visitante chama o seu servidor, e é o
--- servidor quem grava no banco.
+-- Dado isso, liberamos INSERT (só insert — sem select/update/delete)
+-- para o papel "anon" na tabela portfolio_leads, restrito aos
+-- valores esperados de "source". É a alternativa mais pragmática
+-- compatível com hospedagem 100% estática: qualquer um pode inserir
+-- uma linha, mas ninguém além de quem faz login (authenticated)
+-- consegue ler, alterar ou apagar leads existentes.
 --
--- Se quiser liberar a escrita direto do navegador mesmo assim
--- (não recomendado), seria necessário criar policies de INSERT
--- para o papel "anon" nas duas tabelas — mas isso abre a porta
--- para dados falsos e spam.
+-- Trade-off aceito: sem um backend no meio, não dá pra bloquear
+-- 100% spam automatizado. Se isso virar problema, mitigar depois
+-- com rate-limit/captcha (ex: Cloudflare Turnstile) antes do insert.
 -- ------------------------------------------------------------
+
+create policy "anon pode inserir leads"
+  on public.portfolio_leads
+  for insert
+  to anon
+  with check (source in ('rodape', 'modal'));

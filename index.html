@@ -783,6 +783,138 @@
   .video-modal-fechar:hover{
     background: rgba(255,255,255,0.3);
   }
+
+  /* ===================== MODAL DE CAPTURA DE LEADS =====================
+     Reaproveita as mesmas variáveis de cor/raio/sombra do resto do site.
+     Sem verde: a identidade do site já substituiu azul/laranja por
+     grafite (--neutro-escuro) e bronze acinzentado (--acento/--acento-escuro),
+     então o eyebrow usa --acento-escuro em vez de um verde novo. */
+  .lead-modal{
+    position: fixed;
+    inset: 0;
+    z-index: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(20,17,13,0.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    padding: 20px;
+    opacity: 0;
+    transition: opacity .2s ease;
+  }
+  .lead-modal[hidden]{ display: none; }
+  .lead-modal.aberto{ opacity: 1; }
+  .lead-modal-card{
+    position: relative;
+    width: 100%;
+    max-width: 440px;
+    background: var(--branco);
+    border-radius: 24px;
+    box-shadow: var(--sombra);
+    padding: 40px 32px;
+    text-align: center;
+    transform: translateY(14px);
+    transition: transform .2s ease;
+  }
+  .lead-modal.aberto .lead-modal-card{ transform: translateY(0); }
+  @media (prefers-reduced-motion: reduce){
+    .lead-modal, .lead-modal-card{ transition: none; }
+  }
+  .lead-modal .rotulo{ margin-bottom: 14px; }
+  .lead-modal-titulo{
+    font-weight: 700;
+    font-size: 28px;
+    margin-bottom: 10px;
+  }
+  .lead-modal-subtitulo{
+    font-size: 15px;
+    margin-bottom: 26px;
+  }
+  .lead-modal-fechar{
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--tinta-suave);
+    font-size: 22px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background .2s ease;
+  }
+  .lead-modal-fechar:hover{ background: rgba(20,17,13,0.06); }
+  .lm-form{ text-align: left; }
+  .lm-campo{ margin-bottom: 16px; }
+  .lm-sr-only{
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap;
+    border: 0;
+  }
+  .lm-campo input{
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 16px;
+    border: 1.5px solid rgba(20,17,13,0.14);
+    background: transparent;
+    color: var(--tinta);
+    font-size: 15px;
+  }
+  .lm-campo input::placeholder{ color: var(--tinta-suave); }
+  .lm-campo input:focus{ border-color: var(--tinta); outline: none; }
+  .lm-campo input[aria-invalid="true"]{ border-color: #b3261e; }
+  .lm-erro{
+    display: block;
+    color: #b3261e;
+    font-size: 12.5px;
+    margin-top: 6px;
+    min-height: 0;
+  }
+  .lm-botao{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 14px 16px;
+    border: none;
+    border-radius: 16px;
+    background: var(--acento-escuro);
+    color: var(--branco);
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background .2s ease;
+  }
+  .lm-botao:hover{ background: var(--neutro-escuro2); }
+  .lm-botao:disabled{ opacity: .75; cursor: default; }
+  .lm-microcopy{
+    text-align: center;
+    font-size: 12.5px;
+    color: var(--tinta-suave);
+    margin: 14px 0 0;
+  }
+  .lm-erro-geral{
+    text-align: center;
+    color: #b3261e;
+    font-size: 13.5px;
+    margin: 14px 0 0;
+  }
+  .lm-erro-geral[hidden]{ display: none; }
+  .lm-sucesso{
+    padding: 12px 0;
+  }
+  .lm-sucesso p{ color: var(--tinta); font-weight: 600; margin: 0; }
+
   .portfolio-item-titulo{
     margin: 0;
     font-size: 16px;
@@ -965,6 +1097,20 @@
     margin-bottom: 18px;
   }
   .mensagem-confirmacao.visivel{ display: block; }
+  .formulario-campos.oculto{ display: none; }
+  .campo-erro{
+    display: block;
+    color: #b3261e;
+    font-size: 12.5px;
+    margin-top: 6px;
+  }
+  .campo input[aria-invalid="true"], .campo textarea[aria-invalid="true"]{ border-color: #b3261e; }
+  .formulario-erro-geral{
+    color: #b3261e;
+    font-size: 13.5px;
+    margin: 0 0 16px;
+  }
+  .formulario-erro-geral[hidden]{ display: none; }
 
   .contato-direto h3{ font-size: 20px; margin-bottom: 18px; }
   .contato-canais{ display: grid; gap: 14px; }
@@ -1126,6 +1272,8 @@
     .rodape-topo{ flex-direction: column; align-items: flex-start; }
     .rodape-baixo{ flex-direction: column; }
     .portfolio-item{ width: 160px; }
+    .lead-modal-card{ padding: 32px 24px; }
+    .lead-modal-titulo{ font-size: 24px; }
   }
 
   @media (max-width: 420px){
@@ -1144,6 +1292,13 @@
 <div class="video-modal" id="video-modal" role="dialog" aria-modal="true" aria-label="Reprodutor de vídeo" hidden>
   <button class="video-modal-fechar" id="video-modal-fechar" aria-label="Fechar vídeo">&times;</button>
   <div class="video-modal-quadro" id="video-modal-quadro"></div>
+</div>
+
+<!-- ===================== MODAL DE CAPTURA DE LEADS =====================
+     Conteúdo montado por renderizarModalDeLeads() a partir de CONFIG.modalLeads,
+     seguindo o mesmo padrão "EDITE AQUI" do resto do site. -->
+<div class="lead-modal" id="lead-modal" role="dialog" aria-modal="true" aria-labelledby="lead-modal-titulo" hidden>
+  <div class="lead-modal-card" id="lead-modal-card"></div>
 </div>
 
 <!-- ===================== CABEÇALHO / MENU ===================== -->
@@ -1398,10 +1553,24 @@ const CONFIG = {
     { texto: "A forma calorosa como ela apresenta o produto criou uma conexão imediata com o nosso público. Já fechamos a próxima parceria.", nome: "Juliana Prado", empresa: "Fundadora, pet shop parceiro" }
   ],
 
-  // EDITE AQUI: textos e assunto padrão do formulário de contato
+  // EDITE AQUI: textos do formulário de contato do rodapé
   formulario: {
-    assuntoEmail: "Contato via site - proposta de parceria",
-    textoConfirmacao: "Mensagem pronta! Se o seu e-mail não abrir automaticamente, me chame direto pelo WhatsApp."
+    // Mostrado no lugar do formulário depois de um envio bem-sucedido — o
+    // formulário não abre mais o e-mail do visitante, só grava o contato.
+    textoConfirmacao: "Recebi seu contato. Te respondo em breve.",
+    textoErro: "Não consegui enviar agora. Confere sua conexão e tenta de novo."
+  },
+
+  // EDITE AQUI: textos do modal de captura de leads (abre depois de um tempo na página)
+  modalLeads: {
+    eyebrow: "Vamos conversar?",
+    titulo: "Curtindo o portfolio?",
+    subtitulo: "Deixa seu contato e eu mando ideias de conteúdo personalizadas pra sua marca.",
+    textoBotao: "Quero receber",
+    microcopy: "Sem spam, prometo. Só conteúdo relevante.",
+    textoConfirmacao: "Recebi seu contato. Te respondo em breve.",
+    textoErro: "Não consegui enviar agora. Confere sua conexão e tenta de novo.",
+    segundosParaAbrir: 7
   },
 
   anoFundacao: 2024
@@ -1466,12 +1635,54 @@ async function registrarEvento(tipo, nome, metadata){
   }
 }
 
-async function registrarLead(lead){
-  try{
-    await window.Auth.sb.from("portfolio_leads").insert(lead);
-  }catch(erro){
-    console.warn("Não foi possível registrar mensagem:", erro);
+/* =====================================================================
+   CAPTURA DE LEADS — módulo compartilhado entre o formulário do rodapé
+   (renderizarContato/configurarFormulario) e o modal (renderizarModalDeLeads/
+   configurarModalDeLeads). Os dois chamam exatamente validarLead() e
+   enviarLead(); nenhum dos dois reimplementa validação nem o insert.
+===================================================================== */
+
+const REGEX_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+// Valida os campos comuns aos dois formulários. "mensagem" só é obrigatória
+// quando fornecida no objeto (o modal não tem esse campo).
+function validarLead({ nome, email, mensagemObrigatoria }){
+  const erros = {};
+  if(!nome || !nome.trim()) erros.nome = "Digite seu nome.";
+  if(!email || !email.trim()){
+    erros.email = "Digite seu e-mail.";
+  } else if(!REGEX_EMAIL.test(email.trim())){
+    erros.email = "Digite um e-mail válido.";
   }
+  if(mensagemObrigatoria !== undefined && !mensagemObrigatoria.trim()){
+    erros.mensagem = "Escreva uma mensagem.";
+  }
+  return erros;
+}
+
+// Grava o lead no Supabase. Lança o erro (em vez de engolir com try/catch)
+// pra quem chamou poder mostrar estado de erro/retry na tela, em vez de
+// achar que enviou quando na verdade falhou silenciosamente.
+async function enviarLead({ nome, email, telefone, mensagem, origem }){
+  const lead = {
+    name: nome.trim(),
+    email: email.trim(),
+    phone: telefone ? telefone.trim() : null,
+    message: mensagem ? mensagem.trim() : null,
+    source: origem
+  };
+  const { error } = await window.Auth.sb.from("portfolio_leads").insert(lead);
+  if(error) throw error;
+  registrarEvento("button_click", origem === "modal" ? "lead_modal" : "lead_rodape", null);
+}
+
+// Máscara simples de telefone BR: (XX) XXXXX-XXXX (celular) ou (XX) XXXX-XXXX (fixo).
+function formatarTelefoneBR(valor){
+  const digitos = valor.replace(/\D/g, "").slice(0, 11);
+  if(digitos.length <= 2) return digitos.replace(/^(\d*)/, "($1");
+  if(digitos.length <= 6) return digitos.replace(/^(\d{2})(\d*)/, "($1) $2");
+  if(digitos.length <= 10) return digitos.replace(/^(\d{2})(\d{4})(\d*)/, "($1) $2-$3");
+  return digitos.replace(/^(\d{2})(\d{5})(\d*)/, "($1) $2-$3");
 }
 
 // Delega o clique de qualquer elemento marcado com data-evento="..."
@@ -1907,19 +2118,25 @@ function renderizarContato(){
   document.getElementById("contato-conteudo").innerHTML = `
     <form class="formulario reveal" id="formulario-contato" novalidate>
       <div class="mensagem-confirmacao" id="mensagem-confirmacao" role="status">${CONFIG.formulario.textoConfirmacao}</div>
-      <div class="campo">
-        <label for="campo-nome">Nome</label>
-        <input type="text" id="campo-nome" name="nome" required autocomplete="name">
+      <div class="formulario-campos" id="formulario-campos">
+        <p class="formulario-erro-geral" id="formulario-erro-geral" role="alert" hidden></p>
+        <div class="campo">
+          <label for="campo-nome">Nome</label>
+          <input type="text" id="campo-nome" name="nome" required autocomplete="name">
+          <span class="campo-erro" id="erro-campo-nome"></span>
+        </div>
+        <div class="campo">
+          <label for="campo-email">E-mail</label>
+          <input type="email" id="campo-email" name="email" required autocomplete="email">
+          <span class="campo-erro" id="erro-campo-email"></span>
+        </div>
+        <div class="campo">
+          <label for="campo-mensagem">Mensagem</label>
+          <textarea id="campo-mensagem" name="mensagem" rows="5" required></textarea>
+          <span class="campo-erro" id="erro-campo-mensagem"></span>
+        </div>
+        <button type="submit" class="botao" id="formulario-botao-enviar" style="width:100%;">Enviar mensagem</button>
       </div>
-      <div class="campo">
-        <label for="campo-email">E-mail</label>
-        <input type="email" id="campo-email" name="email" required autocomplete="email">
-      </div>
-      <div class="campo">
-        <label for="campo-mensagem">Mensagem</label>
-        <textarea id="campo-mensagem" name="mensagem" rows="5" required></textarea>
-      </div>
-      <button type="submit" class="botao" style="width:100%;">Enviar mensagem</button>
     </form>
     <div class="contato-direto reveal">
       <h3>Prefere falar direto?</h3>
@@ -1937,6 +2154,37 @@ function renderizarContato(){
           ${CONFIG.perfil.instagramHandle}
         </a>
       </div>
+    </div>
+  `;
+}
+
+function renderizarModalDeLeads(){
+  const c = CONFIG.modalLeads;
+  document.getElementById("lead-modal-card").innerHTML = `
+    <button class="lead-modal-fechar" id="lead-modal-fechar" aria-label="Fechar">&times;</button>
+    <div id="lead-modal-conteudo">
+      <p class="rotulo">${c.eyebrow}</p>
+      <h3 class="lead-modal-titulo" id="lead-modal-titulo">${c.titulo}</h3>
+      <p class="lead-modal-subtitulo">${c.subtitulo}</p>
+      <form class="lm-form" id="lead-modal-form" novalidate>
+        <p class="lm-erro-geral" id="lm-erro-geral" role="alert" hidden></p>
+        <div class="lm-campo">
+          <label class="lm-sr-only" for="lm-nome">Seu nome</label>
+          <input type="text" id="lm-nome" name="nome" placeholder="Seu nome" autocomplete="name" required>
+          <span class="lm-erro" id="lm-erro-nome"></span>
+        </div>
+        <div class="lm-campo">
+          <label class="lm-sr-only" for="lm-email">Seu email</label>
+          <input type="email" id="lm-email" name="email" placeholder="Seu email" autocomplete="email" required>
+          <span class="lm-erro" id="lm-erro-email"></span>
+        </div>
+        <div class="lm-campo">
+          <label class="lm-sr-only" for="lm-telefone">Telefone</label>
+          <input type="tel" id="lm-telefone" name="telefone" placeholder="Telefone (opcional)" autocomplete="tel" inputmode="numeric">
+        </div>
+        <button type="submit" class="lm-botao" id="lm-botao-enviar">${c.textoBotao}</button>
+        <p class="lm-microcopy">${c.microcopy}</p>
+      </form>
     </div>
   `;
 }
@@ -1969,6 +2217,7 @@ function renderizarTudo(){
   // continuam no código pra reativar depois.
   renderizarContato();
   renderizarRodape();
+  renderizarModalDeLeads();
 }
 
 /* =====================================================================
@@ -2118,33 +2367,248 @@ function configurarAnimacoesEntrada(){
   elementos.forEach(el => observador.observe(el));
 }
 
+// Chave usada tanto pelo formulário do rodapé quanto pelo modal: uma vez
+// marcada (por envio OU por fechar o modal), o modal nunca mais abre pra
+// esse visitante nesse navegador.
+const CHAVE_LEAD_MODAL_VISTO = "ugc_lead_modal_visto";
+
+function leadModalJaFoiVisto(){
+  try{ return localStorage.getItem(CHAVE_LEAD_MODAL_VISTO) === "1"; }
+  catch(erro){ return false; }
+}
+
+function marcarLeadModalComoVisto(){
+  try{ localStorage.setItem(CHAVE_LEAD_MODAL_VISTO, "1"); }
+  catch(erro){ /* localStorage indisponível (modo privado, etc.) — sem problema, só não persiste */ }
+}
+
 function configurarFormulario(){
   const form = document.getElementById("formulario-contato");
+  const campos = document.getElementById("formulario-campos");
   const confirmacao = document.getElementById("mensagem-confirmacao");
+  const erroGeral = document.getElementById("formulario-erro-geral");
+  const botao = document.getElementById("formulario-botao-enviar");
 
-  form.addEventListener("submit", (evento) => {
+  function limparErros(){
+    ["nome", "email", "mensagem"].forEach((campo) => {
+      document.getElementById(`erro-campo-${campo}`).textContent = "";
+      document.getElementById(`campo-${campo}`).removeAttribute("aria-invalid");
+    });
+    erroGeral.hidden = true;
+  }
+
+  function mostrarErros(erros){
+    Object.entries(erros).forEach(([campo, mensagem]) => {
+      const campoErro = document.getElementById(`erro-campo-${campo}`);
+      const campoInput = document.getElementById(`campo-${campo}`);
+      if(campoErro) campoErro.textContent = mensagem;
+      if(campoInput) campoInput.setAttribute("aria-invalid", "true");
+    });
+  }
+
+  form.addEventListener("submit", async (evento) => {
     evento.preventDefault();
+    limparErros();
 
-    const nome = document.getElementById("campo-nome").value.trim();
-    const email = document.getElementById("campo-email").value.trim();
-    const mensagem = document.getElementById("campo-mensagem").value.trim();
+    const nome = document.getElementById("campo-nome").value;
+    const email = document.getElementById("campo-email").value;
+    const mensagem = document.getElementById("campo-mensagem").value;
 
-    if(!nome || !email || !mensagem){
+    const erros = validarLead({ nome, email, mensagemObrigatoria: mensagem });
+    if(Object.keys(erros).length > 0){
+      mostrarErros(erros);
       return;
     }
 
-    const corpo = `Nome: ${nome}%0AE-mail: ${email}%0A%0AMensagem:%0A${mensagem}`;
-    const linkMailto = `mailto:${CONFIG.perfil.email}?subject=${encodeURIComponent(CONFIG.formulario.assuntoEmail)}&body=${corpo}`;
+    botao.disabled = true;
+    botao.textContent = "Enviando...";
 
-    window.location.href = linkMailto;
-
-    // Registra a mensagem e o clique no painel administrativo
-    registrarLead({ name: nome, email: email, message: mensagem, source: "contact" });
-    registrarEvento("button_click", "contact_form", null);
-
-    confirmacao.classList.add("visivel");
-    form.reset();
+    try{
+      await enviarLead({ nome, email, mensagem, origem: "rodape" });
+      marcarLeadModalComoVisto(); // já converteu — o modal não precisa mais aparecer
+      campos.classList.add("oculto");
+      confirmacao.classList.add("visivel");
+    }catch(erro){
+      console.warn("Não foi possível registrar mensagem:", erro);
+      erroGeral.textContent = CONFIG.formulario.textoErro;
+      erroGeral.hidden = false;
+      botao.disabled = false;
+      botao.textContent = "Enviar mensagem";
+    }
   });
+}
+
+/* =====================================================================
+   MODAL DE CAPTURA DE LEADS — gatilho, comportamento e submit.
+   Reaproveita validarLead()/enviarLead() (mesmo módulo do formulário do
+   rodapé, ver bloco "CAPTURA DE LEADS" acima) — só muda o campo "origem".
+===================================================================== */
+
+let elementoFocadoAntesDoModalDeLeads = null;
+
+function abrirModalDeLeads(){
+  const modal = document.getElementById("lead-modal");
+  if(!modal.hidden) return;
+  elementoFocadoAntesDoModalDeLeads = document.activeElement;
+  modal.hidden = false;
+  document.body.style.overflow = "hidden";
+  requestAnimationFrame(() => modal.classList.add("aberto"));
+  const primeiroCampo = document.getElementById("lm-nome");
+  if(primeiroCampo) primeiroCampo.focus();
+}
+
+function fecharModalDeLeads(){
+  const modal = document.getElementById("lead-modal");
+  if(modal.hidden) return;
+  modal.classList.remove("aberto");
+  modal.hidden = true;
+  document.body.style.overflow = "";
+  marcarLeadModalComoVisto();
+  if(elementoFocadoAntesDoModalDeLeads && typeof elementoFocadoAntesDoModalDeLeads.focus === "function"){
+    elementoFocadoAntesDoModalDeLeads.focus();
+  }
+}
+
+function mostrarSucessoNoModalDeLeads(){
+  document.getElementById("lead-modal-conteudo").innerHTML = `
+    <div class="lm-sucesso" role="status">
+      <p class="rotulo">${CONFIG.modalLeads.eyebrow}</p>
+      <p>${CONFIG.modalLeads.textoConfirmacao}</p>
+    </div>
+  `;
+}
+
+function configurarSubmitDoModalDeLeads(){
+  const form = document.getElementById("lead-modal-form");
+
+  form.addEventListener("submit", async (evento) => {
+    evento.preventDefault();
+
+    const botao = document.getElementById("lm-botao-enviar");
+    const erroGeral = document.getElementById("lm-erro-geral");
+    const campoNome = document.getElementById("lm-nome");
+    const campoEmail = document.getElementById("lm-email");
+    const campoTelefone = document.getElementById("lm-telefone");
+
+    document.getElementById("lm-erro-nome").textContent = "";
+    document.getElementById("lm-erro-email").textContent = "";
+    campoNome.removeAttribute("aria-invalid");
+    campoEmail.removeAttribute("aria-invalid");
+    erroGeral.hidden = true;
+
+    const nome = campoNome.value;
+    const email = campoEmail.value;
+    const telefone = campoTelefone.value;
+
+    const erros = validarLead({ nome, email });
+    if(erros.nome){
+      document.getElementById("lm-erro-nome").textContent = erros.nome;
+      campoNome.setAttribute("aria-invalid", "true");
+    }
+    if(erros.email){
+      document.getElementById("lm-erro-email").textContent = erros.email;
+      campoEmail.setAttribute("aria-invalid", "true");
+    }
+    if(Object.keys(erros).length > 0) return;
+
+    botao.disabled = true;
+    botao.textContent = "Enviando...";
+
+    try{
+      await enviarLead({ nome, email, telefone, origem: "modal" });
+      mostrarSucessoNoModalDeLeads();
+      setTimeout(fecharModalDeLeads, 3000);
+    }catch(erro){
+      console.warn("Não foi possível registrar lead do modal:", erro);
+      erroGeral.textContent = CONFIG.modalLeads.textoErro;
+      erroGeral.hidden = false;
+      botao.disabled = false;
+      botao.textContent = CONFIG.modalLeads.textoBotao;
+    }
+  });
+
+  document.getElementById("lm-telefone").addEventListener("input", (evento) => {
+    evento.target.value = formatarTelefoneBR(evento.target.value);
+  });
+}
+
+function configurarComportamentoDoModalDeLeads(){
+  document.getElementById("lead-modal-fechar").addEventListener("click", fecharModalDeLeads);
+
+  // Fecha só se o clique COMEÇAR e TERMINAR no fundo escuro. Sem isso, selecionar
+  // texto num campo (ex: corrigir o e-mail) e soltar o mouse fora do card contava
+  // como "clique fora" e fechava o modal no meio da digitação.
+  let cliqueComecouNoFundo = false;
+  const overlay = document.getElementById("lead-modal");
+  overlay.addEventListener("mousedown", (evento) => {
+    cliqueComecouNoFundo = evento.target.id === "lead-modal";
+  });
+  overlay.addEventListener("click", (evento) => {
+    if(evento.target.id === "lead-modal" && cliqueComecouNoFundo) fecharModalDeLeads();
+    cliqueComecouNoFundo = false;
+  });
+
+  document.addEventListener("keydown", (evento) => {
+    const modal = document.getElementById("lead-modal");
+    if(modal.hidden) return;
+
+    if(evento.key === "Escape"){
+      fecharModalDeLeads();
+      return;
+    }
+
+    // Focus trap: Tab/Shift+Tab nunca sai do modal enquanto ele estiver aberto.
+    if(evento.key === "Tab"){
+      const focaveis = Array.from(
+        modal.querySelectorAll("button, input, textarea, [href]")
+      ).filter((el) => !el.disabled && el.offsetParent !== null);
+      if(focaveis.length === 0) return;
+      const primeiro = focaveis[0];
+      const ultimo = focaveis[focaveis.length - 1];
+      if(evento.shiftKey && document.activeElement === primeiro){
+        evento.preventDefault();
+        ultimo.focus();
+      } else if(!evento.shiftKey && document.activeElement === ultimo){
+        evento.preventDefault();
+        primeiro.focus();
+      }
+    }
+  });
+
+  configurarSubmitDoModalDeLeads();
+}
+
+// Gatilho: abre entre 5-10s de permanência ativa (não conta tempo com a aba em
+// segundo plano), uma vez por visitante, nunca se o formulário do rodapé já foi
+// enviado ou está visível na tela no momento em que o tempo se esgota.
+function configurarGatilhoDoModalDeLeads(){
+  if(leadModalJaFoiVisto()) return;
+
+  const formularioRodape = document.getElementById("formulario-contato");
+  let rodapeVisivel = false;
+  const observador = new IntersectionObserver(
+    (entradas) => { rodapeVisivel = entradas[0].isIntersecting; },
+    { threshold: 0.1 }
+  );
+  observador.observe(formularioRodape);
+
+  let segundosAtivos = 0;
+  const intervalo = setInterval(() => {
+    if(document.hidden) return; // aba em segundo plano: não conta tempo
+    if(leadModalJaFoiVisto()){ clearInterval(intervalo); return; }
+
+    segundosAtivos += 1;
+    if(segundosAtivos < CONFIG.modalLeads.segundosParaAbrir) return;
+    if(rodapeVisivel) return; // tenta de novo no próximo segundo, sem abrir agora
+
+    abrirModalDeLeads();
+    clearInterval(intervalo);
+  }, 1000);
+}
+
+function configurarModalDeLeads(){
+  configurarComportamentoDoModalDeLeads();
+  configurarGatilhoDoModalDeLeads();
 }
 
 /* =====================================================================
@@ -2162,6 +2626,7 @@ document.addEventListener("DOMContentLoaded", () => {
   configurarFormulario();
   configurarRastreamentoDeCliques();
   configurarModalDeVideo();
+  configurarModalDeLeads();
   configurarVoltarAoTopo();
   configurarPreviewDeVideoNoHover();
   registrarEvento("page_view", "home", null);
