@@ -1280,6 +1280,8 @@ const CONFIG = {
     // EDITE AQUI: troque pelo seu usuário real do TikTok
     tiktokHandle: "@erikabarreir",
     tiktokLink: "https://www.tiktok.com/@erikabarreir",
+    // Ícones/links do TikTok ocultados temporariamente em 2026-08-11 (backup em backup-links-sociais/tiktok.md) — trocar pra true (ou remover a linha) reativa nos 2 pontos do site sem precisar recriar nada
+    tiktokAtivo: false,
     localizacao: "Santos, Brasil"
   },
 
@@ -1724,7 +1726,7 @@ function renderizarHero(){
     <div class="hero-rodape-mini reveal">
       <div class="hero-redes">
         <a class="hero-social" href="${CONFIG.perfil.instagramLink}" target="_blank" rel="noopener" aria-label="Instagram: ${CONFIG.perfil.instagramHandle}" data-evento="contact_instagram">${ICONE_INSTAGRAM}</a>
-        <a class="hero-social" href="${CONFIG.perfil.tiktokLink}" target="_blank" rel="noopener" aria-label="TikTok: ${CONFIG.perfil.tiktokHandle}" data-evento="social_tiktok">${ICONE_TIKTOK}</a>
+        ${CONFIG.perfil.tiktokAtivo !== false ? `<a class="hero-social" href="${CONFIG.perfil.tiktokLink}" target="_blank" rel="noopener" aria-label="TikTok: ${CONFIG.perfil.tiktokHandle}" data-evento="social_tiktok">${ICONE_TIKTOK}</a>` : ''}
       </div>
       <span class="hero-local">${ICONE_LOCAL}${CONFIG.perfil.localizacao}</span>
     </div>
@@ -1945,7 +1947,7 @@ function renderizarRodape(){
   document.getElementById("rodape-redes").innerHTML = `
     <a href="${CONFIG.perfil.instagramLink}" target="_blank" rel="noopener" aria-label="Instagram de ${CONFIG.perfil.nomeCompleto}" data-evento="contact_instagram">${ICONE_INSTAGRAM}</a>
     <a href="${CONFIG.perfil.whatsappLink}" target="_blank" rel="noopener" aria-label="WhatsApp de ${CONFIG.perfil.nomeCompleto}" data-evento="contact_whatsapp">${ICONE_WHATSAPP}</a>
-    <a href="${CONFIG.perfil.tiktokLink}" target="_blank" rel="noopener" aria-label="TikTok de ${CONFIG.perfil.nomeCompleto}" data-evento="social_tiktok">${ICONE_TIKTOK}</a>
+    ${CONFIG.perfil.tiktokAtivo !== false ? `<a href="${CONFIG.perfil.tiktokLink}" target="_blank" rel="noopener" aria-label="TikTok de ${CONFIG.perfil.nomeCompleto}" data-evento="social_tiktok">${ICONE_TIKTOK}</a>` : ''}
     <a href="mailto:${CONFIG.perfil.email}" aria-label="E-mail de ${CONFIG.perfil.nomeCompleto}" data-evento="contact_email">${ICONE_EMAIL}</a>
   `;
 
