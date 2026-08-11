@@ -1332,9 +1332,12 @@ const CONFIG = {
   },
 
   // EDITE AQUI: nichos usados nos botões de filtro do portfólio
+  // "ativo: false" tira o botão de filtro da vista do visitante sem apagar a categoria —
+  // ela continua toda aqui (chave, texto, lógica de renderização), só oculta. Pra reativar
+  // no futuro é só remover a linha "ativo: false" (ou trocar pra true) desse item.
   portfolioCategorias: [
     { chave: "skincare", texto: "Skincare & Beleza" },
-    { chave: "tecnologia", texto: "Tecnologia" },
+    { chave: "tecnologia", texto: "Tecnologia", ativo: false },
     { chave: "pet", texto: "Pet" },
     { chave: "bem-estar", texto: "Bem-Estar" },
     { chave: "casa", texto: "Casa & Organização" }
@@ -1375,8 +1378,7 @@ const CONFIG = {
     { titulo: "Reels para Redes Sociais", descricao: "Conteúdo dinâmico e nativo de plataforma, pensado para reter atenção e gerar engajamento orgânico." },
     { titulo: "Fotos de Produto", descricao: "Imagens limpas e bem compostas, prontas para e-commerce, catálogo e redes sociais da marca." },
     { titulo: "Unboxing e Primeira Impressão", descricao: "Experiência real de abrir e usar o produto pela primeira vez, gerando desejo e curiosidade genuína." },
-    { titulo: "Reviews e Comparativos", descricao: "Resenhas sinceras e comparativos de compra que ajudam o consumidor a decidir com confiança." },
-    { titulo: "Roteiro e Copywriting", descricao: "Textos e roteiros que comunicam o diferencial do produto na linguagem certa para o público certo." }
+    { titulo: "Reviews e Comparativos", descricao: "Resenhas sinceras e comparativos de compra que ajudam o consumidor a decidir com confiança." }
   ],
 
   // EDITE AQUI: números e resultados (o contador conta automaticamente até este valor)
@@ -1771,9 +1773,11 @@ function renderizarSobre(){
 }
 
 function renderizarPortfolio(){
-  // Botões de filtro: "Todos" (ativo por padrão) + um para cada nicho
+  // Botões de filtro: "Todos" (ativo por padrão) + um para cada nicho ativo.
+  // Categorias com "ativo: false" (ex: Tecnologia, sem vídeos ainda) ficam de fora do
+  // filtro visível, mas continuam em CONFIG.portfolioCategorias — nada foi apagado.
   const filtrosHtml = `<button class="filtro-botao" data-categoria="todos" data-evento="filtro_todos" aria-pressed="true">Todos</button>` +
-    CONFIG.portfolioCategorias.map(cat =>
+    CONFIG.portfolioCategorias.filter(cat => cat.ativo !== false).map(cat =>
       `<button class="filtro-botao" data-categoria="${cat.chave}" data-evento="filtro_${cat.chave}" aria-pressed="false">${cat.texto}</button>`
     ).join("");
   document.getElementById("portfolio-filtros").innerHTML = filtrosHtml;
