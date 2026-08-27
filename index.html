@@ -416,7 +416,15 @@
     gap: 22px;
     animation: rolarMarcas 32s linear infinite;
   }
-  .marcas:hover .marcas-lista{ animation-play-state: paused; }
+  /* Pausar no hover só faz sentido em dispositivo com mouse de verdade. Em touch
+     (celular), não existe "tirar o mouse de cima" pra despausar — o navegador
+     mantém o estado de :hover grudado depois de um toque qualquer na área da
+     esteira (ex: um toque de leve ao rolar a página perto do Hero), e a barra
+     fica parada pra sempre. Restringindo a regra a "hover: hover" (só quando o
+     dispositivo suporta hover de verdade) evita que isso trave no mobile. */
+  @media (hover: hover) and (pointer: fine){
+    .marcas:hover .marcas-lista{ animation-play-state: paused; }
+  }
   .marcas-separador{
     flex: 0 0 auto;
     font-size: 9px;
@@ -1472,7 +1480,8 @@ const CONFIG = {
     { nome: "3 Corações", logo: "imagens/marcas/3coracoes.png" },
     { nome: "doTERRA", logo: "imagens/marcas/doterra.png", inverterCor: true },
     { nome: "Pet Society", logo: "imagens/marcas/petsociety.png" },
-    { nome: "Medicube", logo: "imagens/marcas/medicube.png" }
+    { nome: "Medicube", logo: "imagens/marcas/medicube.png" },
+    { nome: "Beats", logo: "imagens/marcas/beats.png", inverterCor: true }
   ],
 
   // EDITE AQUI: texto da seção Sobre
@@ -1481,7 +1490,7 @@ const CONFIG = {
     saudacao: "Oie, eu sou a <em>Erika</em>!",
     subtitulo: "Conteúdo que gera confiança",
     paragrafos: [
-      "Sou a Erika, 53 anos, casada, mãe de pet. Antes de estar na frente das câmeras, passei quase 27 anos à frente da minha própria confecção de moda. Cuidei de produção, logística, gestão e também das fotos e vídeos que vendiam a marca. Foi ali que aprendi, na prática, o que faz um conteúdo vender de verdade.",
+      "Sou a Erika, 53 anos, casada, mãe de pet. Antes de estar na frente das câmeras, passei quase 27 anos à frente da minha própria confecção de moda. Cuidei de toda gestão e também das fotos e vídeos que vendiam a marca. Foi ali que aprendi na prática, o que faz um conteúdo vender de verdade.",
       "<strong>Hoje uso essa vivência pra criar vídeos que soam como conselho de amiga, não como propaganda. É assim que se conquista confiança de verdade, e é confiança que converte em resultado pra marca.</strong>"
     ],
     imagem: "imagens/foto-sobre-pets-eueospet.png",
@@ -1497,7 +1506,8 @@ const CONFIG = {
     { chave: "tecnologia", texto: "Tecnologia", ativo: false },
     { chave: "pet", texto: "Pet" },
     { chave: "bem-estar", texto: "Bem-Estar" },
-    { chave: "casa", texto: "Casa & Organização" }
+    { chave: "casa", texto: "Casa & Organização" },
+    { chave: "lifestyle", texto: "Lifestyle" }
   ],
 
   // EDITE AQUI: trabalhos do portfólio. "categoria" precisa bater com a "chave" definida acima.
@@ -1506,15 +1516,12 @@ const CONFIG = {
   portfolioItens: [
     { titulo: "Modelador de Cachos", categoria: "skincare", tag: "Vídeo UGC", marca: "KISS NEW YORK", videoId: "iOT6lIM1MkA", capa: "imagens/capa-modelador-de-cachos.jpg" },
     { titulo: "Banho a Seco Pet Society", categoria: "pet", tag: "Vídeo UGC", marca: "PET SOCIETY", videoId: "B34NZrVWbs4" },
+    { titulo: "Skol Beats Spirit", categoria: "lifestyle", tag: "Vídeo UGC", marca: "SKOL BEATS", videoId: "GdTKT_rqcNE" },
     { titulo: "Omega 3 VHITA", categoria: "bem-estar", tag: "Vídeo UGC", marca: "VHITA", videoId: "28js5oXUjwA", capa: "imagens/capa-omega-3.jpg" },
     { titulo: "Cappuccino 3 Corações Havanna", categoria: "casa", tag: "Vídeo UGC", marca: "3 CORAÇÕES", videoId: "WwwM0wkflYA" },
     { titulo: "Unboxing Óleos Essenciais", categoria: "bem-estar", tag: "Vídeo UGC", marca: "DOTERRA", videoId: "5zeC5P23Glk" },
     { titulo: "CREATINA GROWTH", categoria: "bem-estar", tag: "Vídeo UGC", marca: "GROWTH", videoId: "vBai7y2ph64" },
-    // Espaços reservados (sem vídeo ainda) pra manter o carrossel com a mesma aparência
-    // de antes. EDITE AQUI: quando mandar um vídeo novo, é só trocar um destes objetos
-    // pelo formato completo (titulo, categoria, tag, videoId) na posição desejada.
-    { titulo: "Booster Pro", categoria: "skincare", tag: "Vídeo UGC", marca: "MEDICUBE", videoId: "_mEa3oESgUA" },
-    { titulo: "Em breve", categoria: "em-breve", tag: "Novo conteúdo em breve" }
+    { titulo: "Booster Pro", categoria: "skincare", tag: "Vídeo UGC", marca: "MEDICUBE", videoId: "_mEa3oESgUA" }
   ],
 
   // EDITE AQUI: fotos de produto (still de produto). Troque cada "titulo" pela legenda
