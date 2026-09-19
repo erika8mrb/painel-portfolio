@@ -1481,7 +1481,8 @@ const CONFIG = {
     { nome: "doTERRA", logo: "imagens/marcas/doterra.png", inverterCor: true },
     { nome: "Pet Society", logo: "imagens/marcas/petsociety.png" },
     { nome: "Medicube", logo: "imagens/marcas/medicube.png" },
-    { nome: "Beats", logo: "imagens/marcas/beats.png", inverterCor: true }
+    { nome: "Beats", logo: "imagens/marcas/beats.png", inverterCor: true },
+    { nome: "A'Gold", logo: "imagens/marcas/agold.png" }
   ],
 
   // EDITE AQUI: texto da seção Sobre
@@ -1503,25 +1504,30 @@ const CONFIG = {
   // no futuro é só remover a linha "ativo: false" (ou trocar pra true) desse item.
   portfolioCategorias: [
     { chave: "skincare", texto: "Skincare & Beleza" },
-    { chave: "tecnologia", texto: "Tecnologia", ativo: false },
+    { chave: "tecnologia", texto: "Tecnologia" },
     { chave: "pet", texto: "Pet" },
     { chave: "bem-estar", texto: "Bem-Estar" },
     { chave: "casa", texto: "Casa & Organização" },
     { chave: "lifestyle", texto: "Lifestyle" }
   ],
 
-  // EDITE AQUI: trabalhos do portfólio. "categoria" precisa bater com a "chave" definida acima.
+  // LISTA DE RESERVA: o site normalmente lê os vídeos da tabela "portfolio_videos" no
+  // Supabase (editável pela aba "Vídeos" do painel administrativo — ver buscarVideosPortfolio()
+  // mais abaixo). Esta lista só entra em ação se aquela busca falhar (Supabase fora do ar, sem
+  // internet etc.), pra o Portfólio nunca ficar vazio. Editar aqui NÃO afeta o site no dia a dia
+  // — para isso, use o painel. "categoria" precisa bater com a "chave" definida acima.
   // Itens com "videoId" mostram a miniatura real do vídeo no YouTube (clicável) em vez do
   // bloco de gradiente, e cada clique é contado como "vídeo visto" no painel administrativo.
   portfolioItens: [
     { titulo: "Modelador de Cachos", categoria: "skincare", tag: "Vídeo UGC", marca: "KISS NEW YORK", videoId: "iOT6lIM1MkA", capa: "imagens/capa-modelador-de-cachos.jpg" },
     { titulo: "Banho a Seco Pet Society", categoria: "pet", tag: "Vídeo UGC", marca: "PET SOCIETY", videoId: "B34NZrVWbs4" },
+    { titulo: "Booster Pro", categoria: "skincare", tag: "Vídeo UGC", marca: "MEDICUBE", videoId: "_mEa3oESgUA" },
     { titulo: "Skol Beats Spirit", categoria: "lifestyle", tag: "Vídeo UGC", marca: "SKOL BEATS", videoId: "GdTKT_rqcNE" },
+    { titulo: "Microfone de Lapela", categoria: "tecnologia", tag: "Vídeo UGC", marca: "A'GOLD", videoId: "w-qKXbbCqSM" },
     { titulo: "Omega 3 VHITA", categoria: "bem-estar", tag: "Vídeo UGC", marca: "VHITA", videoId: "28js5oXUjwA", capa: "imagens/capa-omega-3.jpg" },
     { titulo: "Cappuccino 3 Corações Havanna", categoria: "casa", tag: "Vídeo UGC", marca: "3 CORAÇÕES", videoId: "WwwM0wkflYA" },
     { titulo: "Unboxing Óleos Essenciais", categoria: "bem-estar", tag: "Vídeo UGC", marca: "DOTERRA", videoId: "5zeC5P23Glk" },
-    { titulo: "CREATINA GROWTH", categoria: "bem-estar", tag: "Vídeo UGC", marca: "GROWTH", videoId: "vBai7y2ph64" },
-    { titulo: "Booster Pro", categoria: "skincare", tag: "Vídeo UGC", marca: "MEDICUBE", videoId: "_mEa3oESgUA" }
+    { titulo: "CREATINA GROWTH", categoria: "bem-estar", tag: "Vídeo UGC", marca: "GROWTH", videoId: "vBai7y2ph64" }
   ],
 
   // EDITE AQUI: fotos de produto (still de produto). Troque cada "titulo" pela legenda
@@ -1992,7 +1998,39 @@ function renderizarSobre(){
   `;
 }
 
-function renderizarPortfolio(){
+// Busca os vídeos do portfólio na tabela "portfolio_videos" do Supabase — é essa
+// mesma tabela que a aba "Vídeos" do painel administrativo edita, então qualquer
+// alteração feita lá (adicionar, editar, reordenar, ocultar) aparece aqui na
+// próxima vez que a página carregar, sem precisar publicar o site de novo.
+// Se o Supabase falhar por qualquer motivo, cai de volta em CONFIG.portfolioItens
+// (mantido no CONFIG só como reserva) para o site nunca ficar com o Portfólio vazio.
+async function buscarVideosPortfolio(){
+  try{
+    const { data, error } = await window.Auth.sb
+      .from("portfolio_videos")
+      .select("*")
+      .eq("ativo", true)
+      .order("ordem", { ascending: true });
+
+    if(error) throw error;
+
+    return data.map(v => ({
+      titulo: v.titulo,
+      categoria: v.categoria,
+      tag: v.tag,
+      marca: v.marca,
+      videoId: v.video_id,
+      capa: v.capa || undefined
+    }));
+  }catch(erro){
+    console.warn("Não foi possível carregar os vídeos do Supabase, usando a lista de reserva:", erro);
+    return CONFIG.portfolioItens;
+  }
+}
+
+async function renderizarPortfolio(){
+  const portfolioItens = await buscarVideosPortfolio();
+
   // Botões de filtro: "Todos" (ativo por padrão) + um para cada nicho ativo.
   // Categorias com "ativo: false" (ex: Tecnologia, sem vídeos ainda) ficam de fora do
   // filtro visível, mas continuam em CONFIG.portfolioCategorias — nada foi apagado.
@@ -2014,7 +2052,7 @@ function renderizarPortfolio(){
 
   // Todos os vídeos juntos num único carrossel (sem separar por nicho).
   // Cada card guarda a categoria em data-categoria para o filtro poder escondê-lo ou mostrá-lo.
-  const cardsHtml = CONFIG.portfolioItens.map((item, i) => {
+  const cardsHtml = portfolioItens.map((item, i) => {
     const nicho = nomeDoNicho[item.categoria] || "";
     // Item com vídeo real do YouTube: mostra a miniatura de verdade, clicável
     if(item.videoId){
@@ -2211,12 +2249,12 @@ function renderizarRodape(){
     `© ${anoAtual} <strong>${CONFIG.perfil.nomeCompleto}</strong>. Todos os direitos reservados.`;
 }
 
-function renderizarTudo(){
+async function renderizarTudo(){
   renderizarCabecalho();
   renderizarHero();
   renderizarMarcas();
   renderizarSobre();
-  renderizarPortfolio();
+  await renderizarPortfolio(); // busca no Supabase — ver buscarVideosPortfolio()
   renderizarFotosProdutos();
   renderizarServicos();
   // Números e Depoimentos ficam desativados até ter dados reais (ver CONFIG.numeros
@@ -2622,9 +2660,9 @@ function configurarModalDeLeads(){
    INICIALIZAÇÃO
 ===================================================================== */
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   carregarApiYouTube(); // começa a carregar em segundo plano, antes de qualquer hover
-  renderizarTudo();
+  await renderizarTudo(); // espera a busca dos vídeos no Supabase antes de ligar os botões abaixo
   configurarMenuMobile();
   configurarFiltrosPortfolio();
   configurarCarrosseisPortfolio();

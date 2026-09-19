@@ -591,6 +591,117 @@
     font-size: 13px;
   }
 
+  /* ---------- Aba Vídeos ---------- */
+
+  .bloco-videos-topo {
+    padding: 24px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .bloco-videos-topo h3 {
+    font-size: 16px;
+    margin-bottom: 4px;
+  }
+
+  .bloco-videos-topo p {
+    color: var(--texto-suave);
+    font-size: 13px;
+  }
+
+  .formulario-video {
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+
+  .formulario-video h3 {
+    font-size: 16px;
+    margin-bottom: 16px;
+  }
+
+  .grade-campos-video {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .campo select {
+    font-family: var(--fonte-texto);
+    font-size: 15px;
+    padding: 12px 14px;
+    border: 1px solid var(--borda);
+    border-radius: var(--raio-sm);
+    background: var(--branco);
+    color: var(--grafite);
+    outline: none;
+  }
+
+  .campo select:focus {
+    border-color: var(--coral);
+    box-shadow: 0 0 0 3px rgba(212, 87, 42, 0.12);
+  }
+
+  .campo-checkbox {
+    flex-direction: row !important;
+    align-items: center;
+    gap: 8px !important;
+  }
+
+  .campo-checkbox input {
+    width: 16px;
+    height: 16px;
+  }
+
+  .lista-videos-admin {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .video-cabecalho-thumb {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 8px;
+    flex-shrink: 0;
+    background: var(--creme);
+  }
+
+  .video-cabecalho-ordem {
+    font-size: 12px;
+    color: var(--texto-suave);
+    flex-shrink: 0;
+    width: 20px;
+    text-align: center;
+  }
+
+  .video-detalhe-acoes {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+  }
+
+  .video-detalhe-acoes .botao {
+    padding: 9px 16px;
+    font-size: 13px;
+  }
+
+  .botao-perigo {
+    background: transparent;
+    color: var(--erro);
+    border: 1px solid rgba(196, 69, 60, 0.35);
+  }
+
+  .botao-perigo:hover {
+    background: rgba(196, 69, 60, 0.08);
+  }
+
   /* ---------- Responsivo ---------- */
 
   @media (max-width: 900px) {
@@ -647,6 +758,13 @@
           <rect x="16" y="3" width="4" height="17"></rect>
         </svg>
         <span>Portfólio</span>
+      </button>
+      <button class="nav-item" data-tab="videos">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="16" rx="3"></rect>
+          <path d="M10 9l5 3-5 3V9z" fill="currentColor" stroke="none"></path>
+        </svg>
+        <span>Vídeos</span>
       </button>
     </nav>
 
@@ -748,6 +866,55 @@
 
       </div>
     </section>
+
+    <!-- ================= Aba: Vídeos ================= -->
+    <section id="painelVideos" class="painel-tab oculto">
+      <div class="cartao bloco-videos-topo">
+        <div>
+          <h3>Vídeos do Portfólio</h3>
+          <p>O que você editar aqui aparece no site na hora, sem precisar publicar de novo.</p>
+        </div>
+        <button class="botao botao-primario" id="botaoNovoVideo">+ Novo vídeo</button>
+      </div>
+
+      <div class="cartao formulario-video oculto" id="blocoNovoVideo">
+        <h3>Novo vídeo</h3>
+        <form id="formNovoVideo">
+          <div class="grade-campos-video">
+            <div class="campo">
+              <label for="novoTitulo">Título</label>
+              <input type="text" id="novoTitulo" required>
+            </div>
+            <div class="campo">
+              <label for="novoMarca">Marca</label>
+              <input type="text" id="novoMarca" required>
+            </div>
+            <div class="campo">
+              <label for="novaCategoria">Categoria</label>
+              <select id="novaCategoria" required></select>
+            </div>
+            <div class="campo">
+              <label for="novoVideoId">ID do vídeo no YouTube</label>
+              <input type="text" id="novoVideoId" placeholder="ex: w-qKXbbCqSM" required>
+            </div>
+            <div class="campo">
+              <label for="novaCapa">Capa personalizada (opcional)</label>
+              <input type="text" id="novaCapa" placeholder="imagens/minha-capa.jpg">
+            </div>
+            <div class="campo campo-checkbox">
+              <input type="checkbox" id="novoAtivo" checked>
+              <label for="novoAtivo">Mostrar no site</label>
+            </div>
+          </div>
+          <div class="video-detalhe-acoes">
+            <button type="submit" class="botao botao-primario" id="botaoSalvarNovoVideo">Adicionar vídeo</button>
+            <button type="button" class="botao botao-secundario" id="botaoCancelarNovoVideo">Cancelar</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="lista-videos-admin" id="listaVideosAdmin"></div>
+    </section>
   </main>
 
   <script>
@@ -756,7 +923,20 @@
     // ============================================================
     let cacheEventos = [];
     let cacheLeads = [];
+    let cacheVideos = [];
     let periodoAtual = 'todos';
+
+    // Categorias do portfólio — precisam bater com as "chave" de CONFIG.portfolioCategorias
+    // no index.html. Categorias vivem só no código do site (não numa tabela), então uma
+    // categoria nova precisa ser adicionada nos dois lugares.
+    const CATEGORIAS_VIDEO = [
+      { chave: 'skincare', texto: 'Skincare & Beleza' },
+      { chave: 'tecnologia', texto: 'Tecnologia' },
+      { chave: 'pet', texto: 'Pet' },
+      { chave: 'bem-estar', texto: 'Bem-Estar' },
+      { chave: 'casa', texto: 'Casa & Organização' },
+      { chave: 'lifestyle', texto: 'Lifestyle' },
+    ];
 
     // ------------------------------------------------------------
     // Utilitários
@@ -1110,6 +1290,259 @@
     }
 
     // ------------------------------------------------------------
+    // Aba Vídeos — lista, edita, reordena e exclui a tabela
+    // portfolio_videos (é ela que o site lê no lugar do array fixo)
+    // ------------------------------------------------------------
+
+    function miniaturaVideo(video) {
+      if (video.capa) return video.capa;
+      if (video.video_id) return `https://i.ytimg.com/vi/${video.video_id}/oar2.jpg`;
+      return '';
+    }
+
+    function nomeCategoria(chave) {
+      return CATEGORIAS_VIDEO.find((c) => c.chave === chave)?.texto || chave;
+    }
+
+    function opcoesCategoriaHtml(selecionada) {
+      return CATEGORIAS_VIDEO
+        .map((c) => `<option value="${c.chave}" ${c.chave === selecionada ? 'selected' : ''}>${c.texto}</option>`)
+        .join('');
+    }
+
+    async function buscarVideos() {
+      const { data, error } = await Auth.sb
+        .from('portfolio_videos')
+        .select('*')
+        .order('ordem', { ascending: true });
+      if (error) throw error;
+      return data;
+    }
+
+    function renderVideosAdmin() {
+      const container = document.getElementById('listaVideosAdmin');
+
+      if (cacheVideos.length === 0) {
+        container.innerHTML = '<p class="texto-vazio">Nenhum vídeo cadastrado ainda.</p>';
+        return;
+      }
+
+      container.innerHTML = cacheVideos
+        .map((video, indice) => `
+          <div class="cartao-mensagem">
+            <button class="mensagem-cabecalho" data-toggle-video="${video.id}" aria-expanded="false">
+              <span class="video-cabecalho-ordem">${indice + 1}</span>
+              <img class="video-cabecalho-thumb" src="${miniaturaVideo(video)}" alt="" loading="lazy">
+              <span class="selo ${video.ativo ? 'selo-popup' : 'selo-contact'}">${video.ativo ? 'Ativo' : 'Oculto'}</span>
+              <span class="mensagem-nome">${escaparHtml(video.titulo)} — ${escaparHtml(video.marca || '')}</span>
+              <span class="mensagem-data">${nomeCategoria(video.categoria)}</span>
+              <svg class="icone-expandir" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div class="mensagem-detalhe oculto" id="detalheVideo${video.id}">
+              <form class="grade-campos-video" style="margin-top:16px;" onsubmit="return false;">
+                <div class="campo">
+                  <label for="titulo${video.id}">Título</label>
+                  <input type="text" id="titulo${video.id}" value="${escaparHtml(video.titulo)}" required>
+                </div>
+                <div class="campo">
+                  <label for="marca${video.id}">Marca</label>
+                  <input type="text" id="marca${video.id}" value="${escaparHtml(video.marca || '')}" required>
+                </div>
+                <div class="campo">
+                  <label for="categoria${video.id}">Categoria</label>
+                  <select id="categoria${video.id}" required>${opcoesCategoriaHtml(video.categoria)}</select>
+                </div>
+                <div class="campo">
+                  <label for="videoId${video.id}">ID do vídeo no YouTube</label>
+                  <input type="text" id="videoId${video.id}" value="${escaparHtml(video.video_id || '')}" required>
+                </div>
+                <div class="campo">
+                  <label for="capa${video.id}">Capa personalizada (opcional)</label>
+                  <input type="text" id="capa${video.id}" value="${escaparHtml(video.capa || '')}">
+                </div>
+                <div class="campo campo-checkbox">
+                  <input type="checkbox" id="ativo${video.id}" ${video.ativo ? 'checked' : ''}>
+                  <label for="ativo${video.id}">Mostrar no site</label>
+                </div>
+              </form>
+              <div class="video-detalhe-acoes">
+                <button type="button" class="botao botao-primario" data-salvar-video="${video.id}">Salvar</button>
+                <button type="button" class="botao botao-secundario" data-mover-video="${video.id}" data-direcao="-1" ${indice === 0 ? 'disabled' : ''}>↑ Subir</button>
+                <button type="button" class="botao botao-secundario" data-mover-video="${video.id}" data-direcao="1" ${indice === cacheVideos.length - 1 ? 'disabled' : ''}>↓ Descer</button>
+                <button type="button" class="botao botao-perigo" data-excluir-video="${video.id}">Excluir</button>
+              </div>
+            </div>
+          </div>
+        `)
+        .join('');
+
+      // Expandir/colapsar cada cartão (mesmo padrão de renderMensagens)
+      container.querySelectorAll('[data-toggle-video]').forEach((botao) => {
+        botao.addEventListener('click', () => {
+          const id = botao.getAttribute('data-toggle-video');
+          const detalhe = document.getElementById('detalheVideo' + id);
+          const aberto = !detalhe.classList.contains('oculto');
+          detalhe.classList.toggle('oculto');
+          botao.setAttribute('aria-expanded', String(!aberto));
+        });
+      });
+
+      container.querySelectorAll('[data-salvar-video]').forEach((botao) => {
+        botao.addEventListener('click', () => salvarEdicaoVideo(botao.getAttribute('data-salvar-video')));
+      });
+
+      container.querySelectorAll('[data-mover-video]').forEach((botao) => {
+        botao.addEventListener('click', () => {
+          moverVideo(botao.getAttribute('data-mover-video'), Number(botao.getAttribute('data-direcao')));
+        });
+      });
+
+      container.querySelectorAll('[data-excluir-video]').forEach((botao) => {
+        botao.addEventListener('click', () => excluirVideo(botao.getAttribute('data-excluir-video')));
+      });
+    }
+
+    async function recarregarVideos() {
+      try {
+        cacheVideos = await buscarVideos();
+        renderVideosAdmin();
+      } catch (erro) {
+        console.error(erro);
+        mostrarMensagemArea('Não foi possível carregar os vídeos agora. Tente novamente em instantes.', 'erro');
+      }
+    }
+
+    async function salvarEdicaoVideo(id) {
+      const titulo = document.getElementById('titulo' + id).value.trim();
+      const marca = document.getElementById('marca' + id).value.trim();
+      const categoria = document.getElementById('categoria' + id).value;
+      const videoId = document.getElementById('videoId' + id).value.trim();
+      const capa = document.getElementById('capa' + id).value.trim();
+      const ativo = document.getElementById('ativo' + id).checked;
+
+      if (!titulo || !marca || !videoId) {
+        mostrarMensagemArea('Preencha título, marca e ID do vídeo antes de salvar.', 'erro');
+        return;
+      }
+
+      try {
+        const { error } = await Auth.sb
+          .from('portfolio_videos')
+          .update({
+            titulo,
+            marca,
+            categoria,
+            video_id: videoId,
+            capa: capa || null,
+            ativo,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', id);
+        if (error) throw error;
+        mostrarMensagemArea('Vídeo atualizado.', 'sucesso');
+        await recarregarVideos();
+      } catch (erro) {
+        console.error(erro);
+        mostrarMensagemArea('Não foi possível salvar esse vídeo agora.', 'erro');
+      }
+    }
+
+    async function excluirVideo(id) {
+      if (!confirm('Excluir este vídeo do portfólio? Essa ação não pode ser desfeita.')) return;
+
+      try {
+        const { error } = await Auth.sb.from('portfolio_videos').delete().eq('id', id);
+        if (error) throw error;
+        mostrarMensagemArea('Vídeo excluído.', 'sucesso');
+        await recarregarVideos();
+      } catch (erro) {
+        console.error(erro);
+        mostrarMensagemArea('Não foi possível excluir esse vídeo agora.', 'erro');
+      }
+    }
+
+    async function moverVideo(id, direcao) {
+      const indice = cacheVideos.findIndex((v) => v.id === id);
+      const indiceVizinho = indice + direcao;
+      if (indice === -1 || indiceVizinho < 0 || indiceVizinho >= cacheVideos.length) return;
+
+      const video = cacheVideos[indice];
+      const vizinho = cacheVideos[indiceVizinho];
+
+      try {
+        const [r1, r2] = await Promise.all([
+          Auth.sb.from('portfolio_videos').update({ ordem: vizinho.ordem }).eq('id', video.id),
+          Auth.sb.from('portfolio_videos').update({ ordem: video.ordem }).eq('id', vizinho.id),
+        ]);
+        if (r1.error) throw r1.error;
+        if (r2.error) throw r2.error;
+        await recarregarVideos();
+      } catch (erro) {
+        console.error(erro);
+        mostrarMensagemArea('Não foi possível reordenar os vídeos agora.', 'erro');
+      }
+    }
+
+    // ------------------------------------------------------------
+    // Aba Vídeos — formulário de "+ Novo vídeo"
+    // ------------------------------------------------------------
+    document.getElementById('novaCategoria').innerHTML = opcoesCategoriaHtml();
+
+    const blocoNovoVideo = document.getElementById('blocoNovoVideo');
+    const formNovoVideo = document.getElementById('formNovoVideo');
+
+    document.getElementById('botaoNovoVideo').addEventListener('click', () => {
+      blocoNovoVideo.classList.toggle('oculto');
+    });
+
+    document.getElementById('botaoCancelarNovoVideo').addEventListener('click', () => {
+      formNovoVideo.reset();
+      blocoNovoVideo.classList.add('oculto');
+    });
+
+    formNovoVideo.addEventListener('submit', async (evento) => {
+      evento.preventDefault();
+
+      const titulo = document.getElementById('novoTitulo').value.trim();
+      const marca = document.getElementById('novoMarca').value.trim();
+      const categoria = document.getElementById('novaCategoria').value;
+      const videoId = document.getElementById('novoVideoId').value.trim();
+      const capa = document.getElementById('novaCapa').value.trim();
+      const ativo = document.getElementById('novoAtivo').checked;
+
+      const botaoSalvar = document.getElementById('botaoSalvarNovoVideo');
+      botaoSalvar.disabled = true;
+      botaoSalvar.textContent = 'Adicionando...';
+
+      try {
+        const maiorOrdem = cacheVideos.reduce((max, v) => Math.max(max, v.ordem), 0);
+        const { error } = await Auth.sb.from('portfolio_videos').insert({
+          titulo,
+          marca,
+          categoria,
+          video_id: videoId,
+          capa: capa || null,
+          ativo,
+          ordem: maiorOrdem + 1,
+        });
+        if (error) throw error;
+
+        mostrarMensagemArea('Vídeo adicionado.', 'sucesso');
+        formNovoVideo.reset();
+        blocoNovoVideo.classList.add('oculto');
+        await recarregarVideos();
+      } catch (erro) {
+        console.error(erro);
+        mostrarMensagemArea('Não foi possível adicionar esse vídeo agora.', 'erro');
+      } finally {
+        botaoSalvar.disabled = false;
+        botaoSalvar.textContent = 'Adicionar vídeo';
+      }
+    });
+
+    // ------------------------------------------------------------
     // Interação: filtro de período
     // ------------------------------------------------------------
     document.querySelectorAll('.filtro-btn').forEach((botao) => {
@@ -1127,6 +1560,13 @@
     const nomesAba = {
       'menu-principal': 'Menu Principal',
       portfolio: 'Portfólio',
+      videos: 'Vídeos',
+    };
+
+    const idsAba = {
+      'menu-principal': 'painelMenuPrincipal',
+      portfolio: 'painelPortfolio',
+      videos: 'painelVideos',
     };
 
     document.querySelectorAll('.nav-item').forEach((item) => {
@@ -1136,8 +1576,7 @@
 
         document.querySelectorAll('.painel-tab').forEach((painel) => painel.classList.add('oculto'));
         const aba = item.dataset.tab;
-        const idPainel = aba === 'menu-principal' ? 'painelMenuPrincipal' : 'painelPortfolio';
-        document.getElementById(idPainel).classList.remove('oculto');
+        document.getElementById(idsAba[aba]).classList.remove('oculto');
         document.getElementById('tituloPagina').textContent = nomesAba[aba];
 
         fecharSidebarMobile();
@@ -1191,6 +1630,10 @@
         // Mesmo com erro, renderiza os blocos vazios para não deixar a tela quebrada
         atualizarTudo(periodoAtual);
       }
+
+      // Carrega a aba Vídeos à parte (tem seu próprio try/catch e mensagem de erro,
+      // pra um problema nela não atrapalhar o carregamento de eventos/leads acima).
+      recarregarVideos();
     })();
   </script>
 </body>
