@@ -766,6 +766,37 @@
         </svg>
         <span>Vídeos</span>
       </button>
+      <button class="nav-item" data-tab="marcas">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+        <span>Marcas</span>
+      </button>
+      <button class="nav-item" data-tab="calendario">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        <span>Calendário</span>
+      </button>
+      <button class="nav-item" data-tab="campanhas">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M13 2H3v10h10V2z"></path>
+          <path d="M21 2h-10v10h10V2z"></path>
+          <path d="M13 12H3v10h10v-10z"></path>
+          <path d="M21 12h-10v10h10v-10z"></path>
+        </svg>
+        <span>Campanhas</span>
+      </button>
+      <button class="nav-item" data-tab="checklist">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        <span>Checklist</span>
+      </button>
     </nav>
 
     <div class="sidebar-rodape">
@@ -914,6 +945,195 @@
       </div>
 
       <div class="lista-videos-admin" id="listaVideosAdmin"></div>
+    </section>
+
+    <!-- ================= Aba: Marcas ================= -->
+    <section id="painelMarcas" class="painel-tab oculto">
+      <div class="cartao bloco-marcas-topo">
+        <div>
+          <h3>Gestão de Marcas e Leads</h3>
+          <p>Controle seus contatos com marcas e parceiros.</p>
+        </div>
+        <button class="botao botao-primario" id="botaoNovaMarca">+ Nova marca</button>
+      </div>
+
+      <div class="cartao formulario-marca oculto" id="blocoNovaMarca">
+        <h3>Nova marca</h3>
+        <form id="formNovaMarca">
+          <div class="grade-campos">
+            <div class="campo">
+              <label for="novoNomeMarca">Nome da marca</label>
+              <input type="text" id="novoNomeMarca" required>
+            </div>
+            <div class="campo">
+              <label for="novoInstagram">Instagram</label>
+              <input type="text" id="novoInstagram" placeholder="@marca">
+            </div>
+            <div class="campo">
+              <label for="novoEmail">E-mail</label>
+              <input type="email" id="novoEmail">
+            </div>
+            <div class="campo">
+              <label for="novoTelefone">Telefone</label>
+              <input type="tel" id="novoTelefone">
+            </div>
+            <div class="campo">
+              <label for="novoSituacao">Situação</label>
+              <select id="novoSituacao">
+                <option value="lead">Lead</option>
+                <option value="conversando">Conversando</option>
+                <option value="cliente">Cliente</option>
+                <option value="parada">Parada</option>
+              </select>
+            </div>
+            <div class="campo">
+              <label for="novoObs">Observações</label>
+              <textarea id="novoObs" placeholder="Notas sobre essa marca"></textarea>
+            </div>
+          </div>
+          <div class="video-detalhe-acoes">
+            <button type="submit" class="botao botao-primario">Adicionar marca</button>
+            <button type="button" class="botao botao-secundario" id="botaoCancelarMarca">Cancelar</button>
+          </div>
+        </form>
+      </div>
+
+      <div id="listaMarcas"></div>
+    </section>
+
+    <!-- ================= Aba: Calendário ================= -->
+    <section id="painelCalendario" class="painel-tab oculto">
+      <div class="cartao bloco-calendario-topo">
+        <div>
+          <h3>Calendário de Conteúdo</h3>
+          <p>Planejamento de gravações, edições e postagens.</p>
+        </div>
+        <button class="botao botao-primario" id="botaoNovoEvento">+ Novo evento</button>
+      </div>
+
+      <div class="cartao formulario-evento oculto" id="blocoNovoEvento">
+        <h3>Novo evento</h3>
+        <form id="formNovoEvento">
+          <div class="grade-campos">
+            <div class="campo">
+              <label for="novoTituloEvento">Título</label>
+              <input type="text" id="novoTituloEvento" required>
+            </div>
+            <div class="campo">
+              <label for="novoMarcaEvento">Marca</label>
+              <input type="text" id="novoMarcaEvento">
+            </div>
+            <div class="campo">
+              <label for="novoTipoEvento">Tipo</label>
+              <select id="novoTipoEvento" required>
+                <option value="gravar">Gravar</option>
+                <option value="editar">Editar</option>
+                <option value="postar">Postar</option>
+              </select>
+            </div>
+            <div class="campo">
+              <label for="novaDataEvento">Data</label>
+              <input type="date" id="novaDataEvento" required>
+            </div>
+            <div class="campo">
+              <label for="novoStatusEvento">Status</label>
+              <select id="novoStatusEvento">
+                <option value="a fazer">A fazer</option>
+                <option value="feito">Feito</option>
+              </select>
+            </div>
+          </div>
+          <div class="video-detalhe-acoes">
+            <button type="submit" class="botao botao-primario">Adicionar evento</button>
+            <button type="button" class="botao botao-secundario" id="botaoCancelarEvento">Cancelar</button>
+          </div>
+        </form>
+      </div>
+
+      <div id="listaCalendario"></div>
+    </section>
+
+    <!-- ================= Aba: Campanhas ================= -->
+    <section id="painelCampanhas" class="painel-tab oculto">
+      <div class="cartao bloco-campanhas-topo">
+        <div>
+          <h3>Gestão de Campanhas</h3>
+          <p>Acompanhe status, prazos e pagamentos das suas campanhas.</p>
+        </div>
+        <button class="botao botao-primario" id="botaoNovaCampanha">+ Nova campanha</button>
+      </div>
+
+      <div class="cartao formulario-campanha oculto" id="blocoNovaCampanha">
+        <h3>Nova campanha</h3>
+        <form id="formNovaCampanha">
+          <div class="grade-campos">
+            <div class="campo">
+              <label for="novoNomeCampanha">Nome da campanha</label>
+              <input type="text" id="novoNomeCampanha" required>
+            </div>
+            <div class="campo">
+              <label for="novoCliente">Cliente</label>
+              <input type="text" id="novoCliente">
+            </div>
+            <div class="campo">
+              <label for="novoTipoCampanha">Tipo</label>
+              <select id="novoTipoCampanha" required>
+                <option value="Conteúdo">Conteúdo</option>
+                <option value="Publicidade">Publicidade</option>
+              </select>
+            </div>
+            <div class="campo">
+              <label for="novoStatusCampanha">Status</label>
+              <select id="novoStatusCampanha">
+                <option value="Briefing">Briefing</option>
+                <option value="Roteiro">Roteiro</option>
+                <option value="Aprovação Roteiro">Aprovação Roteiro</option>
+                <option value="Gravação">Gravação</option>
+                <option value="Edição">Edição</option>
+                <option value="Aprovado">Aprovado</option>
+                <option value="Entregue">Entregue</option>
+              </select>
+            </div>
+            <div class="campo">
+              <label for="novoQtd">Quantidade de vídeos</label>
+              <input type="number" id="novoQtd" min="0">
+            </div>
+            <div class="campo">
+              <label for="novoValor">Valor (R$)</label>
+              <input type="number" id="novoValor" step="0.01" min="0">
+            </div>
+            <div class="campo">
+              <label for="novoPrazo">Prazo</label>
+              <input type="date" id="novoPrazo">
+            </div>
+            <div class="campo">
+              <label for="novoPagamento">Pagamento</label>
+              <select id="novoPagamento">
+                <option value="pendente">Pendente</option>
+                <option value="pago">Pago</option>
+              </select>
+            </div>
+          </div>
+          <div class="video-detalhe-acoes">
+            <button type="submit" class="botao botao-primario">Adicionar campanha</button>
+            <button type="button" class="botao botao-secundario" id="botaoCancelarCampanha">Cancelar</button>
+          </div>
+        </form>
+      </div>
+
+      <div id="listaCampanhas"></div>
+    </section>
+
+    <!-- ================= Aba: Checklist Portfólio ================= -->
+    <section id="painelChecklist" class="painel-tab oculto">
+      <div class="cartao bloco-checklist-topo">
+        <div>
+          <h3>Checklist do Portfólio</h3>
+          <p>Controle de checklist para produção de vídeos e conteúdo.</p>
+        </div>
+      </div>
+
+      <div id="listaChecklist"></div>
     </section>
   </main>
 
@@ -1542,6 +1762,430 @@
       }
     });
 
+    // ============================================================
+    // ABA: MARCAS
+    // ============================================================
+
+    let cacheMarcas = [];
+
+    async function buscarMarcas() {
+      const { data, error } = await Auth.sb
+        .from('marcas')
+        .select('*')
+        .order('ultimo_contato', { ascending: false });
+      if (error) throw error;
+      return data || [];
+    }
+
+    function renderMarcas() {
+      const container = document.getElementById('listaMarcas');
+      container.innerHTML = '';
+
+      if (cacheMarcas.length === 0) {
+        container.innerHTML = '<div class="cartao"><p class="texto-vazio">Nenhuma marca registrada ainda.</p></div>';
+        return;
+      }
+
+      cacheMarcas.forEach(marca => {
+        const card = document.createElement('div');
+        card.className = 'cartao marca-card';
+        card.innerHTML = `
+          <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 16px;">
+            <div>
+              <h3 style="margin: 0 0 8px 0;">${escaparHtml(marca.nome)}</h3>
+              <div style="font-size: 13px; color: var(--texto-suave);">
+                ${marca.instagram ? `<div>📱 ${escaparHtml(marca.instagram)}</div>` : ''}
+                ${marca.email ? `<div>✉️ ${escaparHtml(marca.email)}</div>` : ''}
+                ${marca.telefone ? `<div>📞 ${escaparHtml(marca.telefone)}</div>` : ''}
+              </div>
+            </div>
+            <span style="padding: 6px 12px; background: var(--creme); border-radius: var(--raio-sm); font-size: 12px; font-weight: 600;">
+              ${marca.situacao}
+            </span>
+          </div>
+          ${marca.obs ? `<p style="font-size: 13px; color: var(--texto-suave); margin: 12px 0 0 0;">📝 ${escaparHtml(marca.obs)}</p>` : ''}
+          <button class="botao botao-secundario" style="margin-top: 12px;" onclick="excluirMarca('${marca.id}')">Excluir</button>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    async function excluirMarca(id) {
+      if (!confirm('Tem certeza que deseja excluir essa marca?')) return;
+      try {
+        const { error } = await Auth.sb.from('marcas').delete().eq('id', id);
+        if (error) throw error;
+        mostrarMensagemArea('Marca excluída com sucesso.', 'sucesso');
+        await recarregarMarcas();
+      } catch (erro) {
+        console.error(erro);
+        mostrarMensagemArea('Não foi possível excluir a marca.', 'erro');
+      }
+    }
+
+    async function recarregarMarcas() {
+      try {
+        cacheMarcas = await buscarMarcas();
+        renderMarcas();
+      } catch (erro) {
+        console.error(erro);
+        mostrarMensagemArea('Não foi possível carregar as marcas.', 'erro');
+      }
+    }
+
+    // Formulário de nova marca
+    document.getElementById('botaoNovaMarca').addEventListener('click', () => {
+      document.getElementById('blocoNovaMarca').classList.remove('oculto');
+    });
+
+    document.getElementById('botaoCancelarMarca').addEventListener('click', () => {
+      document.getElementById('blocoNovaMarca').classList.add('oculto');
+    });
+
+    document.getElementById('formNovaMarca').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const nome = document.getElementById('novoNomeMarca').value.trim();
+      const instagram = document.getElementById('novoInstagram').value.trim();
+      const email = document.getElementById('novoEmail').value.trim();
+      const telefone = document.getElementById('novoTelefone').value.trim();
+      const situacao = document.getElementById('novoSituacao').value;
+      const obs = document.getElementById('novoObs').value.trim();
+
+      try {
+        const { error } = await Auth.sb.from('marcas').insert({
+          nome, instagram, email, telefone, situacao, obs, ultimo_contato: new Date().toISOString()
+        });
+        if (error) throw error;
+        mostrarMensagemArea('Marca adicionada com sucesso.', 'sucesso');
+        document.getElementById('formNovaMarca').reset();
+        document.getElementById('blocoNovaMarca').classList.add('oculto');
+        await recarregarMarcas();
+      } catch (erro) {
+        console.error(erro);
+        mostrarMensagemArea('Não foi possível adicionar a marca.', 'erro');
+      }
+    });
+
+    // ============================================================
+    // ABA: CALENDÁRIO
+    // ============================================================
+
+    let cacheCalendario = [];
+
+    async function buscarCalendario() {
+      const { data, error } = await Auth.sb
+        .from('calendario')
+        .select('*')
+        .order('data', { ascending: true });
+      if (error) throw error;
+      return data || [];
+    }
+
+    function renderCalendario() {
+      const container = document.getElementById('listaCalendario');
+      container.innerHTML = '';
+
+      if (cacheCalendario.length === 0) {
+        container.innerHTML = '<div class="cartao"><p class="texto-vazio">Nenhum evento agendado ainda.</p></div>';
+        return;
+      }
+
+      cacheCalendario.forEach(evento => {
+        const card = document.createElement('div');
+        card.className = 'cartao evento-card';
+        const data = new Date(evento.data).toLocaleDateString('pt-BR');
+        const iconeTipo = {
+          gravar: '🎥',
+          editar: '✂️',
+          postar: '📤'
+        }[evento.tipo] || '📌';
+
+        card.innerHTML = `
+          <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
+            <div>
+              <div style="font-size: 13px; font-weight: 600; color: var(--texto-suave); margin-bottom: 4px;">
+                ${iconeTipo} ${evento.tipo.toUpperCase()} • ${data}
+              </div>
+              <h3 style="margin: 0 0 4px 0;">${escaparHtml(evento.titulo)}</h3>
+              ${evento.marca ? `<div style="font-size: 12px; color: var(--texto-suave);">📌 ${escaparHtml(evento.marca)}</div>` : ''}
+            </div>
+            <span style="padding: 6px 12px; background: ${evento.status === 'feito' ? 'var(--creme)' : 'var(--coral)'}; border-radius: var(--raio-sm); font-size: 12px; font-weight: 600; color: ${evento.status === 'feito' ? 'var(--grafite)' : 'var(--branco)'} ;">
+              ${evento.status === 'feito' ? '✓' : '○'}
+            </span>
+          </div>
+          <button class="botao botao-secundario" style="margin-top: 8px;" onclick="excluirEvento('${evento.id}')">Excluir</button>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    async function excluirEvento(id) {
+      if (!confirm('Tem certeza que deseja excluir esse evento?')) return;
+      try {
+        const { error } = await Auth.sb.from('calendario').delete().eq('id', id);
+        if (error) throw error;
+        mostrarMensagemArea('Evento excluído com sucesso.', 'sucesso');
+        await recarregarCalendario();
+      } catch (erro) {
+        console.error(erro);
+        mostrarMensagemArea('Não foi possível excluir o evento.', 'erro');
+      }
+    }
+
+    async function recarregarCalendario() {
+      try {
+        cacheCalendario = await buscarCalendario();
+        renderCalendario();
+      } catch (erro) {
+        console.error(erro);
+        mostrarMensagemArea('Não foi possível carregar o calendário.', 'erro');
+      }
+    }
+
+    // Formulário de novo evento
+    document.getElementById('botaoNovoEvento').addEventListener('click', () => {
+      document.getElementById('blocoNovoEvento').classList.remove('oculto');
+    });
+
+    document.getElementById('botaoCancelarEvento').addEventListener('click', () => {
+      document.getElementById('blocoNovoEvento').classList.add('oculto');
+    });
+
+    document.getElementById('formNovoEvento').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const titulo = document.getElementById('novoTituloEvento').value.trim();
+      const marca = document.getElementById('novoMarcaEvento').value.trim();
+      const tipo = document.getElementById('novoTipoEvento').value;
+      const data = document.getElementById('novaDataEvento').value;
+      const status = document.getElementById('novoStatusEvento').value;
+
+      try {
+        const { error } = await Auth.sb.from('calendario').insert({
+          titulo, marca, tipo, data, status
+        });
+        if (error) throw error;
+        mostrarMensagemArea('Evento adicionado com sucesso.', 'sucesso');
+        document.getElementById('formNovoEvento').reset();
+        document.getElementById('blocoNovoEvento').classList.add('oculto');
+        await recarregarCalendario();
+      } catch (erro) {
+        console.error(erro);
+        mostrarMensagemArea('Não foi possível adicionar o evento.', 'erro');
+      }
+    });
+
+    // ============================================================
+    // ABA: CAMPANHAS
+    // ============================================================
+
+    let cacheCampanhas = [];
+
+    async function buscarCampanhas() {
+      const { data, error } = await Auth.sb
+        .from('campanhas')
+        .select('*')
+        .order('prazo', { ascending: true });
+      if (error) throw error;
+      return data || [];
+    }
+
+    function renderCampanhas() {
+      const container = document.getElementById('listaCampanhas');
+      container.innerHTML = '';
+
+      if (cacheCampanhas.length === 0) {
+        container.innerHTML = '<div class="cartao"><p class="texto-vazio">Nenhuma campanha registrada ainda.</p></div>';
+        return;
+      }
+
+      cacheCampanhas.forEach(campanha => {
+        const card = document.createElement('div');
+        card.className = 'cartao campanha-card';
+        const prazo = campanha.prazo ? new Date(campanha.prazo).toLocaleDateString('pt-BR') : '-';
+        const valor = campanha.valor ? `R$ ${parseFloat(campanha.valor).toLocaleString('pt-BR', {minimumFractionDigits: 2})}` : '-';
+
+        card.innerHTML = `
+          <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
+            <div style="flex: 1;">
+              <h3 style="margin: 0 0 4px 0;">${escaparHtml(campanha.campanha)}</h3>
+              <div style="font-size: 13px; color: var(--texto-suave);">
+                <div>👤 ${escaparHtml(campanha.cliente || 'Sem cliente')}</div>
+                <div>📂 ${campanha.tipo}</div>
+              </div>
+            </div>
+            <div style="text-align: right;">
+              <div style="padding: 6px 12px; background: var(--creme); border-radius: var(--raio-sm); font-size: 12px; font-weight: 600; margin-bottom: 8px;">
+                ${campanha.status}
+              </div>
+              <div style="font-size: 12px; color: var(--texto-suave);">
+                <div>📅 ${prazo}</div>
+                <div>💰 ${valor}</div>
+              </div>
+            </div>
+          </div>
+          <div style="font-size: 12px; color: var(--texto-suave); margin: 12px 0 0 0;">
+            🎬 ${campanha.qtd} vídeo${campanha.qtd !== 1 ? 's' : ''} • 💳 ${campanha.pagamento}
+          </div>
+          <button class="botao botao-secundario" style="margin-top: 12px;" onclick="excluirCampanha('${campanha.id}')">Excluir</button>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    async function excluirCampanha(id) {
+      if (!confirm('Tem certeza que deseja excluir essa campanha?')) return;
+      try {
+        const { error } = await Auth.sb.from('campanhas').delete().eq('id', id);
+        if (error) throw error;
+        mostrarMensagemArea('Campanha excluída com sucesso.', 'sucesso');
+        await recarregarCampanhas();
+      } catch (erro) {
+        console.error(erro);
+        mostrarMensagemArea('Não foi possível excluir a campanha.', 'erro');
+      }
+    }
+
+    async function recarregarCampanhas() {
+      try {
+        cacheCampanhas = await buscarCampanhas();
+        renderCampanhas();
+      } catch (erro) {
+        console.error(erro);
+        mostrarMensagemArea('Não foi possível carregar as campanhas.', 'erro');
+      }
+    }
+
+    // Formulário de nova campanha
+    document.getElementById('botaoNovaCampanha').addEventListener('click', () => {
+      document.getElementById('blocoNovaCampanha').classList.remove('oculto');
+    });
+
+    document.getElementById('botaoCancelarCampanha').addEventListener('click', () => {
+      document.getElementById('blocoNovaCampanha').classList.add('oculto');
+    });
+
+    document.getElementById('formNovaCampanha').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const campanha = document.getElementById('novoNomeCampanha').value.trim();
+      const cliente = document.getElementById('novoCliente').value.trim();
+      const tipo = document.getElementById('novoTipoCampanha').value;
+      const status = document.getElementById('novoStatusCampanha').value;
+      const qtd = parseInt(document.getElementById('novoQtd').value) || 0;
+      const valor = parseFloat(document.getElementById('novoValor').value) || 0;
+      const prazo = document.getElementById('novoPrazo').value;
+      const pagamento = document.getElementById('novoPagamento').value;
+
+      try {
+        const { error } = await Auth.sb.from('campanhas').insert({
+          campanha, cliente, tipo, status, qtd, valor, prazo: prazo || null, pagamento, ativa: true
+        });
+        if (error) throw error;
+        mostrarMensagemArea('Campanha adicionada com sucesso.', 'sucesso');
+        document.getElementById('formNovaCampanha').reset();
+        document.getElementById('blocoNovaCampanha').classList.add('oculto');
+        await recarregarCampanhas();
+      } catch (erro) {
+        console.error(erro);
+        mostrarMensagemArea('Não foi possível adicionar a campanha.', 'erro');
+      }
+    });
+
+    // ============================================================
+    // ABA: CHECKLIST
+    // ============================================================
+
+    let cacheChecklist = [];
+
+    async function buscarChecklist() {
+      const { data, error } = await Auth.sb
+        .from('marcados')
+        .select('*')
+        .order('id', { ascending: true });
+      if (error) throw error;
+      return data || [];
+    }
+
+    // Checklist padrão do portfólio (itens que vêm da biblioteca ou configuração)
+    const ITENS_CHECKLIST = [
+      { id: 'checklist_hook', label: 'Hook impactante nos primeiros 3 segundos', categoria: 'Gancho' },
+      { id: 'checklist_transicoes', label: 'Transições suaves entre cenas', categoria: 'Edição' },
+      { id: 'checklist_audio', label: 'Áudio claro e volume controlado', categoria: 'Áudio' },
+      { id: 'checklist_texto', label: 'Textos/Legendas alinhadas', categoria: 'Elementos' },
+      { id: 'checklist_marca', label: 'Logo/marca clara e visível', categoria: 'Marca' },
+      { id: 'checklist_call_to_action', label: 'Call-to-action clara no final', categoria: 'Engajamento' },
+      { id: 'checklist_cores', label: 'Cores consistentes com identidade visual', categoria: 'Design' },
+      { id: 'checklist_velocidade', label: 'Ritmo e velocidade de edição apropriados', categoria: 'Edição' },
+    ];
+
+    function renderChecklist() {
+      const container = document.getElementById('listaChecklist');
+      container.innerHTML = '';
+
+      const mapa = new Map(cacheChecklist.map(item => [item.id, item.checked]));
+
+      ITENS_CHECKLIST.forEach(item => {
+        const isChecked = mapa.get(item.id) || false;
+        const card = document.createElement('div');
+        card.className = 'cartao checklist-item';
+        card.innerHTML = `
+          <label style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+            <input
+              type="checkbox"
+              data-checklist-id="${item.id}"
+              ${isChecked ? 'checked' : ''}
+              style="cursor: pointer; width: 18px; height: 18px;"
+            >
+            <div>
+              <div style="font-weight: 600; color: var(--grafite);">${item.label}</div>
+              <div style="font-size: 12px; color: var(--texto-suave);">📂 ${item.categoria}</div>
+            </div>
+          </label>
+        `;
+        container.appendChild(card);
+      });
+
+      // Adicionar listeners para salvar checklist
+      container.querySelectorAll('[data-checklist-id]').forEach(checkbox => {
+        checkbox.addEventListener('change', () => salvarItemChecklist(checkbox));
+      });
+    }
+
+    async function salvarItemChecklist(checkbox) {
+      const id = checkbox.getAttribute('data-checklist-id');
+      const checked = checkbox.checked;
+
+      try {
+        const item = cacheChecklist.find(i => i.id === id);
+        if (item) {
+          const { error } = await Auth.sb
+            .from('marcados')
+            .update({ checked })
+            .eq('id', id);
+          if (error) throw error;
+        } else {
+          const { error } = await Auth.sb
+            .from('marcados')
+            .insert({ id, checked });
+          if (error) throw error;
+        }
+        await recarregarChecklist();
+      } catch (erro) {
+        console.error(erro);
+        checkbox.checked = !checked; // Reverte em caso de erro
+        mostrarMensagemArea('Não foi possível salvar o checklist.', 'erro');
+      }
+    }
+
+    async function recarregarChecklist() {
+      try {
+        cacheChecklist = await buscarChecklist();
+        renderChecklist();
+      } catch (erro) {
+        console.error(erro);
+        mostrarMensagemArea('Não foi possível carregar o checklist.', 'erro');
+      }
+    }
+
     // ------------------------------------------------------------
     // Interação: filtro de período
     // ------------------------------------------------------------
@@ -1561,12 +2205,20 @@
       'menu-principal': 'Menu Principal',
       portfolio: 'Portfólio',
       videos: 'Vídeos',
+      marcas: 'Marcas',
+      calendario: 'Calendário',
+      campanhas: 'Campanhas',
+      checklist: 'Checklist',
     };
 
     const idsAba = {
       'menu-principal': 'painelMenuPrincipal',
       portfolio: 'painelPortfolio',
       videos: 'painelVideos',
+      marcas: 'painelMarcas',
+      calendario: 'painelCalendario',
+      campanhas: 'painelCampanhas',
+      checklist: 'painelChecklist',
     };
 
     document.querySelectorAll('.nav-item').forEach((item) => {
@@ -1634,6 +2286,12 @@
       // Carrega a aba Vídeos à parte (tem seu próprio try/catch e mensagem de erro,
       // pra um problema nela não atrapalhar o carregamento de eventos/leads acima).
       recarregarVideos();
+
+      // Carrega as 4 novas abas
+      recarregarMarcas();
+      recarregarCalendario();
+      recarregarCampanhas();
+      recarregarChecklist();
     })();
   </script>
 </body>
