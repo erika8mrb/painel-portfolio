@@ -68,15 +68,15 @@
     align-items: center;
     gap: 12px;
     background: transparent;
-    border: none;
+    border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: var(--raio-sm);
     padding: 12px 14px;
     font-size: 14px;
     font-weight: 500;
     font-family: var(--fonte-texto);
-    color: rgba(255, 255, 255, 0.8);
+    color: var(--branco);
     text-align: left;
-    transition: background 0.15s ease, color 0.15s ease;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
   }
 
   .nav-item svg {
@@ -86,13 +86,15 @@
   }
 
   .nav-item:hover {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.12);
     color: var(--branco);
+    border-color: rgba(255, 255, 255, 0.5);
   }
 
   .nav-item.ativo {
-    background: rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.2);
     color: var(--branco);
+    border-color: var(--branco);
   }
 
   .sidebar-rodape {
