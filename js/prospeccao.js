@@ -260,7 +260,7 @@ function adicionarEstilosProspeccao() {
     }
 
     .prospeccao-capa h1 {
-      font-size: 32px;
+      font-size: 48px;
       font-weight: 600;
       margin: 0 0 8px 0;
     }
