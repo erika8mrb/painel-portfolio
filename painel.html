@@ -2107,7 +2107,7 @@
 
       const cabecalho = tabela.createTHead();
       const linhaHeader = cabecalho.insertRow();
-      ['Nome', 'Instagram', 'E-mail', 'Telefone', 'Situação'].forEach(col => {
+      ['Nome', 'Instagram', 'E-mail', 'Telefone', 'WhatsApp', 'Situação'].forEach(col => {
         const th = document.createElement('th');
         th.textContent = col;
         th.style.cssText = 'text-align: left; padding: 6px; border-bottom: 1px solid var(--borda); font-weight: 600;';
@@ -2118,7 +2118,7 @@
       dados.slice(0, 10).forEach(marca => {
         const linha = corpo.insertRow();
         linha.style.cssText = 'border-bottom: 1px solid var(--borda);';
-        [marca.nome, marca.instagram, marca.email, marca.telefone, marca.situacao].forEach(valor => {
+        [marca.nome, marca.instagram, marca.email, marca.telefone, marca.whatsapp, marca.situacao].forEach(valor => {
           const td = document.createElement('td');
           td.textContent = valor || '-';
           td.style.cssText = 'padding: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px;';
@@ -2214,6 +2214,26 @@
             return match2 ? `(${match2[1]}) ${match2[2]}-${match2[3]}` : '';
           };
 
+          // Função para separar WhatsApp de Telefone
+          const extrairContatoSeparado = (texto) => {
+            const textoLower = String(texto || '').toLowerCase();
+            const telefonePadrao = extrairTelefone(texto);
+
+            let whatsapp = '';
+            let telefone = '';
+
+            if (textoLower.includes('whatsapp')) {
+              whatsapp = telefonePadrao;
+            } else if (textoLower.includes('telefone')) {
+              telefone = telefonePadrao;
+            } else if (telefonePadrao) {
+              // Se não especificar, assume WhatsApp (mais comum)
+              whatsapp = telefonePadrao;
+            }
+
+            return { telefone, whatsapp };
+          };
+
           // Encontrar coluna de contato para extrair email/telefone
           const indiceContato = encontrarColuna(cabecalho, ['contato', 'contact']);
 
@@ -2224,12 +2244,17 @@
             // Extrair email e telefone das colunas específicas, ou da coluna Contato
             let email = indiceEmail >= 0 ? String(linha[colunasOriginais[indiceEmail]] || '').trim() : '';
             let telefone = indiceTelefone >= 0 ? String(linha[colunasOriginais[indiceTelefone]] || '').trim() : '';
+            let whatsapp = '';
 
             // Se não tiver email/telefone em colunas separadas, tenta extrair da coluna Contato
             if (indiceContato >= 0) {
               const contatoRaw = String(linha[colunasOriginais[indiceContato]] || '').trim();
               if (!email) email = extrairEmail(contatoRaw);
-              if (!telefone) telefone = extrairTelefone(contatoRaw);
+
+              // Separar WhatsApp de Telefone
+              const { telefone: tel, whatsapp: wa } = extrairContatoSeparado(contatoRaw);
+              if (!telefone) telefone = tel;
+              if (!whatsapp) whatsapp = wa;
             }
 
             return {
@@ -2237,6 +2262,7 @@
               instagram: indiceInstagram >= 0 ? String(linha[colunasOriginais[indiceInstagram]] || '').trim() : '',
               email: email,
               telefone: telefone,
+              whatsapp: whatsapp,
               situacao: indiceSituacao >= 0 ? String(linha[colunasOriginais[indiceSituacao]] || 'lead').trim() : 'lead',
               obs: indiceObs >= 0 ? String(linha[colunasOriginais[indiceObs]] || '').trim() : '',
               ultimo_contato: new Date().toISOString()
