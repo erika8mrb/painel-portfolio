@@ -1686,6 +1686,39 @@ async function enviarLead({ nome, email, telefone, mensagem, origem }){
   };
   const { error } = await window.Auth.sb.from("portfolio_leads").insert(lead);
   if(error) throw error;
+
+  // Salva também na tabela "marcas" do painel admin (para aparecer na aba "Marcas")
+  try{
+    // Tenta obter o user_id atual (se estiver logado como admin)
+    const { data: sessionData } = await window.Auth.sb.auth.getSession();
+    let adminUserId = sessionData?.session?.user?.id;
+
+    // Se não estiver logado, tenta descobrir pelos dados já salvos na tabela marcas
+    if(!adminUserId){
+      const { data: existingMarks } = await window.Auth.sb.from("marcas").select("user_id").limit(1);
+      if(existingMarks && existingMarks.length > 0){
+        adminUserId = existingMarks[0].user_id;
+      }
+    }
+
+    // Se conseguiu um user_id, salva o novo lead
+    if(adminUserId){
+      const marca = {
+        user_id: adminUserId,
+        nome: nome.trim(),
+        email: email.trim(),
+        telefone: telefone ? telefone.trim() : null,
+        situacao: "lead",
+        obs: mensagem ? `Mensagem: ${mensagem.trim()}\n\nOrigem: ${origem === "modal" ? "Modal de Interesse" : "Formulário de Contato"}` : `Origem: ${origem === "modal" ? "Modal de Interesse" : "Formulário de Contato"}`,
+        ultimo_contato: new Date().toISOString()
+      };
+
+      await window.Auth.sb.from("marcas").insert(marca);
+    }
+  }catch(err){
+    console.warn("Aviso: não foi possível salvar em marcas", err);
+  }
+
   registrarEvento("button_click", origem === "modal" ? "lead_modal" : "lead_rodape", null);
 }
 
