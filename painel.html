@@ -2056,7 +2056,22 @@
         if (!userId) throw new Error('Usuário não autenticado');
 
         const { error } = await Auth.sb.from('marcas').insert({
-          user_id: userId, nome, instagram, email, telefone, nicho, site, cidade, contato_nome, proposta_data, valor_orcado, categoria, situacao, obs, favorita: false, ultimo_contato: new Date().toISOString()
+          user_id: userId,
+          nome,
+          instagram: instagram || null,
+          email: email || null,
+          telefone: telefone || null,
+          nicho: nicho || null,
+          site: site || null,
+          cidade: cidade || null,
+          contato_nome: contato_nome || null,
+          proposta_data: proposta_data || null,
+          valor_orcado: valor_orcado || null,
+          categoria: categoria || null,
+          situacao,
+          obs: obs || null,
+          favorita: false,
+          ultimo_contato: new Date().toISOString()
         });
         if (error) throw error;
         mostrarMensagemArea('Marca adicionada com sucesso.', 'sucesso');
