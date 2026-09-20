@@ -2276,7 +2276,6 @@ function renderizarRodape(){
     <a href="${CONFIG.perfil.instagramLink}" target="_blank" rel="noopener" aria-label="Instagram de ${CONFIG.perfil.nomeCompleto}" data-evento="contact_instagram">${ICONE_INSTAGRAM}</a>
     <a href="${CONFIG.perfil.whatsappLink}" target="_blank" rel="noopener" aria-label="WhatsApp de ${CONFIG.perfil.nomeCompleto}" data-evento="contact_whatsapp">${ICONE_WHATSAPP}</a>
     ${CONFIG.perfil.tiktokAtivo !== false ? `<a href="${CONFIG.perfil.tiktokLink}" target="_blank" rel="noopener" aria-label="TikTok de ${CONFIG.perfil.nomeCompleto}" data-evento="social_tiktok">${ICONE_TIKTOK}</a>` : ''}
-    <a href="mailto:${CONFIG.perfil.email}" aria-label="E-mail de ${CONFIG.perfil.nomeCompleto}" data-evento="contact_email">${ICONE_EMAIL}</a>
   `;
 
   const anoAtual = new Date().getFullYear();
