@@ -2107,7 +2107,7 @@
 
       const cabecalho = tabela.createTHead();
       const linhaHeader = cabecalho.insertRow();
-      ['Nome', 'Instagram', 'E-mail', 'Situação'].forEach(col => {
+      ['Nome', 'Instagram', 'E-mail', 'Telefone', 'Situação'].forEach(col => {
         const th = document.createElement('th');
         th.textContent = col;
         th.style.cssText = 'text-align: left; padding: 6px; border-bottom: 1px solid var(--borda); font-weight: 600;';
@@ -2118,7 +2118,7 @@
       dados.slice(0, 10).forEach(marca => {
         const linha = corpo.insertRow();
         linha.style.cssText = 'border-bottom: 1px solid var(--borda);';
-        [marca.nome, marca.instagram, marca.email, marca.situacao].forEach(valor => {
+        [marca.nome, marca.instagram, marca.email, marca.telefone, marca.situacao].forEach(valor => {
           const td = document.createElement('td');
           td.textContent = valor || '-';
           td.style.cssText = 'padding: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px;';
