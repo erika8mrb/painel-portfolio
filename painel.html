@@ -2040,14 +2040,17 @@
 
           // Normalizar nomes das colunas (case-insensitive)
           const cabecalho = Object.keys(jsonDados[0]).map(c => c.toLowerCase());
-          const indiceNome = encontrarColuna(cabecalho, ['nome', 'marca', 'empresa', 'cliente', 'contato']);
-          const indiceInstagram = encontrarColuna(cabecalho, ['instagram', 'insta', '@']);
+          const colunasOriginaisKeys = Object.keys(jsonDados[0]);
+
+          let indiceNome = encontrarColuna(cabecalho, ['nome', 'marca', 'empresa', 'cliente', 'contato']);
+          // Se não encontrar, usa a primeira coluna como nome
+          if (indiceNome === -1) indiceNome = 0;
+
+          const indiceInstagram = encontrarColuna(cabecalho, ['instagram', 'insta', '@', 'insta']);
           const indiceEmail = encontrarColuna(cabecalho, ['email', 'e-mail', 'mail']);
           const indiceTelefone = encontrarColuna(cabecalho, ['telefone', 'phone', 'cel', 'celular']);
           const indiceSituacao = encontrarColuna(cabecalho, ['situacao', 'status', 'stage']);
           const indiceObs = encontrarColuna(cabecalho, ['obs', 'observacao', 'notas', 'notes', 'comentario']);
-
-          if (indiceNome === -1) throw new Error('Excel deve ter coluna com "nome" (ou aliases: marca, empresa, cliente, contato)');
 
           const colunasOriginais = Object.keys(jsonDados[0]);
           dados = jsonDados.map(linha => {
