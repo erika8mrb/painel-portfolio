@@ -2310,8 +2310,12 @@
           user_id: userId
         }));
 
+        console.log('Dados para inserir:', dadosParaInserir[0]); // Debug
         const { error } = await Auth.sb.from('marcas').insert(dadosParaInserir);
-        if (error) throw error;
+        if (error) {
+          console.error('Erro RLS detalhado:', error);
+          throw error;
+        }
 
         mostrarMensagemArea(`✅ ${dadosCSVParaImportar.length} marcas importadas com sucesso!`, 'sucesso');
         document.getElementById('blocoImportarCSV').classList.add('oculto');
