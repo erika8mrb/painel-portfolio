@@ -18,7 +18,7 @@ async function iniciarProspeccao() {
   console.log('Inicializando Prospecção...');
 
   // Garantir que marcas estão carregadas
-  if (cacheMarcas.length === 0) {
+  if (typeof cacheMarcas === 'undefined' || cacheMarcas.length === 0) {
     await recarregarMarcas();
   }
 
