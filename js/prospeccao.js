@@ -60,7 +60,7 @@ function montarTelaProspeccao() {
       <div class="prospeccao-capa-conteudo">
         <div class="prospeccao-icone">✉️</div>
         <h1>Prospecção</h1>
-        <p>Envie e-mails personalizados para suas marcas em massa</p>
+        <p></p>
         <div class="prospeccao-stats">
           <div class="stat-item">
             <span class="stat-numero">${obterTotalEnviados()}</span>
