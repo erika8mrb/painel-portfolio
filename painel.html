@@ -2175,25 +2175,61 @@
           const cabecalho = Object.keys(jsonDados[0]).map(c => c.toLowerCase());
           const colunasOriginaisKeys = Object.keys(jsonDados[0]);
 
-          let indiceNome = encontrarColuna(cabecalho, ['nome', 'marca', 'empresa', 'cliente', 'contato']);
-          // Se não encontrar, usa a primeira coluna como nome
-          if (indiceNome === -1) indiceNome = 0;
+          // Detectar nome/marca (com aliases mais amplos)
+          let indiceNome = encontrarColuna(cabecalho, ['nome', 'marca', 'empresa', 'cliente', 'contato', 'perfil', '@']);
+          // Se não encontrar, usa a segunda coluna (pulando o # se existir)
+          if (indiceNome === -1) {
+            indiceNome = cabecalho[0].includes('#') ? 1 : 0;
+          }
 
-          const indiceInstagram = encontrarColuna(cabecalho, ['instagram', 'insta', '@', 'insta']);
+          // Detectar Instagram (inclui aliases como @ do Perfil, instagram, etc)
+          const indiceInstagram = encontrarColuna(cabecalho, ['@', 'instagram', 'insta', 'perfil', 'handle']);
+
+          // Detectar Email (com suporte a "contato" se contiver @)
           const indiceEmail = encontrarColuna(cabecalho, ['email', 'e-mail', 'mail']);
-          const indiceTelefone = encontrarColuna(cabecalho, ['telefone', 'phone', 'cel', 'celular']);
-          const indiceSituacao = encontrarColuna(cabecalho, ['situacao', 'status', 'stage']);
-          const indiceObs = encontrarColuna(cabecalho, ['obs', 'observacao', 'notas', 'notes', 'comentario']);
+
+          // Detectar Telefone (com suporte a "contato" se tiver celular)
+          const indiceTelefone = encontrarColuna(cabecalho, ['telefone', 'phone', 'cel', 'celular', 'whatsapp']);
+
+          // Detectar Situação
+          const indiceSituacao = encontrarColuna(cabecalho, ['situacao', 'status', 'stage', 'estado']);
+
+          // Detectar Obs (inclui "o que vende", "descrição", etc)
+          const indiceObs = encontrarColuna(cabecalho, ['obs', 'observacao', 'notas', 'notes', 'comentario', 'o que vende', 'descrição', 'description']);
 
           const colunasOriginais = Object.keys(jsonDados[0]);
+
+          // Função para extrair email de texto
+          const extrairEmail = (texto) => {
+            const match = String(texto || '').match(/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/);
+            return match ? match[1].trim() : '';
+          };
+
+          // Função para extrair telefone de texto
+          const extrairTelefone = (texto) => {
+            const match = String(texto || '').match(/\(?(\d{2})\)?[\s-]?(\d{4,5})[\s-]?(\d{4})/);
+            if (match) return `(${match[1]}) ${match[2]}-${match[3]}`;
+            const match2 = String(texto || '').match(/\((\d{2})\)\s*(\d{4,5})-(\d{4})/);
+            return match2 ? `(${match2[1]}) ${match2[2]}-${match2[3]}` : '';
+          };
+
           dados = jsonDados.map(linha => {
             const nome = linha[colunasOriginais[indiceNome]];
             if (!nome) return null;
+
+            let email = indiceEmail >= 0 ? String(linha[colunasOriginais[indiceEmail]] || '').trim() : '';
+            let telefone = indiceTelefone >= 0 ? String(linha[colunasOriginais[indiceTelefone]] || '').trim() : '';
+
+            // Se não tiver email/telefone, tenta extrair da coluna de contato
+            const contatoRaw = indiceEmail >= 0 || indiceTelefone >= 0 ? '' : String(linha[colunasOriginais[Math.max(indiceEmail, indiceTelefone)]] || '');
+            if (!email && contatoRaw) email = extrairEmail(contatoRaw);
+            if (!telefone && contatoRaw) telefone = extrairTelefone(contatoRaw);
+
             return {
               nome: String(nome).trim(),
               instagram: indiceInstagram >= 0 ? String(linha[colunasOriginais[indiceInstagram]] || '').trim() : '',
-              email: indiceEmail >= 0 ? String(linha[colunasOriginais[indiceEmail]] || '').trim() : '',
-              telefone: indiceTelefone >= 0 ? String(linha[colunasOriginais[indiceTelefone]] || '').trim() : '',
+              email: email,
+              telefone: telefone,
               situacao: indiceSituacao >= 0 ? String(linha[colunasOriginais[indiceSituacao]] || 'lead').trim() : 'lead',
               obs: indiceObs >= 0 ? String(linha[colunasOriginais[indiceObs]] || '').trim() : '',
               ultimo_contato: new Date().toISOString()
