@@ -16,6 +16,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@latest/dist/xlsx.full.min.js"></script>
 <script src="js/auth.js"></script>
+<script src="js/prospeccao.js"></script>
 
 <style>
   /* O corpo começa invisível e só aparece depois que o guarda de
@@ -819,6 +820,14 @@
         </svg>
         <span>Checklist</span>
       </button>
+      <button class="nav-item" data-tab="prospeccao">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          <line x1="9" y1="10" x2="15" y2="10"></line>
+          <line x1="9" y1="14" x2="15" y2="14"></line>
+        </svg>
+        <span>Prospecção</span>
+      </button>
     </nav>
 
     <div class="sidebar-rodape">
@@ -1222,6 +1231,11 @@
       </div>
 
       <div id="listaChecklist"></div>
+    </section>
+
+    <!-- ================= Aba: Prospecção ================= -->
+    <section id="abaPerspeccao" class="painel-tab oculto">
+      <!-- Carregado por js/prospeccao.js -->
     </section>
   </main>
 
@@ -2715,6 +2729,7 @@
       calendario: 'Calendário',
       campanhas: 'Campanhas',
       checklist: 'Checklist',
+      prospeccao: 'Prospecção',
     };
 
     const idsAba = {
@@ -2725,6 +2740,7 @@
       calendario: 'painelCalendario',
       campanhas: 'painelCampanhas',
       checklist: 'painelChecklist',
+      prospeccao: 'abaPerspeccao',
     };
 
     document.querySelectorAll('.nav-item').forEach((item) => {
@@ -2736,6 +2752,10 @@
         const aba = item.dataset.tab;
         document.getElementById(idsAba[aba]).classList.remove('oculto');
         document.getElementById('tituloPagina').textContent = nomesAba[aba];
+
+        if (aba === 'prospeccao') {
+          iniciarProspeccao();
+        }
 
         fecharSidebarMobile();
       });
