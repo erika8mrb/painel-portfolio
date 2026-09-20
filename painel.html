@@ -2031,6 +2031,12 @@
     document.getElementById('formNovaMarca').addEventListener('submit', async (e) => {
       e.preventDefault();
       const nome = document.getElementById('novoNomeMarca').value.trim();
+
+      if (!nome) {
+        mostrarMensagemArea('Preencha o nome da marca.', 'erro');
+        return;
+      }
+
       const instagram = document.getElementById('novoInstagram').value.trim();
       const email = document.getElementById('novoEmail').value.trim();
       const telefone = document.getElementById('novoTelefone').value.trim();
@@ -2040,7 +2046,7 @@
       const contato_nome = document.getElementById('novoContatoNome').value.trim();
       const proposta_data = document.getElementById('novoPropostaData').value;
       const valor_orcado = document.getElementById('novoValorOrcado').value ? parseFloat(document.getElementById('novoValorOrcado').value) : null;
-      const categoria = document.getElementById('novoCategoria').value;
+      const categoria = document.getElementById('novoCategoria').value || null;
       const situacao = document.getElementById('novoSituacao').value;
       const obs = document.getElementById('novoObs').value.trim();
 
