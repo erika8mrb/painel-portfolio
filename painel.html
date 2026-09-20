@@ -14,6 +14,7 @@
 
 <!-- Supabase precisa ser carregado ANTES de js/auth.js -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@latest/dist/xlsx.full.min.js"></script>
 <script src="js/auth.js"></script>
 
 <style>
@@ -1024,14 +1025,14 @@
       </div>
 
       <div class="cartao formulario-marca oculto" id="blocoImportarCSV">
-        <h3>Importar marcas de CSV</h3>
+        <h3>Importar marcas</h3>
         <p style="color: var(--texto-suave); margin-bottom: 16px; font-size: 13px;">
-          Seu CSV deve ter as seguintes colunas (em qualquer ordem):
+          Seu arquivo deve ter as seguintes colunas (em qualquer ordem):
           <strong>nome, instagram, email, telefone, situacao, obs</strong>
         </p>
         <div class="campo" style="margin-bottom: 20px;">
-          <label for="inputCSV">Selecione o arquivo CSV</label>
-          <input type="file" id="inputCSV" accept=".csv" required>
+          <label for="inputCSV">Selecione o arquivo (CSV ou XLSX)</label>
+          <input type="file" id="inputCSV" accept=".csv,.xlsx" required>
         </div>
         <div id="previewImportacao" style="display: none; margin-bottom: 16px;">
           <p style="font-size: 13px; color: var(--texto-suave); margin-bottom: 8px;"><strong>Preview:</strong> <span id="totalLinhas">0</span> linhas encontradas</p>
@@ -2019,13 +2020,56 @@
       if (!arquivo) return;
 
       try {
-        const texto = await arquivo.text();
-        dadosCSVParaImportar = parseCSV(texto);
+        const nomeArquivo = arquivo.name.toLowerCase();
+        let dados = [];
+
+        if (nomeArquivo.endsWith('.xlsx') || nomeArquivo.endsWith('.xls')) {
+          // Processar Excel
+          const arrayBuffer = await arquivo.arrayBuffer();
+          const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+          const primeiraAba = workbook.SheetNames[0];
+          const planilha = workbook.Sheets[primeiraAba];
+          const jsonDados = XLSX.utils.sheet_to_json(planilha);
+
+          if (jsonDados.length === 0) throw new Error('Arquivo Excel vazio ou sem dados.');
+
+          // Normalizar nomes das colunas (case-insensitive)
+          const cabecalho = Object.keys(jsonDados[0]).map(c => c.toLowerCase());
+          const indiceNome = cabecalho.findIndex(c => c.includes('nome'));
+          const indiceInstagram = cabecalho.findIndex(c => c.includes('instagram'));
+          const indiceEmail = cabecalho.findIndex(c => c.includes('email'));
+          const indiceTelefone = cabecalho.findIndex(c => c.includes('telefone'));
+          const indiceSituacao = cabecalho.findIndex(c => c.includes('situacao'));
+          const indiceObs = cabecalho.findIndex(c => c.includes('obs'));
+
+          if (indiceNome === -1) throw new Error('Excel deve ter coluna com "nome".');
+
+          const colunasOriginais = Object.keys(jsonDados[0]);
+          dados = jsonDados.map(linha => {
+            const nome = linha[colunasOriginais[indiceNome]];
+            if (!nome) return null;
+            return {
+              nome: String(nome).trim(),
+              instagram: indiceInstagram >= 0 ? String(linha[colunasOriginais[indiceInstagram]] || '').trim() : '',
+              email: indiceEmail >= 0 ? String(linha[colunasOriginais[indiceEmail]] || '').trim() : '',
+              telefone: indiceTelefone >= 0 ? String(linha[colunasOriginais[indiceTelefone]] || '').trim() : '',
+              situacao: indiceSituacao >= 0 ? String(linha[colunasOriginais[indiceSituacao]] || 'lead').trim() : 'lead',
+              obs: indiceObs >= 0 ? String(linha[colunasOriginais[indiceObs]] || '').trim() : '',
+              ultimo_contato: new Date().toISOString()
+            };
+          }).filter(d => d !== null);
+        } else {
+          // Processar CSV
+          const texto = await arquivo.text();
+          dados = parseCSV(texto);
+        }
+
+        dadosCSVParaImportar = dados;
         mostrarPreviewCSV(dadosCSVParaImportar);
         document.getElementById('previewImportacao').style.display = 'block';
         document.getElementById('botaoConfirmarImportar').style.display = 'inline-flex';
       } catch (erro) {
-        mostrarMensagemArea(`Erro ao processar CSV: ${erro.message}`, 'erro');
+        mostrarMensagemArea(`Erro ao processar arquivo: ${erro.message}`, 'erro');
         document.getElementById('previewImportacao').style.display = 'none';
         document.getElementById('botaoConfirmarImportar').style.display = 'none';
       }
