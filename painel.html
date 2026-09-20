@@ -1079,6 +1079,13 @@
         </div>
       </div>
 
+      <div style="margin-bottom: 20px;">
+        <p style="font-size: 12px; font-weight: 600; color: var(--texto-suave); margin: 0 0 8px 0;">Filtrar por nicho:</p>
+        <div style="display: flex; gap: 6px; flex-wrap: wrap;" id="filtrosNicho">
+          <button class="filtro-btn ativo" data-nicho="todos" style="padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; border: 1px solid #e7ddd2; background: white; cursor: pointer; transition: all 0.15s;">Todos</button>
+        </div>
+      </div>
+
       <div id="listaMarcas"></div>
     </section>
 
@@ -1858,16 +1865,57 @@
       return data || [];
     }
 
+    let nichodeselecionado = 'todos';
+
+    function atualizarFiltrosNicho() {
+      // Pega todos os nichos únicos
+      const nichosUnicos = new Set(['todos']);
+      cacheMarcas.forEach(marca => {
+        if (marca.nicho) nichosUnicos.add(marca.nicho);
+      });
+
+      const container = document.getElementById('filtrosNicho');
+      container.innerHTML = '';
+
+      nichosUnicos.forEach(nicho => {
+        const btn = document.createElement('button');
+        btn.className = `filtro-btn ${nicho === nichodeselecionado ? 'ativo' : ''}`;
+        btn.textContent = nicho === 'todos' ? 'Todos' : nicho;
+        btn.dataset.nicho = nicho;
+        btn.style.cssText = `
+          padding: 6px 12px;
+          border-radius: 8px;
+          font-size: 12px;
+          font-weight: 600;
+          border: 1px solid #e7ddd2;
+          background: ${nicho === nichodeselecionado ? '#f3eee9' : 'white'};
+          cursor: pointer;
+          transition: all 0.15s;
+        `;
+        btn.addEventListener('click', () => {
+          nichodeselecionado = nicho;
+          atualizarFiltrosNicho();
+          renderMarcas();
+        });
+        container.appendChild(btn);
+      });
+    }
+
     function renderMarcas() {
       const container = document.getElementById('listaMarcas');
       container.innerHTML = '';
 
-      if (cacheMarcas.length === 0) {
-        container.innerHTML = '<div class="cartao"><p class="texto-vazio">Nenhuma marca registrada ainda.</p></div>';
+      // Filtrar marcas por nicho
+      const marcasFiltradas = nichodeselecionado === 'todos'
+        ? cacheMarcas
+        : cacheMarcas.filter(m => m.nicho === nichodeselecionado);
+
+      if (marcasFiltradas.length === 0) {
+        container.innerHTML = '<div class="cartao"><p class="texto-vazio">Nenhuma marca encontrada neste nicho.</p></div>';
         return;
       }
 
-      cacheMarcas.forEach(marca => {
+      marcasFiltradas.forEach(marca => {
         const card = document.createElement('div');
         card.className = 'cartao marca-card';
         card.innerHTML = `
@@ -1875,6 +1923,7 @@
             <div>
               <h3 style="margin: 0 0 8px 0;">${escaparHtml(marca.nome)}</h3>
               <div style="font-size: 13px; color: var(--texto-suave);">
+                ${marca.nicho ? `<div>🏷️ ${escaparHtml(marca.nicho)}</div>` : ''}
                 ${marca.instagram ? `<div>📱 ${escaparHtml(marca.instagram)}</div>` : ''}
                 ${marca.email ? `<div>✉️ ${escaparHtml(marca.email)}</div>` : ''}
                 ${marca.telefone ? `<div>📞 ${escaparHtml(marca.telefone)}</div>` : ''}
@@ -1907,6 +1956,7 @@
     async function recarregarMarcas() {
       try {
         cacheMarcas = await buscarMarcas();
+        atualizarFiltrosNicho();
         renderMarcas();
       } catch (erro) {
         console.error(erro);
