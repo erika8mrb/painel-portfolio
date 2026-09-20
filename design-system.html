@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Design System - Painel Portfolio</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background: #f5f5f5;
+    padding: 40px 20px;
+    color: #333;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  h1 {
+    font-size: 36px;
+    margin-bottom: 40px;
+    color: #9c8365;
+    font-family: 'Noto Serif Display', serif;
+    font-style: italic;
+  }
+
+  h2 {
+    font-size: 24px;
+    margin-top: 50px;
+    margin-bottom: 20px;
+    color: #6d5a47;
+    border-bottom: 2px solid #e7ddd2;
+    padding-bottom: 10px;
+  }
+
+  .section {
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+
+  /* FONTES */
+  .fonte-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+  }
+
+  .fonte-item {
+    padding: 20px;
+    background: #fafafa;
+    border-radius: 8px;
+    border-left: 4px solid #9c8365;
+  }
+
+  .fonte-nome {
+    font-size: 12px;
+    color: #999;
+    margin-bottom: 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .fonte-exemplo {
+    margin-bottom: 12px;
+  }
+
+  .noto-serif {
+    font-family: 'Noto Serif Display', serif;
+  }
+
+  .noto-serif.italic {
+    font-style: italic;
+  }
+
+  .montserrat {
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  .size-36 { font-size: 36px; }
+  .size-28 { font-size: 28px; }
+  .size-24 { font-size: 24px; }
+  .size-18 { font-size: 18px; }
+  .size-16 { font-size: 16px; }
+  .size-14 { font-size: 14px; }
+  .size-12 { font-size: 12px; }
+
+  .weight-300 { font-weight: 300; }
+  .weight-400 { font-weight: 400; }
+  .weight-500 { font-weight: 500; }
+  .weight-600 { font-weight: 600; }
+
+  /* CORES */
+  .cores-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+  }
+
+  .cor-item {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+
+  .cor-amostra {
+    width: 100%;
+    height: 100px;
+  }
+
+  .cor-info {
+    padding: 12px;
+    background: white;
+  }
+
+  .cor-nome {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 4px;
+    color: #333;
+  }
+
+  .cor-hex {
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    color: #999;
+  }
+
+  .cor-uso {
+    font-size: 11px;
+    color: #bbb;
+    margin-top: 4px;
+  }
+
+  /* COMPONENTES */
+  .componentes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+  }
+
+  .componente {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .componente-preview {
+    padding: 20px;
+    background: linear-gradient(135deg, #9c8365 0%, #6d5a47 100%);
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .componente-titulo {
+    font-family: 'Noto Serif Display', serif;
+    font-size: 32px;
+    font-style: italic;
+    color: #e7ddd2;
+  }
+
+  .componente-info {
+    padding: 12px;
+    background: white;
+    font-size: 12px;
+    color: #666;
+  }
+
+  .botao {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 6px;
+    border: none;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    margin: 5px;
+  }
+
+  .botao-primario {
+    background: #9c8365;
+    color: white;
+  }
+
+  .botao-secundario {
+    background: #f3eee9;
+    color: #6d5a47;
+  }
+
+  .info-box {
+    background: #e8f5e9;
+    border-left: 4px solid #2d5a3d;
+    padding: 15px;
+    border-radius: 4px;
+    margin-top: 20px;
+    font-size: 14px;
+  }
+
+  .info-box strong {
+    color: #2d5a3d;
+  }
+
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Design System</h1>
+  <p style="font-size: 16px; color: #666; margin-bottom: 30px;">Guia completo de cores, fontes e componentes do Painel Portfolio</p>
+
+  <!-- FONTES -->
+  <div class="section">
+    <h2>📝 Fontes Tipográficas</h2>
+
+    <div class="fonte-grid">
+      <!-- Noto Serif Display -->
+      <div class="fonte-item">
+        <div class="fonte-nome">Noto Serif Display - Regular</div>
+        <div class="fonte-exemplo">
+          <div class="noto-serif size-36 weight-400">Abc 123</div>
+        </div>
+        <div style="font-size: 12px; color: #999;">Títulos principais (36px)</div>
+      </div>
+
+      <div class="fonte-item">
+        <div class="fonte-nome">Noto Serif Display - Itálica</div>
+        <div class="fonte-exemplo">
+          <div class="noto-serif italic size-36 weight-400">Abc 123</div>
+        </div>
+        <div style="font-size: 12px; color: #999;">Títulos destaque (36px, itálico)</div>
+      </div>
+
+      <!-- Montserrat -->
+      <div class="fonte-item">
+        <div class="fonte-nome">Montserrat - Regular</div>
+        <div class="fonte-exemplo">
+          <div class="montserrat size-16 weight-400">Abc 123</div>
+        </div>
+        <div style="font-size: 12px; color: #999;">Texto corpo (16px)</div>
+      </div>
+
+      <div class="fonte-item">
+        <div class="fonte-nome">Montserrat - Semi Bold</div>
+        <div class="fonte-exemplo">
+          <div class="montserrat size-16 weight-600">Abc 123</div>
+        </div>
+        <div style="font-size: 12px; color: #999;">Botões, destaques (16px)</div>
+      </div>
+
+      <div class="fonte-item">
+        <div class="fonte-nome">Montserrat - Pequeno</div>
+        <div class="fonte-exemplo">
+          <div class="montserrat size-12 weight-500">Abc 123</div>
+        </div>
+        <div style="font-size: 12px; color: #999;">Labels, rodapé (12px)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CORES PRINCIPAIS -->
+  <div class="section">
+    <h2>🎨 Paleta de Cores</h2>
+
+    <h3 style="font-size: 16px; margin: 20px 0 15px; color: #6d5a47;">Cores Principais</h3>
+    <div class="cores-grid">
+      <div class="cor-item">
+        <div class="cor-amostra" style="background: #9c8365;"></div>
+        <div class="cor-info">
+          <div class="cor-nome">Coral (Principal)</div>
+          <div class="cor-hex">#9c8365</div>
+          <div class="cor-uso">Botões, links, destaque</div>
+        </div>
+      </div>
+
+      <div class="cor-item">
+        <div class="cor-amostra" style="background: #6d5a47;"></div>
+        <div class="cor-info">
+          <div class="cor-nome">Coral Escuro</div>
+          <div class="cor-hex">#6d5a47</div>
+          <div class="cor-uso">Hover, backgrounds</div>
+        </div>
+      </div>
+
+      <div class="cor-item">
+        <div class="cor-amostra" style="background: #e7ddd2;"></div>
+        <div class="cor-info">
+          <div class="cor-nome">Borda / Claro</div>
+          <div class="cor-hex">#e7ddd2</div>
+          <div class="cor-uso">Textos em capa, bordas</div>
+        </div>
+      </div>
+
+      <div class="cor-item">
+        <div class="cor-amostra" style="background: #f3eee9;"></div>
+        <div class="cor-info">
+          <div class="cor-nome">Creme</div>
+          <div class="cor-hex">#f3eee9</div>
+          <div class="cor-uso">Background, inputs</div>
+        </div>
+      </div>
+
+      <div class="cor-item">
+        <div class="cor-amostra" style="background: #FFFFFF; border: 1px solid #ddd;"></div>
+        <div class="cor-info">
+          <div class="cor-nome">Branco</div>
+          <div class="cor-hex">#FFFFFF</div>
+          <div class="cor-uso">Fundo principal</div>
+        </div>
+      </div>
+
+      <div class="cor-item">
+        <div class="cor-amostra" style="background: #333333;"></div>
+        <div class="cor-info">
+          <div class="cor-nome">Grafite (Texto)</div>
+          <div class="cor-hex">#333333</div>
+          <div class="cor-uso">Texto principal</div>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="font-size: 16px; margin: 20px 0 15px; color: #6d5a47;">Cores de Status</h3>
+    <div class="cores-grid">
+      <div class="cor-item">
+        <div class="cor-amostra" style="background: #2d5a3d;"></div>
+        <div class="cor-info">
+          <div class="cor-nome">Sucesso / Verde</div>
+          <div class="cor-hex">#2d5a3d</div>
+          <div class="cor-uso">Enviados, OK</div>
+        </div>
+      </div>
+
+      <div class="cor-item">
+        <div class="cor-amostra" style="background: #3b7a8a;"></div>
+        <div class="cor-info">
+          <div class="cor-nome">Info / Azul</div>
+          <div class="cor-hex">#3b7a8a</div>
+          <div class="cor-uso">Informações</div>
+        </div>
+      </div>
+
+      <div class="cor-item">
+        <div class="cor-amostra" style="background: #d4a574;"></div>
+        <div class="cor-info">
+          <div class="cor-nome">Aviso / Laranja</div>
+          <div class="cor-hex">#d4a574</div>
+          <div class="cor-uso">Atenção, review</div>
+        </div>
+      </div>
+
+      <div class="cor-item">
+        <div class="cor-amostra" style="background: #c76464;"></div>
+        <div class="cor-info">
+          <div class="cor-nome">Erro / Vermelho</div>
+          <div class="cor-hex">#c76464</div>
+          <div class="cor-uso">Erros, falhas</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPONENTES -->
+  <div class="section">
+    <h2>🧩 Componentes Principais</h2>
+
+    <div class="componentes-grid">
+      <div class="componente">
+        <div class="componente-preview">
+          <div class="componente-titulo">Prospecção</div>
+        </div>
+        <div class="componente-info">
+          <strong>Capa Principal</strong><br>
+          Font: Noto Serif Display Itálica 72px<br>
+          Cor: #e7ddd2<br>
+          Background: gradiente #9c8365 → #6d5a47
+        </div>
+      </div>
+
+      <div class="componente">
+        <div style="padding: 20px; background: white;">
+          <button class="botao botao-primario">Botão Primário</button><br>
+          <button class="botao botao-secundario">Botão Secundário</button>
+        </div>
+        <div class="componente-info">
+          <strong>Botões</strong><br>
+          Font: Montserrat 14px 600<br>
+          Primário: #9c8365<br>
+          Secundário: #f3eee9
+        </div>
+      </div>
+
+      <div class="componente">
+        <div style="padding: 20px; background: white; border-left: 4px solid #2d5a3d;">
+          <div style="font-weight: 600; color: #2d5a3d; margin-bottom: 4px;">Enviados</div>
+          <div style="font-size: 24px; font-weight: 600; color: #2d5a3d;">42</div>
+        </div>
+        <div class="componente-info">
+          <strong>Card de Métrica</strong><br>
+          Borda esquerda: cor do status<br>
+          Número em bold grande<br>
+          Label em pequeno
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INFORMAÇÕES -->
+  <div class="section">
+    <div class="info-box">
+      <strong>💡 Como usar este guia:</strong><br><br>
+      Quando você quiser alterar algo no design, use este arquivo como referência. Por exemplo:<br>
+      • "Muda o 'Prospecção' para Montserrat 48px bold"<br>
+      • "Usa a cor Sucesso (#2d5a3d) neste componente"<br>
+      • "Aumenta a fonte para 24px"<br><br>
+      Assim consigo entender exatamente o que você quer! ✨
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
