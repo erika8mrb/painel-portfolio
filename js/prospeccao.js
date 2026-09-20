@@ -260,9 +260,13 @@ function adicionarEstilosProspeccao() {
     }
 
     .prospeccao-capa h1 {
-      font-size: 48px;
-      font-weight: 600;
+      font-family: 'Noto Serif Display', serif;
+      font-size: 72px;
+      font-weight: 400;
+      font-style: italic;
+      color: #e7ddd2;
       margin: 0 0 8px 0;
+      letter-spacing: -0.02em;
     }
 
     .prospeccao-capa > div > p {
