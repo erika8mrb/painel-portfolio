@@ -2261,8 +2261,8 @@
               nome: String(nome).trim(),
               instagram: indiceInstagram >= 0 ? String(linha[colunasOriginais[indiceInstagram]] || '').trim() : '',
               email: email,
-              telefone: telefone,
-              whatsapp: whatsapp,
+              telefone: telefone || whatsapp, // Salva ambos em telefone (coluna whatsapp não existe na tabela)
+              whatsapp: whatsapp, // Apenas para preview
               situacao: indiceSituacao >= 0 ? String(linha[colunasOriginais[indiceSituacao]] || 'lead').trim() : 'lead',
               obs: indiceObs >= 0 ? String(linha[colunasOriginais[indiceObs]] || '').trim() : '',
               ultimo_contato: new Date().toISOString()
@@ -2296,7 +2296,10 @@
       botao.textContent = `Importando ${dadosCSVParaImportar.length} marcas...`;
 
       try {
-        const { error } = await Auth.sb.from('marcas').insert(dadosCSVParaImportar);
+        // Remove campo 'whatsapp' que é apenas para preview (a tabela não tem essa coluna)
+        const dadosParaInserir = dadosCSVParaImportar.map(({ whatsapp, ...resto }) => resto);
+
+        const { error } = await Auth.sb.from('marcas').insert(dadosParaInserir);
         if (error) throw error;
 
         mostrarMensagemArea(`✅ ${dadosCSVParaImportar.length} marcas importadas com sucesso!`, 'sucesso');
