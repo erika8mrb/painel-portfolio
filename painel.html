@@ -975,9 +975,10 @@
           <h3>Gestão de Marcas e Leads</h3>
           <p>Controle seus contatos com marcas e parceiros.</p>
         </div>
-        <div style="display: flex; gap: 8px;">
+        <div style="display: flex; gap: 12px; align-items: center;">
+          <button class="botao botao-secundario" id="botaoImportarCSV" style="font-size: 13px;">Importar planilha</button>
+          <button class="botao botao-secundario" id="botaoBaixarCSV" style="font-size: 13px;">Baixar CSV</button>
           <button class="botao botao-primario" id="botaoNovaMarca">+ Nova marca</button>
-          <button class="botao botao-secundario" id="botaoImportarCSV">📥 Importar CSV</button>
         </div>
       </div>
 
@@ -2053,6 +2054,49 @@
       } finally {
         botao.disabled = false;
         botao.textContent = 'Importar agora';
+      }
+    });
+
+    // Botão de download de CSV
+    document.getElementById('botaoBaixarCSV').addEventListener('click', async () => {
+      try {
+        const { data, error } = await Auth.sb.from('marcas').select('nome, instagram, email, telefone, situacao, obs').order('created_at', { ascending: false });
+        if (error) throw error;
+
+        if (!data || data.length === 0) {
+          mostrarMensagemArea('Nenhuma marca para exportar.', 'erro');
+          return;
+        }
+
+        // Monta o CSV
+        const cabecalho = ['nome', 'instagram', 'email', 'telefone', 'situacao', 'obs'].join(',');
+        const linhas = data.map(m =>
+          [
+            `"${(m.nome || '').replace(/"/g, '""')}"`,
+            `"${(m.instagram || '').replace(/"/g, '""')}"`,
+            `"${(m.email || '').replace(/"/g, '""')}"`,
+            `"${(m.telefone || '').replace(/"/g, '""')}"`,
+            m.situacao || 'lead',
+            `"${(m.obs || '').replace(/"/g, '""')}"`
+          ].join(',')
+        );
+        const csv = [cabecalho, ...linhas].join('\n');
+
+        // Download
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', `marcas_${new Date().toISOString().split('T')[0]}.csv`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        mostrarMensagemArea(`✅ ${data.length} marcas exportadas!`, 'sucesso');
+      } catch (erro) {
+        console.error(erro);
+        mostrarMensagemArea('Não foi possível exportar as marcas.', 'erro');
       }
     });
 
