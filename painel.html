@@ -2033,16 +2033,21 @@
 
           if (jsonDados.length === 0) throw new Error('Arquivo Excel vazio ou sem dados.');
 
+          // Função para encontrar coluna por aliases
+          const encontrarColuna = (cabecalho, aliases) => {
+            return cabecalho.findIndex(c => aliases.some(a => c.includes(a)));
+          };
+
           // Normalizar nomes das colunas (case-insensitive)
           const cabecalho = Object.keys(jsonDados[0]).map(c => c.toLowerCase());
-          const indiceNome = cabecalho.findIndex(c => c.includes('nome'));
-          const indiceInstagram = cabecalho.findIndex(c => c.includes('instagram'));
-          const indiceEmail = cabecalho.findIndex(c => c.includes('email'));
-          const indiceTelefone = cabecalho.findIndex(c => c.includes('telefone'));
-          const indiceSituacao = cabecalho.findIndex(c => c.includes('situacao'));
-          const indiceObs = cabecalho.findIndex(c => c.includes('obs'));
+          const indiceNome = encontrarColuna(cabecalho, ['nome', 'marca', 'empresa', 'cliente', 'contato']);
+          const indiceInstagram = encontrarColuna(cabecalho, ['instagram', 'insta', '@']);
+          const indiceEmail = encontrarColuna(cabecalho, ['email', 'e-mail', 'mail']);
+          const indiceTelefone = encontrarColuna(cabecalho, ['telefone', 'phone', 'cel', 'celular']);
+          const indiceSituacao = encontrarColuna(cabecalho, ['situacao', 'status', 'stage']);
+          const indiceObs = encontrarColuna(cabecalho, ['obs', 'observacao', 'notas', 'notes', 'comentario']);
 
-          if (indiceNome === -1) throw new Error('Excel deve ter coluna com "nome".');
+          if (indiceNome === -1) throw new Error('Excel deve ter coluna com "nome" (ou aliases: marca, empresa, cliente, contato)');
 
           const colunasOriginais = Object.keys(jsonDados[0]);
           dados = jsonDados.map(linha => {
