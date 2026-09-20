@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teste Parser de Arquivos</title>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@latest/dist/xlsx.full.min.js"></script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .container {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    h1 { color: #333; margin-top: 0; }
+    input[type="file"] {
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      margin: 10px 0;
+    }
+    button {
+      padding: 10px 20px;
+      background: #8B7355;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    button:hover { background: #6d5a47; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background: #f0f0f0;
+      font-weight: 600;
+    }
+    tr:hover { background: #fafafa; }
+
+    .stats {
+      background: #f9f9f9;
+      padding: 10px;
+      border-radius: 4px;
+      margin: 10px 0;
+      font-size: 14px;
+    }
+    .debug {
+      background: #f0f0f0;
+      padding: 10px;
+      border-radius: 4px;
+      margin: 10px 0;
+      font-family: monospace;
+      white-space: pre-wrap;
+      word-break: break-all;
+      max-height: 300px;
+      overflow-y: auto;
+      font-size: 11px;
+    }
+    .error { color: #d32f2f; }
+    .success { color: #388e3c; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🧪 Teste do Parser de Importação</h1>
+
+    <div>
+      <label>Selecione um arquivo Excel ou CSV:</label>
+      <input type="file" id="inputFile" accept=".xlsx,.xls,.csv" />
+      <button onclick="testarParser()">Analisar Arquivo</button>
+    </div>
+
+    <div id="stats" class="stats" style="display: none;"></div>
+    <div id="debug" class="debug" style="display: none;"></div>
+    <div id="preview"></div>
+  </div>
+
+  <script>
+    function extrairEmail(texto) {
+      const match = String(texto || '').match(/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/);
+      return match ? match[1].trim() : '';
+    }
+
+    function extrairTelefone(texto) {
+      const match = String(texto || '').match(/\(?(\d{2})\)?[\s-]?(\d{4,5})[\s-]?(\d{4})/);
+      if (match) return `(${match[1]}) ${match[2]}-${match[3]}`;
+      return '';
+    }
+
+    async function testarParser() {
+      const input = document.getElementById('inputFile');
+      const arquivo = input.files[0];
+
+      if (!arquivo) {
+        alert('Selecione um arquivo primeiro!');
+        return;
+      }
+
+      try {
+        const nomeArquivo = arquivo.name.toLowerCase();
+        let jsonDados = [];
+        let debug = '';
+
+        if (nomeArquivo.endsWith('.xlsx') || nomeArquivo.endsWith('.xls')) {
+          const arrayBuffer = await arquivo.arrayBuffer();
+          const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+          const primeiraAba = workbook.SheetNames[0];
+          const planilha = workbook.Sheets[primeiraAba];
+          jsonDados = XLSX.utils.sheet_to_json(planilha);
+          debug = `Arquivo Excel detectado: "${nomeArquivo}"\nAba: "${primeiraAba}"\nLinhas: ${jsonDados.length}`;
+        } else if (nomeArquivo.endsWith('.csv')) {
+          const texto = await arquivo.text();
+          const linhas = texto.trim().split('\n');
+          const cabecalho = linhas[0].split(',').map(c => c.trim());
+          jsonDados = linhas.slice(1).map(linha => {
+            const valores = linha.split(',').map(v => v.trim());
+            const obj = {};
+            cabecalho.forEach((col, i) => {
+              obj[col] = valores[i] || '';
+            });
+            return obj;
+          });
+          debug = `Arquivo CSV detectado: "${nomeArquivo}"\nLinhas: ${jsonDados.length}`;
+        }
+
+        // Detectar colunas
+        const encontrarColuna = (cabecalho, aliases) => {
+          return cabecalho.findIndex(c => aliases.some(a => c.includes(a)));
+        };
+
+        const cabecalho = Object.keys(jsonDados[0]).map(c => c.toLowerCase());
+        debug += `\n\nColunas originais: ${Object.keys(jsonDados[0]).join(', ')}`;
+        debug += `\nColunas normalizadas: ${cabecalho.join(', ')}`;
+
+        const colunasOriginais = Object.keys(jsonDados[0]);
+
+        let indiceNome = encontrarColuna(cabecalho, ['nome', 'marca', 'empresa', 'cliente', 'contato', 'perfil', '@']);
+        if (indiceNome === -1) {
+          indiceNome = cabecalho[0].includes('#') ? 1 : 0;
+        }
+        debug += `\n\nIndices detectados:`;
+        debug += `\n  Nome: ${indiceNome} (${colunasOriginais[indiceNome]})`;
+
+        const indiceInstagram = encontrarColuna(cabecalho, ['@', 'instagram', 'insta', 'perfil', 'handle']);
+        debug += `\n  Instagram: ${indiceInstagram} ${indiceInstagram >= 0 ? '(' + colunasOriginais[indiceInstagram] + ')' : '(não encontrado)'}`;
+
+        const indiceEmail = encontrarColuna(cabecalho, ['email', 'e-mail', 'mail']);
+        debug += `\n  Email: ${indiceEmail} ${indiceEmail >= 0 ? '(' + colunasOriginais[indiceEmail] + ')' : '(não encontrado)'}`;
+
+        const indiceTelefone = encontrarColuna(cabecalho, ['telefone', 'phone', 'cel', 'celular', 'whatsapp']);
+        debug += `\n  Telefone: ${indiceTelefone} ${indiceTelefone >= 0 ? '(' + colunasOriginais[indiceTelefone] + ')' : '(não encontrado)'}`;
+
+        const indiceSituacao = encontrarColuna(cabecalho, ['situacao', 'status', 'stage', 'estado']);
+        debug += `\n  Situacao: ${indiceSituacao} ${indiceSituacao >= 0 ? '(' + colunasOriginais[indiceSituacao] + ')' : '(não encontrado)'}`;
+
+        const indiceObs = encontrarColuna(cabecalho, ['obs', 'observacao', 'notas', 'notes', 'comentario', 'o que vende', 'descrição', 'description']);
+        debug += `\n  Obs: ${indiceObs} ${indiceObs >= 0 ? '(' + colunasOriginais[indiceObs] + ')' : '(não encontrado)'}`;
+
+        // Parse dados
+        const dados = jsonDados.map(linha => {
+          const nome = linha[colunasOriginais[indiceNome]];
+          if (!nome) return null;
+
+          let email = indiceEmail >= 0 ? String(linha[colunasOriginais[indiceEmail]] || '').trim() : '';
+          let telefone = indiceTelefone >= 0 ? String(linha[colunasOriginais[indiceTelefone]] || '').trim() : '';
+
+          // Se não tiver email/telefone, tenta extrair da coluna de contato
+          const contatoRaw = indiceEmail >= 0 || indiceTelefone >= 0 ? '' : String(linha[colunasOriginais[Math.max(indiceEmail, indiceTelefone)]] || '');
+          if (!email && contatoRaw) email = extrairEmail(contatoRaw);
+          if (!telefone && contatoRaw) telefone = extrairTelefone(contatoRaw);
+
+          return {
+            nome: String(nome).trim(),
+            instagram: indiceInstagram >= 0 ? String(linha[colunasOriginais[indiceInstagram]] || '').trim() : '',
+            email: email,
+            telefone: telefone,
+            situacao: indiceSituacao >= 0 ? String(linha[colunasOriginais[indiceSituacao]] || 'lead').trim() : 'lead',
+            obs: indiceObs >= 0 ? String(linha[colunasOriginais[indiceObs]] || '').trim() : '',
+          };
+        }).filter(d => d !== null);
+
+        // Mostrar resultados
+        document.getElementById('stats').style.display = 'block';
+        document.getElementById('stats').innerHTML = `
+          <strong>✅ Sucesso!</strong><br/>
+          Total de linhas: ${jsonDados.length}<br/>
+          Linhas com dados válidos: ${dados.length}
+        `;
+
+        document.getElementById('debug').style.display = 'block';
+        document.getElementById('debug').textContent = debug;
+
+        // Tabela de preview
+        const preview = document.getElementById('preview');
+        const tabela = document.createElement('table');
+
+        const cabecalhoHtml = tabela.createTHead();
+        const linhaH = cabecalhoHtml.insertRow();
+        ['Nome', 'Instagram', 'Email', 'Telefone', 'Situação', 'Obs'].forEach(col => {
+          const th = document.createElement('th');
+          th.textContent = col;
+          linhaH.appendChild(th);
+        });
+
+        const corpo = tabela.createTBody();
+        dados.slice(0, 20).forEach(marca => {
+          const linha = corpo.insertRow();
+          [marca.nome, marca.instagram, marca.email, marca.telefone, marca.situacao, marca.obs].forEach(valor => {
+            const td = document.createElement('td');
+            td.textContent = valor || '-';
+            td.style.fontSize = '12px';
+            linha.appendChild(td);
+          });
+        });
+
+        preview.innerHTML = '';
+        preview.appendChild(tabela);
+
+        if (dados.length > 20) {
+          const nota = document.createElement('p');
+          nota.textContent = `... e mais ${dados.length - 20} marcas`;
+          nota.style.fontStyle = 'italic';
+          nota.style.color = '#666';
+          preview.appendChild(nota);
+        }
+
+      } catch (erro) {
+        document.getElementById('stats').style.display = 'block';
+        document.getElementById('stats').innerHTML = `<span class="error">❌ Erro: ${erro.message}</span>`;
+        console.error(erro);
+      }
+    }
+  </script>
+</body>
+</html>
