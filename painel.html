@@ -2175,11 +2175,12 @@
           const cabecalho = Object.keys(jsonDados[0]).map(c => c.toLowerCase());
           const colunasOriginaisKeys = Object.keys(jsonDados[0]);
 
-          // Detectar nome/marca (com aliases mais amplos)
-          let indiceNome = encontrarColuna(cabecalho, ['nome', 'marca', 'empresa', 'cliente', 'contato', 'perfil', '@']);
-          // Se não encontrar, usa a segunda coluna (pulando o # se existir)
+          // Detectar nome/marca (sem 'contato' pois isso é para email/telefone)
+          let indiceNome = encontrarColuna(cabecalho, ['nome', 'marca', 'empresa', 'cliente', 'perfil']);
+          // Se não encontrar, usa a segunda coluna se a primeira for # (número)
           if (indiceNome === -1) {
-            indiceNome = cabecalho[0].includes('#') ? 1 : 0;
+            const primeiraColuna = cabecalho[0];
+            indiceNome = (primeiraColuna === '#' || primeiraColuna.match(/^[\d]+$/)) ? 1 : 0;
           }
 
           // Detectar Instagram (inclui aliases como @ do Perfil, instagram, etc)
@@ -2213,17 +2214,23 @@
             return match2 ? `(${match2[1]}) ${match2[2]}-${match2[3]}` : '';
           };
 
+          // Encontrar coluna de contato para extrair email/telefone
+          const indiceContato = encontrarColuna(cabecalho, ['contato', 'contact']);
+
           dados = jsonDados.map(linha => {
             const nome = linha[colunasOriginais[indiceNome]];
             if (!nome) return null;
 
+            // Extrair email e telefone das colunas específicas, ou da coluna Contato
             let email = indiceEmail >= 0 ? String(linha[colunasOriginais[indiceEmail]] || '').trim() : '';
             let telefone = indiceTelefone >= 0 ? String(linha[colunasOriginais[indiceTelefone]] || '').trim() : '';
 
-            // Se não tiver email/telefone, tenta extrair da coluna de contato
-            const contatoRaw = indiceEmail >= 0 || indiceTelefone >= 0 ? '' : String(linha[colunasOriginais[Math.max(indiceEmail, indiceTelefone)]] || '');
-            if (!email && contatoRaw) email = extrairEmail(contatoRaw);
-            if (!telefone && contatoRaw) telefone = extrairTelefone(contatoRaw);
+            // Se não tiver email/telefone em colunas separadas, tenta extrair da coluna Contato
+            if (indiceContato >= 0) {
+              const contatoRaw = String(linha[colunasOriginais[indiceContato]] || '').trim();
+              if (!email) email = extrairEmail(contatoRaw);
+              if (!telefone) telefone = extrairTelefone(contatoRaw);
+            }
 
             return {
               nome: String(nome).trim(),
