@@ -156,18 +156,18 @@ function montarTelaProspeccao() {
           <div id="modoTexto" class="modo-conteudo">
             <div class="form-group">
               <label>Assunto</label>
-              <input type="text" id="assuntoTexto" placeholder="Ex: Parceria para conteúdo UGC" onchange="atualizarPrevia()">
+              <input type="text" id="assuntoEmail" placeholder="Ex: Parceria para conteúdo UGC" oninput="atualizarPrevia()" onchange="atualizarPrevia()">
             </div>
 
             <div class="form-group">
               <label>Texto do e-mail</label>
-              <textarea id="textoEmail" placeholder="Escreva seu e-mail aqui...&#10;&#10;Use {{nome}} para o primeiro nome&#10;Use {{marca}} para o nome completo" onchange="atualizarPrevia()"></textarea>
+              <textarea id="textoEmail" placeholder="Escreva seu e-mail aqui...&#10;&#10;Use {{nome}} para o primeiro nome&#10;Use {{marca}} para o nome completo" oninput="atualizarPrevia()" onchange="atualizarPrevia()"></textarea>
             </div>
 
             <div class="form-group">
               <label>Botão (opcional)</label>
-              <input type="text" id="textoButao" placeholder="Texto do botão" onchange="atualizarPrevia()">
-              <input type="text" id="linkButao" placeholder="URL do botão" onchange="atualizarPrevia()">
+              <input type="text" id="textoButao" placeholder="Texto do botão" oninput="atualizarPrevia()" onchange="atualizarPrevia()">
+              <input type="text" id="linkButao" placeholder="URL do botão" oninput="atualizarPrevia()" onchange="atualizarPrevia()">
             </div>
           </div>
 
@@ -179,7 +179,7 @@ function montarTelaProspeccao() {
 
             <div class="form-group">
               <label>HTML do e-mail</label>
-              <textarea id="htmlEmail" placeholder="Cole aqui o HTML completo..." onchange="atualizarPrevia()"></textarea>
+              <textarea id="htmlEmail" placeholder="Cole aqui o HTML completo..." oninput="atualizarPrevia()" onchange="atualizarPrevia()"></textarea>
             </div>
           </div>
         </div>
@@ -641,8 +641,44 @@ function mudarModo(modo) {
 
 // Atualizar prévia
 function atualizarPrevia() {
-  // TODO: Implementar lógica de prévia
-  console.log('Atualizando prévia...');
+  const containerPrevia = document.getElementById('previaEmail');
+  if (!containerPrevia) return;
+
+  const assunto = document.getElementById('assuntoEmail')?.value || estadoProspeccao.assunto;
+  const textoEmail = document.getElementById('textoEmail')?.value || '';
+  const htmlEmail = document.getElementById('htmlEmail')?.value || '';
+  const modo = document.querySelector('input[name="modo"]:checked')?.value || estadoProspeccao.modo;
+
+  estadoProspeccao.assunto = assunto;
+  estadoProspeccao.modo = modo;
+
+  let htmlParaMostrar = '';
+
+  if (modo === 'texto') {
+    estadoProspeccao.html = `<p>${textoEmail.replace(/\n/g, '</p><p>')}</p>`;
+    htmlParaMostrar = `<pre style="white-space: pre-wrap; word-wrap: break-word; font-family: inherit;">${escapeHtml(textoEmail)}</pre>`;
+  } else {
+    estadoProspeccao.html = htmlEmail;
+    htmlParaMostrar = htmlEmail;
+  }
+
+  containerPrevia.innerHTML = `
+    <div style="background: white; border: 1px solid var(--borda); border-radius: var(--raio-sm); overflow: hidden;">
+      <div style="padding: 16px; border-bottom: 1px solid var(--borda); background: var(--creme);">
+        <div style="font-size: 12px; color: var(--texto-suave); margin-bottom: 4px;">Assunto</div>
+        <div style="font-weight: 600; color: var(--grafite);">${escapeHtml(assunto) || '(vazio)'}</div>
+      </div>
+      <div style="padding: 24px; font-size: 14px; line-height: 1.6; color: var(--grafite);">
+        ${htmlParaMostrar}
+      </div>
+    </div>
+  `;
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
 }
 
 // Carregar modelo HTML
@@ -673,12 +709,132 @@ function carregarModeloHtml() {
 
 // Enviar teste
 async function enviarTeste() {
-  alert('✋ Teste será implementado quando o Resend estiver configurado');
+  if (!estadoProspeccao.assunto.trim()) {
+    alert('⚠️ Digite um assunto para o teste');
+    return;
+  }
+
+  const botaoTeste = document.querySelector('[onclick="enviarTeste()"]');
+  const boesOriginal = botaoTeste?.textContent;
+  if (botaoTeste) botaoTeste.disabled = true;
+
+  try {
+    if (botaoTeste) botaoTeste.textContent = 'Enviando...';
+
+    const session = await Auth.sb.auth.getSession();
+    const token = session?.data?.session?.access_token;
+
+    if (!token) {
+      alert('❌ Sessão expirada. Faça login novamente.');
+      return;
+    }
+
+    const response = await fetch(
+      'https://tvgpzamubhmhypsuyyps.supabase.co/functions/v1/enviar-emails',
+      {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          destinatarios: ['erika333ugc@gmail.com'],
+          assunto: estadoProspeccao.assunto,
+          html: estadoProspeccao.html || `<p>${estadoProspeccao.assunto}</p>`,
+          skip_enviados: false,
+        }),
+      }
+    );
+
+    const resultado = await response.json();
+
+    if (resultado.sucesso) {
+      alert(`✅ Teste enviado!\n\nVerifique seu e-mail em alguns segundos.`);
+      atualizarNumerosProspeccao();
+    } else {
+      alert(`❌ Erro: ${resultado.erro || 'Desconhecido'}`);
+    }
+  } catch (erro) {
+    console.error(erro);
+    alert(`❌ Erro ao enviar: ${erro.message}`);
+  } finally {
+    if (botaoTeste) {
+      botaoTeste.disabled = false;
+      botaoTeste.textContent = boesOriginal || 'Enviar teste';
+    }
+  }
 }
 
-// Disparar
+// Disparar para todos os selecionados
 async function disparar() {
-  alert('✋ Disparo será implementado quando o Resend estiver configurado');
+  if (!estadoProspeccao.assunto.trim()) {
+    alert('⚠️ Digite um assunto');
+    return;
+  }
+
+  if (estadoProspeccao.destinatarios.length === 0) {
+    alert('⚠️ Selecione pelo menos um destinatário');
+    return;
+  }
+
+  if (!confirm(`📧 Enviar para ${estadoProspeccao.destinatarios.length} marca(s)?\n\nVerifique tudo antes de confirmar!`)) {
+    return;
+  }
+
+  const botaoDisparar = document.querySelector('[onclick="disparar()"]');
+  const textoOriginal = botaoDisparar?.textContent;
+  if (botaoDisparar) botaoDisparar.disabled = true;
+
+  try {
+    if (botaoDisparar) botaoDisparar.textContent = 'Disparando...';
+
+    const session = await Auth.sb.auth.getSession();
+    const token = session?.data?.session?.access_token;
+
+    if (!token) {
+      alert('❌ Sessão expirada. Faça login novamente.');
+      return;
+    }
+
+    const response = await fetch(
+      'https://tvgpzamubhmhypsuyyps.supabase.co/functions/v1/enviar-emails',
+      {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          destinatarios: estadoProspeccao.destinatarios,
+          assunto: estadoProspeccao.assunto,
+          html: estadoProspeccao.html || `<p>${estadoProspeccao.assunto}</p>`,
+          skip_enviados: estadoProspeccao.skipEnviados,
+        }),
+      }
+    );
+
+    const resultado = await response.json();
+
+    if (resultado.sucesso) {
+      const msg = `✅ Disparo concluído!\n\n📤 Enviados: ${resultado.resumo.enviados}\n❌ Falhas: ${resultado.resumo.falhas}\n⏭️ Pulados: ${resultado.resumo.pulados}`;
+      alert(msg);
+      atualizarNumerosProspeccao();
+      estadoProspeccao.assunto = '';
+      estadoProspeccao.html = '';
+      document.getElementById('abaPerspeccao').innerHTML = ''; // Recarrega a tela
+      montarTelaProspeccao();
+    } else {
+      alert(`❌ Erro: ${resultado.erro || 'Desconhecido'}`);
+    }
+  } catch (erro) {
+    console.error(erro);
+    alert(`❌ Erro ao enviar: ${erro.message}`);
+  } finally {
+    if (botaoDisparar) {
+      botaoDisparar.disabled = false;
+      botaoDisparar.textContent = textoOriginal || 'Disparar';
+    }
+  }
 }
 
 // Atualizar números
