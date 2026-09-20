@@ -30,8 +30,8 @@
   .sidebar {
     width: 260px;
     flex-shrink: 0;
-    background: var(--branco);
-    border-right: 1px solid var(--borda);
+    background: var(--coral);
+    border-right: 1px solid var(--coral-escuro);
     display: flex;
     flex-direction: column;
     padding: 28px 20px;
@@ -49,10 +49,11 @@
     font-weight: 600;
     padding: 0 8px;
     margin-bottom: 32px;
+    color: var(--branco);
   }
 
   .sidebar-topo .logo .ponto {
-    color: var(--coral);
+    color: var(--creme);
   }
 
   .sidebar-nav {
@@ -73,7 +74,7 @@
     font-size: 14px;
     font-weight: 500;
     font-family: var(--fonte-texto);
-    color: var(--texto-suave);
+    color: rgba(255, 255, 255, 0.8);
     text-align: left;
     transition: background 0.15s ease, color 0.15s ease;
   }
@@ -85,17 +86,17 @@
   }
 
   .nav-item:hover {
-    background: var(--creme);
-    color: var(--grafite);
+    background: rgba(255, 255, 255, 0.15);
+    color: var(--branco);
   }
 
   .nav-item.ativo {
-    background: var(--coral);
+    background: rgba(255, 255, 255, 0.25);
     color: var(--branco);
   }
 
   .sidebar-rodape {
-    border-top: 1px solid var(--borda);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
     padding-top: 16px;
     display: flex;
     flex-direction: column;
@@ -104,13 +105,20 @@
 
   .usuario-email {
     font-size: 13px;
-    color: var(--texto-suave);
+    color: rgba(255, 255, 255, 0.7);
     padding: 0 8px;
     word-break: break-all;
   }
 
   .botao-sair {
     width: 100%;
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: var(--branco) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  }
+
+  .botao-sair:hover {
+    background: rgba(255, 255, 255, 0.3) !important;
   }
 
   /* ---------- Overlay mobile ---------- */
