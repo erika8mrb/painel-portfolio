@@ -1906,7 +1906,7 @@
       container.innerHTML = '';
 
       // Filtrar marcas por nicho
-      const marcasFiltradas = nichodeselecionado === 'todos'
+      let marcasFiltradas = nichodeselecionado === 'todos'
         ? cacheMarcas
         : cacheMarcas.filter(m => m.nicho === nichodeselecionado);
 
@@ -1915,29 +1915,70 @@
         return;
       }
 
-      marcasFiltradas.forEach(marca => {
+      // Separar favoritadas e não favoritadas - mostrar favoritadas primeiro
+      const favoritadas = marcasFiltradas.filter(m => m.favorita);
+      const naoFavoritadas = marcasFiltradas.filter(m => !m.favorita);
+      const marcasOrdenadas = [...favoritadas, ...naoFavoritadas];
+
+      marcasOrdenadas.forEach(marca => {
         const card = document.createElement('div');
         card.className = 'cartao marca-card';
+        const ehFavorita = marca.favorita;
         card.innerHTML = `
-          <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 16px;">
-            <div>
-              <h3 style="margin: 0 0 8px 0;">${escaparHtml(marca.nome)}</h3>
-              <div style="font-size: 13px; color: var(--texto-suave);">
-                ${marca.nicho ? `<div>🏷️ ${escaparHtml(marca.nicho)}</div>` : ''}
-                ${marca.instagram ? `<div>📱 ${escaparHtml(marca.instagram)}</div>` : ''}
-                ${marca.email ? `<div>✉️ ${escaparHtml(marca.email)}</div>` : ''}
-                ${marca.telefone ? `<div>📞 ${escaparHtml(marca.telefone)}</div>` : ''}
+          <div style="${ehFavorita ? 'border: 2px solid #9c8365; background: #faf8f5;' : ''} padding: 16px; border-radius: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 16px;">
+              <div style="flex: 1;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                  <h3 style="margin: 0;">${escaparHtml(marca.nome)}</h3>
+                  ${ehFavorita ? '<span style="font-size: 18px;">⭐</span>' : ''}
+                </div>
+                <div style="font-size: 13px; color: var(--texto-suave);">
+                  ${marca.nicho ? `<div>🏷️ ${escaparHtml(marca.nicho)}</div>` : ''}
+                  ${marca.instagram ? `<div>📱 ${escaparHtml(marca.instagram)}</div>` : ''}
+                  ${marca.email ? `<div>✉️ ${escaparHtml(marca.email)}</div>` : ''}
+                  ${marca.telefone ? `<div>📞 ${escaparHtml(marca.telefone)}</div>` : ''}
+                </div>
               </div>
+              <span style="padding: 6px 12px; background: var(--creme); border-radius: var(--raio-sm); font-size: 12px; font-weight: 600;">
+                ${marca.situacao}
+              </span>
             </div>
-            <span style="padding: 6px 12px; background: var(--creme); border-radius: var(--raio-sm); font-size: 12px; font-weight: 600;">
-              ${marca.situacao}
-            </span>
+            ${marca.obs ? `<p style="font-size: 13px; color: var(--texto-suave); margin: 12px 0 0 0;">📝 ${escaparHtml(marca.obs)}</p>` : ''}
+            <div style="display: flex; gap: 8px; margin-top: 12px;">
+              <button class="botao botao-secundario" style="flex: 1;" onclick="toggleFavoritaMarca('${marca.id}')">
+                ${ehFavorita ? '☆ Remover destaque' : '⭐ Destacar'}
+              </button>
+              <button class="botao botao-secundario" onclick="excluirMarca('${marca.id}')">Excluir</button>
+            </div>
           </div>
-          ${marca.obs ? `<p style="font-size: 13px; color: var(--texto-suave); margin: 12px 0 0 0;">📝 ${escaparHtml(marca.obs)}</p>` : ''}
-          <button class="botao botao-secundario" style="margin-top: 12px;" onclick="excluirMarca('${marca.id}')">Excluir</button>
         `;
         container.appendChild(card);
       });
+    }
+
+    async function toggleFavoritaMarca(id) {
+      try {
+        const marca = cacheMarcas.find(m => m.id === id);
+        if (!marca) return;
+
+        const novoStatus = !marca.favorita;
+        const { error } = await Auth.sb
+          .from('marcas')
+          .update({ favorita: novoStatus })
+          .eq('id', id);
+
+        if (error) throw error;
+
+        marca.favorita = novoStatus;
+        renderMarcas();
+        mostrarMensagemArea(
+          novoStatus ? '⭐ Marca destacada!' : '☆ Destaque removido',
+          'sucesso'
+        );
+      } catch (erro) {
+        console.error(erro);
+        mostrarMensagemArea('Não foi possível atualizar a marca.', 'erro');
+      }
     }
 
     async function excluirMarca(id) {
