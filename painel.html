@@ -2046,7 +2046,7 @@
 
       try {
         const { error } = await Auth.sb.from('marcas').insert({
-          nome, instagram, email, telefone, nicho, site, cidade, contato_nome, proposta_data, valor_orcado, categoria, situacao, obs, ultimo_contato: new Date().toISOString()
+          nome, instagram, email, telefone, nicho, site, cidade, contato_nome, proposta_data, valor_orcado, categoria, situacao, obs, favorita: false, ultimo_contato: new Date().toISOString()
         });
         if (error) throw error;
         mostrarMensagemArea('Marca adicionada com sucesso.', 'sucesso');
