@@ -264,7 +264,7 @@ function adicionarEstilosProspeccao() {
       font-size: 72px;
       font-weight: 400;
       font-style: italic;
-      color: #ffffff;
+      color: #e7ddd2;
       margin: 0 0 8px 0;
       letter-spacing: -0.02em;
     }
