@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Preview - Aba Marcas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 20px;
+      background: #f3eee9;
+      font-family: 'Montserrat', sans-serif;
+      color: #14110d;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: white;
+      border: 1px solid #e7ddd2;
+      border-radius: 16px;
+      padding: 32px;
+    }
+    h1 {
+      font-family: 'Noto Serif Display', serif;
+      font-size: 28px;
+      font-weight: 600;
+      margin: 0 0 8px 0;
+      color: #14110d;
+    }
+    .subtitle {
+      color: #4a463f;
+      font-size: 14px;
+      margin: 0 0 20px 0;
+    }
+    .header-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+    .header-text {
+      flex: 1;
+    }
+    .buttons-group {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .botao {
+      padding: 10px 16px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: 'Montserrat', sans-serif;
+      cursor: pointer;
+      border: none;
+      transition: all 0.15s ease;
+    }
+    .botao-secundario {
+      background: white;
+      color: #14110d;
+      border: 1px solid #e7ddd2;
+    }
+    .botao-secundario:hover {
+      background: #f3eee9;
+      border-color: #4a463f;
+    }
+    .botao-primario {
+      background: #9c8365;
+      color: white;
+    }
+    .botao-primario:hover {
+      background: #7a6248;
+    }
+    .search-box {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #e7ddd2;
+      border-radius: 12px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px;
+      margin-bottom: 16px;
+    }
+    .filters {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid #e7ddd2;
+      background: transparent;
+      cursor: pointer;
+      font-family: 'Montserrat', sans-serif;
+    }
+    .filter-btn.active {
+      background: #f3eee9;
+      color: #14110d;
+    }
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    .table thead tr {
+      border-bottom: 1px solid #e7ddd2;
+      background: #f9f7f4;
+    }
+    .table th {
+      padding: 12px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 11px;
+      color: #4a463f;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .table td {
+      padding: 12px;
+      border-bottom: 1px solid #e7ddd2;
+      font-size: 13px;
+    }
+    .table tbody tr:hover {
+      background: #f9f7f4;
+    }
+    .status-badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .status-lead {
+      background: #f3eee9;
+      color: #14110d;
+    }
+    .status-conversando {
+      background: #fff3e0;
+      color: #14110d;
+    }
+    .status-cliente {
+      background: #e8f5e9;
+      color: #14110d;
+    }
+    .highlight {
+      background: #fff9c4;
+      padding: 2px 4px;
+      border-radius: 2px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header-section">
+      <div class="header-text">
+        <h1>Marcas</h1>
+        <p class="subtitle">A sua base de contatos de empresa.</p>
+      </div>
+      <div class="buttons-group">
+        <button class="botao botao-secundario">Importar planilha</button>
+        <button class="botao botao-secundario">Baixar CSV</button>
+        <button class="botao botao-primario">+ nova marca</button>
+      </div>
+    </div>
+
+    <input type="text" class="search-box" placeholder="buscar por nome, @ ou e-mail">
+
+    <div class="filters">
+      <button class="filter-btn active">todas</button>
+      <button class="filter-btn">Lead</button>
+      <button class="filter-btn">Conversando</button>
+      <button class="filter-btn">Cliente</button>
+      <button class="filter-btn">Parada</button>
+    </div>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Marca</th>
+          <th>Instagram</th>
+          <th>E-mail</th>
+          <th>Telefone</th>
+          <th>Situação</th>
+          <th>Observação</th>
+          <th>Último Contato</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Avon Brasil</td>
+          <td>@avonbrasil</td>
+          <td>contato@avon.com.br</td>
+          <td>(11) 3333-1111</td>
+          <td><span class="status-badge status-lead">lead</span></td>
+          <td>Proposta enviada</td>
+          <td>há 5 dias</td>
+        </tr>
+        <tr>
+          <td>Natura Cosméticos</td>
+          <td>@naturabrasil</td>
+          <td>parceria@natura.com.br</td>
+          <td>(21) 2500-2500</td>
+          <td><span class="status-badge status-conversando">conversando</span></td>
+          <td>Em análise</td>
+          <td>há 2 dias</td>
+        </tr>
+        <tr>
+          <td>Boticário</td>
+          <td>@boticario</td>
+          <td>contato@boticario.com.br</td>
+          <td>(41) 3300-3300</td>
+          <td><span class="status-badge status-cliente">cliente</span></td>
+          <td>Campanha confirmada</td>
+          <td>hoje</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

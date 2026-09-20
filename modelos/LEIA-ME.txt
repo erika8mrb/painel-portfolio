@@ -1,0 +1,33 @@
+MODELOS REUTILIZÁVEIS — Resultados e Depoimentos
+==================================================
+
+O que tem aqui:
+
+- resultados.html   → a seção de números/resultados (com o contador animado)
+- depoimentos.html  → a seção de depoimentos de marcas parceiras
+
+Os dois arquivos funcionam SOZINHOS. Pra ver como ficam, é só dar dois
+cliques em cima de qualquer um deles — abre direto no navegador, com a
+mesma cara que tem no seu site atual.
+
+QUANDO QUISER USAR EM UM SITE NOVO (seu ou de um projeto futuro):
+
+1. Abra o arquivo e edite os dados:
+   - Em resultados.html, procure "const NUMEROS" e troque os números/textos.
+   - Em depoimentos.html, procure "const DEPOIMENTOS" e troque os textos,
+     nomes e empresas.
+
+2. Se o site novo já tiver uma paleta de cores parecida, pode copiar só o
+   HTML da seção (a parte dentro de <section class="...">) e o <script>
+   com os dados — e ajustar o CSS pra combinar com o site novo.
+
+3. Se estiver começando um site do zero, pode copiar o arquivo inteiro
+   como base e ir editando: as cores ficam todas no topo do <style>,
+   dentro de ":root" (procure por --tinta, --creme, --acento etc.).
+
+Esses dois arquivos foram tirados do site painel-portfolio (pasta
+~/Projects/painel-portfolio) em 29/07/2026. Se esse site mudar de visual
+no futuro, esses modelos aqui NÃO mudam junto — são uma cópia fixa desse
+momento, pra você reaproveitar quando quiser.
+
+Uma cópia dessa mesma pasta "modelos" também está salva no Desktop.

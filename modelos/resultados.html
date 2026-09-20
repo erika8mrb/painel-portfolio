@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modelo: Seção de Resultados</title>
+
+<!--
+  MODELO REUTILIZÁVEL — Seção "Números / Resultados"
+  ====================================================
+  Este arquivo funciona sozinho (é só abrir no navegador pra ver o preview).
+  Pra usar em um site novo:
+    1. Copie o <style> inteiro pra dentro do <head> do novo site (ou aproveite
+       só as regras que começam com ".numeros" e ".numero-" se o site novo já
+       tiver as variáveis de cor no :root).
+    2. Copie o <section class="numeros">...</section> pra dentro do <body>.
+    3. Copie os dois <script> do final: o primeiro tem os dados (edite os
+       números e os textos ali), o segundo é o que desenha o contador animado.
+    4. Troque as cores no :root (--tinta, --creme, --acento etc.) pra combinar
+       com a identidade visual do site novo.
+
+  Os números contam de 0 até o valor final automaticamente quando a seção
+  entra na tela (efeito usado no site atual da Erika Barreiros).
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  /* ===================== VARIÁVEIS DE COR — troque aqui pra reaproveitar noutra marca ===================== */
+  :root{
+    --creme: #f3eee9;
+    --tinta: #14110d;
+    --tinta-suave: #4a463f;
+    --acento: #9c8365;
+    --acento-escuro: #7a6248;
+    --branco: #ffffff;
+    --raio: 20px;
+  }
+
+  *, *::before, *::after{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  body{
+    margin: 0;
+    background: var(--creme);
+    color: var(--tinta);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3{
+    font-family: 'Noto Serif Display', serif;
+    color: var(--tinta);
+    margin: 0 0 .5em;
+    line-height: 1.15;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+  h2 em{ font-style: italic; font-weight: 400; }
+  p{ margin: 0 0 1em; color: var(--tinta-suave); }
+
+  .container{ width: 100%; max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+  section{ padding: 96px 0; }
+
+  .rotulo{
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--acento-escuro);
+    background: rgba(156,131,101,0.16);
+    padding: 6px 14px;
+    border-radius: 999px;
+    margin-bottom: 18px;
+  }
+  .titulo-secao{ font-size: clamp(28px, 4.2vw, 44px); max-width: 640px; }
+  .descricao-secao{ max-width: 560px; font-size: 17px; }
+
+  /* ===================== ANIMAÇÃO DE ENTRADA (fade + sobe de leve) ===================== */
+  .reveal{
+    opacity: 0;
+    transform: translateY(26px);
+    transition: opacity .8s ease, transform .8s ease;
+  }
+  .reveal.visivel{ opacity: 1; transform: translateY(0); }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
+    .reveal{ transition: none; opacity: 1; transform: none; }
+  }
+
+  /* ===================== SEÇÃO NÚMEROS / RESULTADOS ===================== */
+  .numeros{ background: var(--tinta); color: var(--creme); }
+  .numeros .titulo-secao, .numeros .descricao-secao{ color: var(--creme); }
+  .numeros .rotulo{ background: rgba(156,131,101,0.24); color: var(--acento); }
+  .numeros-grid{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    margin-top: 48px;
+  }
+  .numero-card{ text-align: center; padding: 12px; }
+  .numero-valor{
+    font-family: 'Noto Serif Display', serif;
+    font-size: clamp(34px, 5vw, 50px);
+    font-weight: 600;
+    color: var(--branco);
+  }
+  .numero-valor span{ color: var(--acento); }
+  .numero-rotulo{
+    margin-top: 8px;
+    font-size: 14px;
+    color: rgba(243,238,233,0.68);
+    font-weight: 500;
+  }
+
+  @media (max-width: 1000px){
+    .numeros-grid{ grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 760px){
+    section{ padding: 68px 0; }
+    .numeros-grid{ grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 420px){
+    .container{ padding: 0 18px; }
+    .numeros-grid{ grid-template-columns: 1fr 1fr; gap: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<section class="numeros" id="numeros" aria-labelledby="numeros-titulo">
+  <div class="container">
+    <div class="reveal">
+      <p class="rotulo">Resultados</p>
+      <h2 class="titulo-secao" id="numeros-titulo">Números que mostram <em>impacto</em> real</h2>
+      <p class="descricao-secao">Estes são os indicadores que acompanho de perto para garantir que o conteúdo entrega resultado, não só estética.</p>
+    </div>
+    <div class="numeros-grid" id="numeros-grid"></div>
+  </div>
+</section>
+
+<script>
+  // EDITE AQUI: seus próprios números e resultados.
+  // "valor" é o número final (pode ter casas decimais, ex: 6.8).
+  // "sufixo" é o que aparece colado depois do número (ex: "+", " mil+", "%").
+  const NUMEROS = [
+    { valor: 8500, sufixo: "+", label: "Comunidade engajada" },
+    { valor: 150, sufixo: " mil+", label: "Visualizações por mês" },
+    { valor: 18, sufixo: "+", label: "Marcas atendidas" },
+    { valor: 6.8, sufixo: "%", label: "Taxa média de engajamento" }
+  ];
+
+  document.getElementById("numeros-grid").innerHTML = NUMEROS.map(n => `
+    <div class="numero-card reveal">
+      <p class="numero-valor">
+        <span class="numero-contador" data-valor="${n.valor}" data-sufixo="${n.sufixo}">0</span>
+      </p>
+      <p class="numero-rotulo">${n.label}</p>
+    </div>
+  `).join("");
+</script>
+
+<script>
+  // Anima cada número contando de 0 até o valor final quando entra na tela.
+  function configurarContadores(){
+    const contadores = document.querySelectorAll(".numero-contador");
+
+    const animarContador = (elemento) => {
+      const valorFinal = parseFloat(elemento.dataset.valor);
+      const sufixo = elemento.dataset.sufixo || "";
+      const ehDecimal = !Number.isInteger(valorFinal);
+      const duracao = 1600;
+      let inicio = null;
+
+      function passo(timestamp){
+        if(!inicio) inicio = timestamp;
+        const progresso = Math.min((timestamp - inicio) / duracao, 1);
+        const valorAtual = progresso * valorFinal;
+        elemento.textContent = (ehDecimal ? valorAtual.toFixed(1) : Math.floor(valorAtual)) + sufixo;
+        if(progresso < 1){
+          requestAnimationFrame(passo);
+        } else {
+          elemento.textContent = (ehDecimal ? valorFinal.toFixed(1) : valorFinal) + sufixo;
+        }
+      }
+      requestAnimationFrame(passo);
+    };
+
+    const observador = new IntersectionObserver((entradas, obs) => {
+      entradas.forEach(entrada => {
+        if(entrada.isIntersecting){
+          animarContador(entrada.target);
+          obs.unobserve(entrada.target);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    contadores.forEach(c => observador.observe(c));
+  }
+
+  // Efeito de fade-up quando qualquer elemento ".reveal" entra na tela.
+  function configurarAnimacoesEntrada(){
+    const elementos = document.querySelectorAll(".reveal");
+    const observador = new IntersectionObserver((entradas, obs) => {
+      entradas.forEach(entrada => {
+        if(entrada.isIntersecting){
+          entrada.target.classList.add("visivel");
+          obs.unobserve(entrada.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    elementos.forEach(el => observador.observe(el));
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    configurarContadores();
+    configurarAnimacoesEntrada();
+  });
+</script>
+
+</body>
+</html>

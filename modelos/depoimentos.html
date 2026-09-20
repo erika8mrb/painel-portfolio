@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modelo: Seção de Depoimentos</title>
+
+<!--
+  MODELO REUTILIZÁVEL — Seção "Depoimentos"
+  ====================================================
+  Este arquivo funciona sozinho (é só abrir no navegador pra ver o preview).
+  Pra usar em um site novo:
+    1. Copie o <style> inteiro pra dentro do <head> do novo site (ou aproveite
+       só as regras que começam com ".depoimentos" e ".depoimento-" se o site
+       novo já tiver as variáveis de cor no :root).
+    2. Copie o <section class="depoimentos">...</section> pra dentro do <body>.
+    3. Copie o <script> do final e edite a lista DEPOIMENTOS com os textos,
+       nomes e empresas de verdade.
+    4. Troque as cores no :root (--tinta, --creme, --acento etc.) pra combinar
+       com a identidade visual do site novo.
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  /* ===================== VARIÁVEIS DE COR — troque aqui pra reaproveitar noutra marca ===================== */
+  :root{
+    --creme: #f3eee9;
+    --creme-escuro: #e7ddd2;
+    --tinta: #14110d;
+    --tinta-suave: #4a463f;
+    --acento: #9c8365;
+    --acento-escuro: #7a6248;
+    --branco: #ffffff;
+    --raio: 20px;
+    --sombra-suave: 0 10px 30px -18px rgba(20,17,13,0.25);
+  }
+
+  *, *::before, *::after{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  body{
+    margin: 0;
+    background: var(--creme);
+    color: var(--tinta);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3{
+    font-family: 'Noto Serif Display', serif;
+    color: var(--tinta);
+    margin: 0 0 .5em;
+    line-height: 1.15;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+  h2 em{ font-style: italic; font-weight: 400; }
+  p{ margin: 0 0 1em; color: var(--tinta-suave); }
+
+  .container{ width: 100%; max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+  section{ padding: 96px 0; }
+
+  .rotulo{
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--acento-escuro);
+    background: rgba(156,131,101,0.16);
+    padding: 6px 14px;
+    border-radius: 999px;
+    margin-bottom: 18px;
+  }
+  .titulo-secao{ font-size: clamp(28px, 4.2vw, 44px); max-width: 640px; }
+  .descricao-secao{ max-width: 560px; font-size: 17px; }
+
+  /* ===================== ANIMAÇÃO DE ENTRADA (fade + sobe de leve) ===================== */
+  .reveal{
+    opacity: 0;
+    transform: translateY(26px);
+    transition: opacity .8s ease, transform .8s ease;
+  }
+  .reveal.visivel{ opacity: 1; transform: translateY(0); }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
+    .reveal{ transition: none; opacity: 1; transform: none; }
+  }
+
+  /* ===================== SEÇÃO DEPOIMENTOS ===================== */
+  .depoimentos-grid{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 44px;
+  }
+  .depoimento-card{
+    background: var(--branco);
+    border-radius: var(--raio);
+    padding: 30px 26px;
+    box-shadow: var(--sombra-suave);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .depoimento-aspas{
+    font-family: 'Noto Serif Display', serif;
+    font-size: 40px;
+    color: var(--acento);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .depoimento-texto{
+    font-style: italic;
+    color: var(--tinta);
+    font-size: 15.5px;
+    flex-grow: 1;
+  }
+  .depoimento-autor{
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(20,17,13,0.1);
+  }
+  .depoimento-nome{ font-weight: 700; font-size: 14.5px; }
+  .depoimento-empresa{ font-size: 13px; color: var(--tinta-suave); }
+
+  @media (max-width: 1000px){
+    .depoimentos-grid{ grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 760px){
+    section{ padding: 68px 0; }
+    .depoimentos-grid{ grid-template-columns: 1fr; }
+  }
+  @media (max-width: 420px){
+    .container{ padding: 0 18px; }
+  }
+</style>
+</head>
+<body>
+
+<section class="depoimentos" id="depoimentos" aria-labelledby="depoimentos-titulo">
+  <div class="container">
+    <div class="reveal">
+      <p class="rotulo">Depoimentos</p>
+      <h2 class="titulo-secao" id="depoimentos-titulo">O que dizem as marcas <em>parceiras</em></h2>
+      <p class="descricao-secao">A confiança de quem já trabalhou comigo é o meu melhor cartão de visita.</p>
+    </div>
+    <div class="depoimentos-grid" id="depoimentos-grid"></div>
+  </div>
+</section>
+
+<script>
+  // EDITE AQUI: seus próprios depoimentos (texto, nome de quem falou e empresa/cargo).
+  const DEPOIMENTOS = [
+    { texto: "O conteúdo entregue foi além do esperado. A Erika entendeu o produto e comunicou exatamente o que a nossa cliente precisava ouvir.", nome: "Camila Duarte", empresa: "Gerente de Marketing, marca de cosméticos parceira" },
+    { texto: "Profissionalismo do início ao fim. Prazo cumprido, comunicação clara e um vídeo que converteu muito bem nos anúncios.", nome: "Rafael Nogueira", empresa: "Coordenador de E-commerce, loja de tecnologia parceira" },
+    { texto: "A forma calorosa como ela apresenta o produto criou uma conexão imediata com o nosso público. Já fechamos a próxima parceria.", nome: "Juliana Prado", empresa: "Fundadora, pet shop parceiro" }
+  ];
+
+  document.getElementById("depoimentos-grid").innerHTML = DEPOIMENTOS.map(d => `
+    <div class="depoimento-card reveal">
+      <p class="depoimento-aspas" aria-hidden="true">"</p>
+      <p class="depoimento-texto">${d.texto}</p>
+      <div class="depoimento-autor">
+        <p class="depoimento-nome">${d.nome}</p>
+        <p class="depoimento-empresa">${d.empresa}</p>
+      </div>
+    </div>
+  `).join("");
+</script>
+
+<script>
+  // Efeito de fade-up quando qualquer elemento ".reveal" entra na tela.
+  function configurarAnimacoesEntrada(){
+    const elementos = document.querySelectorAll(".reveal");
+    const observador = new IntersectionObserver((entradas, obs) => {
+      entradas.forEach(entrada => {
+        if(entrada.isIntersecting){
+          entrada.target.classList.add("visivel");
+          obs.unobserve(entrada.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    elementos.forEach(el => observador.observe(el));
+  }
+
+  document.addEventListener("DOMContentLoaded", configurarAnimacoesEntrada);
+</script>
+
+</body>
+</html>

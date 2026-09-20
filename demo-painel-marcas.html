@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demo Painel - Aba Marcas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Fraunces:wght@600&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      background: #f3eee9;
+      font-family: 'Montserrat', sans-serif;
+      color: #14110d;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 260px;
+      background: #9c8365;
+      padding: 28px 20px;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .logo {
+      font-family: 'Noto Serif Display', serif;
+      font-size: 36px;
+      font-weight: 600;
+      margin-bottom: 48px;
+      line-height: 1.2;
+    }
+
+    .logo .ponto { color: #f3eee9; }
+    .logo-meu { font-style: italic; font-weight: 400; }
+    .logo-painel { font-family: 'Fraunces', serif; }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      background: #f3eee9;
+      color: #14110d;
+      border: none;
+      border-radius: 12px;
+      margin-bottom: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      font-family: 'Montserrat', sans-serif;
+      width: 100%;
+      text-align: left;
+    }
+
+    .nav-item.ativo {
+      background: #9c8365;
+      color: white;
+    }
+
+    .conteudo {
+      flex: 1;
+      padding: 32px 40px;
+      overflow-y: auto;
+    }
+
+    .cartao {
+      background: white;
+      border: 1px solid #e7ddd2;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+
+    .bloco-marcas-topo {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+
+    .bloco-marcas-topo h3 {
+      font-family: 'Noto Serif Display', serif;
+      font-size: 18px;
+      font-weight: 600;
+      margin: 0 0 8px 0;
+    }
+
+    .bloco-marcas-topo p {
+      color: #4a463f;
+      font-size: 14px;
+      margin: 0;
+    }
+
+    .buttons-group {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .botao {
+      padding: 10px 16px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: 'Montserrat', sans-serif;
+      cursor: pointer;
+      border: none;
+      transition: all 0.15s ease;
+    }
+
+    .botao-secundario {
+      background: white;
+      color: #14110d;
+      border: 1px solid #e7ddd2;
+    }
+
+    .botao-secundario:hover {
+      background: #f3eee9;
+      border-color: #4a463f;
+    }
+
+    .botao-primario {
+      background: #9c8365;
+      color: white;
+    }
+
+    .botao-primario:hover {
+      background: #7a6248;
+    }
+
+    .search-box {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #e7ddd2;
+      border-radius: 12px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px;
+      margin-bottom: 16px;
+    }
+
+    .filters {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid #e7ddd2;
+      background: white;
+      cursor: pointer;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .filter-btn.active {
+      background: #f3eee9;
+      color: #14110d;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.visivel {
+      display: flex;
+    }
+
+    .modal-conteudo {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      max-width: 500px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-conteudo h3 {
+      font-family: 'Noto Serif Display', serif;
+      font-size: 18px;
+      font-weight: 600;
+      margin: 0 0 12px 0;
+    }
+
+    .modal-conteudo p {
+      color: #4a463f;
+      font-size: 13px;
+      margin: 0 0 16px 0;
+    }
+
+    .campo {
+      margin-bottom: 16px;
+    }
+
+    .campo label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #4a463f;
+      margin-bottom: 6px;
+    }
+
+    .campo input[type="file"] {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #e7ddd2;
+      border-radius: 8px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px;
+    }
+
+    .preview-box {
+      background: #f3eee9;
+      border: 1px solid #e7ddd2;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    .preview-box.visivel {
+      display: block;
+    }
+
+    .preview-table {
+      width: 100%;
+      font-size: 11px;
+      border-collapse: collapse;
+    }
+
+    .preview-table th {
+      background: white;
+      padding: 6px;
+      text-align: left;
+      font-weight: 600;
+      border-bottom: 1px solid #e7ddd2;
+    }
+
+    .preview-table td {
+      padding: 6px;
+      border-bottom: 1px solid #e7ddd2;
+    }
+
+    .modal-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .modal-buttons .botao {
+      flex: 1;
+    }
+
+    .msg-sucesso {
+      background: rgba(45, 122, 79, 0.1);
+      border: 1px solid rgba(45, 122, 79, 0.25);
+      color: #2d7a4f;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    .msg-sucesso.visivel {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="logo">
+      <span class="logo-meu">meu</span><span class="ponto">.</span><span class="logo-painel">painel</span>
+    </div>
+    <button class="nav-item ativo">📊 Menu Principal</button>
+    <button class="nav-item">🎬 Portfólio</button>
+    <button class="nav-item">▶️ Vídeos</button>
+    <button class="nav-item">👥 Marcas</button>
+    <button class="nav-item">📅 Calendário</button>
+    <button class="nav-item">📢 Campanhas</button>
+    <button class="nav-item">✓ Checklist</button>
+  </aside>
+
+  <!-- Conteúdo -->
+  <main class="conteudo">
+    <section class="cartao">
+      <div class="bloco-marcas-topo">
+        <div>
+          <h3>Gestão de Marcas e Leads</h3>
+          <p>Controle seus contatos com marcas e parceiros.</p>
+        </div>
+        <div class="buttons-group">
+          <button class="botao botao-secundario" onclick="abrirImportacao()">Importar planilha</button>
+          <button class="botao botao-secundario" onclick="baixarCSV()">Baixar CSV</button>
+          <button class="botao botao-primario" onclick="abrirNovaMarca()">+ Nova marca</button>
+        </div>
+      </div>
+
+      <input type="text" class="search-box" placeholder="buscar por nome, @ ou e-mail">
+
+      <div class="filters">
+        <button class="filter-btn active">todas</button>
+        <button class="filter-btn">Lead</button>
+        <button class="filter-btn">Conversando</button>
+        <button class="filter-btn">Cliente</button>
+        <button class="filter-btn">Parada</button>
+      </div>
+
+      <div class="msg-sucesso" id="msgSucesso"></div>
+
+      <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+        <thead>
+          <tr style="border-bottom: 1px solid #e7ddd2; background: #f9f7f4;">
+            <th style="padding: 12px; text-align: left; font-weight: 600; font-size: 11px; color: #4a463f; text-transform: uppercase;">Marca</th>
+            <th style="padding: 12px; text-align: left; font-weight: 600; font-size: 11px; color: #4a463f; text-transform: uppercase;">Instagram</th>
+            <th style="padding: 12px; text-align: left; font-weight: 600; font-size: 11px; color: #4a463f; text-transform: uppercase;">E-mail</th>
+            <th style="padding: 12px; text-align: left; font-weight: 600; font-size: 11px; color: #4a463f; text-transform: uppercase;">Telefone</th>
+            <th style="padding: 12px; text-align: left; font-weight: 600; font-size: 11px; color: #4a463f; text-transform: uppercase;">Situação</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom: 1px solid #e7ddd2;">
+            <td style="padding: 12px; font-size: 13px;">Avon Brasil</td>
+            <td style="padding: 12px; font-size: 13px;">@avonbrasil</td>
+            <td style="padding: 12px; font-size: 13px;">contato@avon.com.br</td>
+            <td style="padding: 12px; font-size: 13px;">(11) 3333-1111</td>
+            <td style="padding: 12px; font-size: 13px;"><span style="background: #f3eee9; padding: 4px 8px; border-radius: 4px;">lead</span></td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e7ddd2;">
+            <td style="padding: 12px; font-size: 13px;">Natura Cosméticos</td>
+            <td style="padding: 12px; font-size: 13px;">@naturabrasil</td>
+            <td style="padding: 12px; font-size: 13px;">parceria@natura.com.br</td>
+            <td style="padding: 12px; font-size: 13px;">(21) 2500-2500</td>
+            <td style="padding: 12px; font-size: 13px;"><span style="background: #fff3e0; padding: 4px 8px; border-radius: 4px;">conversando</span></td>
+          </tr>
+          <tr>
+            <td style="padding: 12px; font-size: 13px;">Boticário</td>
+            <td style="padding: 12px; font-size: 13px;">@boticario</td>
+            <td style="padding: 12px; font-size: 13px;">contato@boticario.com.br</td>
+            <td style="padding: 12px; font-size: 13px;">(41) 3300-3300</td>
+            <td style="padding: 12px; font-size: 13px;"><span style="background: #e8f5e9; padding: 4px 8px; border-radius: 4px;">cliente</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <!-- Modal de Importação -->
+  <div class="modal" id="modalImportacao">
+    <div class="modal-conteudo">
+      <h3>Importar marcas de CSV</h3>
+      <p>Seu CSV deve ter as seguintes colunas (em qualquer ordem):<br><strong>nome, instagram, email, telefone, situacao, obs</strong></p>
+
+      <div class="campo">
+        <label for="inputCSV">Selecione o arquivo (CSV ou XLSX)</label>
+        <input type="file" id="inputCSV" accept=".csv,.xlsx" onchange="previewCSV()">
+      </div>
+
+      <div class="preview-box" id="previewBox">
+        <p style="font-size: 13px; color: #4a463f; margin: 0 0 8px 0;"><strong>Preview:</strong> <span id="totalLinhas">0</span> linhas encontradas</p>
+        <table class="preview-table">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Instagram</th>
+              <th>E-mail</th>
+            </tr>
+          </thead>
+          <tbody id="previewTbody">
+          </tbody>
+        </table>
+      </div>
+
+      <div class="modal-buttons">
+        <button class="botao botao-primario" id="botaoConfirmar" onclick="confirmarImportacao()" style="display: none;">Importar agora</button>
+        <button class="botao botao-secundario" onclick="fecharImportacao()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function abrirImportacao() {
+      document.getElementById('modalImportacao').classList.add('visivel');
+    }
+
+    function fecharImportacao() {
+      document.getElementById('modalImportacao').classList.remove('visivel');
+      document.getElementById('inputCSV').value = '';
+      document.getElementById('previewBox').classList.remove('visivel');
+      document.getElementById('botaoConfirmar').style.display = 'none';
+    }
+
+    function previewCSV() {
+      const file = document.getElementById('inputCSV').files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const csv = e.target.result;
+        const linhas = csv.split('\n').filter(l => l.trim());
+
+        if (linhas.length < 2) {
+          alert('CSV inválido');
+          return;
+        }
+
+        const dados = linhas.slice(1, 6).map(linha => {
+          const cols = linha.split(',');
+          return {
+            nome: cols[0] ? cols[0].trim() : '-',
+            instagram: cols[1] ? cols[1].trim() : '-',
+            email: cols[2] ? cols[2].trim() : '-'
+          };
+        });
+
+        document.getElementById('totalLinhas').textContent = linhas.length - 1;
+        const tbody = document.getElementById('previewTbody');
+        tbody.innerHTML = dados.map(d =>
+          `<tr><td>${d.nome}</td><td>${d.instagram}</td><td>${d.email}</td></tr>`
+        ).join('');
+
+        document.getElementById('previewBox').classList.add('visivel');
+        document.getElementById('botaoConfirmar').style.display = 'inline-flex';
+      };
+      reader.readAsText(file);
+    }
+
+    function confirmarImportacao() {
+      const msg = document.getElementById('msgSucesso');
+      const total = document.getElementById('totalLinhas').textContent;
+      msg.textContent = `✅ ${total} marcas importadas com sucesso!`;
+      msg.classList.add('visivel');
+
+      setTimeout(() => {
+        fecharImportacao();
+        msg.classList.remove('visivel');
+      }, 2000);
+    }
+
+    function abrirNovaMarca() {
+      alert('Abre formulário de nova marca');
+    }
+
+    function baixarCSV() {
+      const csv = 'nome,instagram,email,telefone,situacao,obs\nAvon Brasil,@avonbrasil,contato@avon.com.br,(11) 3333-1111,lead,Proposta enviada\nNatura Cosméticos,@naturabrasil,parceria@natura.com.br,(21) 2500-2500,conversando,Em análise\nBoticário,@boticario,contato@boticario.com.br,(41) 3300-3300,cliente,Campanha confirmada';
+
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'marcas_' + new Date().toISOString().split('T')[0] + '.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+  </script>
+</body>
+</html>

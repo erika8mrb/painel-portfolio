@@ -1004,6 +1004,41 @@
               <input type="tel" id="novoTelefone">
             </div>
             <div class="campo">
+              <label for="novoNicho">Nicho</label>
+              <input type="text" id="novoNicho" placeholder="Ex: beleza, tecnologia, moda">
+            </div>
+            <div class="campo">
+              <label for="novoSite">Site</label>
+              <input type="url" id="novoSite" placeholder="https://exemplo.com">
+            </div>
+            <div class="campo">
+              <label for="novoCidade">Cidade</label>
+              <input type="text" id="novoCidade" placeholder="Ex: São Paulo">
+            </div>
+            <div class="campo">
+              <label for="novoContatoNome">Nome do Contato</label>
+              <input type="text" id="novoContatoNome" placeholder="Nome da pessoa responsável">
+            </div>
+            <div class="campo">
+              <label for="novoPropostaData">Data da Proposta</label>
+              <input type="date" id="novoPropostaData">
+            </div>
+            <div class="campo">
+              <label for="novoValorOrcado">Valor do Orçamento (R$)</label>
+              <input type="number" id="novoValorOrcado" step="0.01" min="0" placeholder="0,00">
+            </div>
+            <div class="campo">
+              <label for="novoCategoria">Categoria</label>
+              <select id="novoCategoria">
+                <option value="">Selecione...</option>
+                <option value="pme">PME</option>
+                <option value="startup">Startup</option>
+                <option value="grande">Grande Empresa</option>
+                <option value="freelancer">Freelancer</option>
+                <option value="agencia">Agência</option>
+              </select>
+            </div>
+            <div class="campo">
               <label for="novoSituacao">Situação</label>
               <select id="novoSituacao">
                 <option value="lead">Lead</option>
@@ -1894,12 +1929,19 @@
       const instagram = document.getElementById('novoInstagram').value.trim();
       const email = document.getElementById('novoEmail').value.trim();
       const telefone = document.getElementById('novoTelefone').value.trim();
+      const nicho = document.getElementById('novoNicho').value.trim();
+      const site = document.getElementById('novoSite').value.trim();
+      const cidade = document.getElementById('novoCidade').value.trim();
+      const contato_nome = document.getElementById('novoContatoNome').value.trim();
+      const proposta_data = document.getElementById('novoPropostaData').value;
+      const valor_orcado = document.getElementById('novoValorOrcado').value ? parseFloat(document.getElementById('novoValorOrcado').value) : null;
+      const categoria = document.getElementById('novoCategoria').value;
       const situacao = document.getElementById('novoSituacao').value;
       const obs = document.getElementById('novoObs').value.trim();
 
       try {
         const { error } = await Auth.sb.from('marcas').insert({
-          nome, instagram, email, telefone, situacao, obs, ultimo_contato: new Date().toISOString()
+          nome, instagram, email, telefone, nicho, site, cidade, contato_nome, proposta_data, valor_orcado, categoria, situacao, obs, ultimo_contato: new Date().toISOString()
         });
         if (error) throw error;
         mostrarMensagemArea('Marca adicionada com sucesso.', 'sucesso');
