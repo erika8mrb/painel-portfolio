@@ -264,7 +264,7 @@ function adicionarEstilosProspeccao() {
       font-size: 72px;
       font-weight: 400;
       font-style: italic;
-      color: #e7ddd2;
+      color: #ffffff;
       margin: 0 0 8px 0;
       letter-spacing: -0.02em;
     }
@@ -289,11 +289,13 @@ function adicionarEstilosProspeccao() {
     .stat-numero {
       font-size: 28px;
       font-weight: 600;
+      color: #ffffff;
     }
 
     .stat-label {
       font-size: 12px;
       opacity: 0.85;
+      color: #ffffff;
     }
 
     .prospeccao-tags {
@@ -307,6 +309,7 @@ function adicionarEstilosProspeccao() {
       padding: 6px 12px;
       border-radius: 20px;
       font-size: 12px;
+      color: #ffffff;
     }
 
     .prospeccao-metricas {
