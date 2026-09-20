@@ -975,7 +975,10 @@
           <h3>Gestão de Marcas e Leads</h3>
           <p>Controle seus contatos com marcas e parceiros.</p>
         </div>
-        <button class="botao botao-primario" id="botaoNovaMarca">+ Nova marca</button>
+        <div style="display: flex; gap: 8px;">
+          <button class="botao botao-primario" id="botaoNovaMarca">+ Nova marca</button>
+          <button class="botao botao-secundario" id="botaoImportarCSV">📥 Importar CSV</button>
+        </div>
       </div>
 
       <div class="cartao formulario-marca oculto" id="blocoNovaMarca">
@@ -1017,6 +1020,26 @@
             <button type="button" class="botao botao-secundario" id="botaoCancelarMarca">Cancelar</button>
           </div>
         </form>
+      </div>
+
+      <div class="cartao formulario-marca oculto" id="blocoImportarCSV">
+        <h3>Importar marcas de CSV</h3>
+        <p style="color: var(--texto-suave); margin-bottom: 16px; font-size: 13px;">
+          Seu CSV deve ter as seguintes colunas (em qualquer ordem):
+          <strong>nome, instagram, email, telefone, situacao, obs</strong>
+        </p>
+        <div class="campo" style="margin-bottom: 20px;">
+          <label for="inputCSV">Selecione o arquivo CSV</label>
+          <input type="file" id="inputCSV" accept=".csv" required>
+        </div>
+        <div id="previewImportacao" style="display: none; margin-bottom: 16px;">
+          <p style="font-size: 13px; color: var(--texto-suave); margin-bottom: 8px;"><strong>Preview:</strong> <span id="totalLinhas">0</span> linhas encontradas</p>
+          <div id="tabelaPreview" style="max-height: 300px; overflow-y: auto; border: 1px solid var(--borda); border-radius: var(--raio-sm); padding: 8px; background: var(--creme); font-size: 12px;"></div>
+        </div>
+        <div class="video-detalhe-acoes">
+          <button type="button" class="botao botao-primario" id="botaoConfirmarImportar" style="display: none;">Importar agora</button>
+          <button type="button" class="botao botao-secundario" id="botaoCancelarImportar">Cancelar</button>
+        </div>
       </div>
 
       <div id="listaMarcas"></div>
@@ -1884,6 +1907,152 @@
       } catch (erro) {
         console.error(erro);
         mostrarMensagemArea('Não foi possível adicionar a marca.', 'erro');
+      }
+    });
+
+    // ============================================================
+    // IMPORTAÇÃO DE CSV — MARCAS
+    // ============================================================
+
+    let dadosCSVParaImportar = [];
+
+    function parseCSV(texto) {
+      const linhas = texto.trim().split('\n');
+      if (linhas.length < 2) throw new Error('CSV vazio ou sem dados.');
+
+      const cabecalho = linhas[0].split(',').map(c => c.trim().toLowerCase());
+      const indiceNome = cabecalho.indexOf('nome');
+      const indiceInstagram = cabecalho.indexOf('instagram');
+      const indiceEmail = cabecalho.indexOf('email');
+      const indiceTelefone = cabecalho.indexOf('telefone');
+      const indiceSituacao = cabecalho.indexOf('situacao');
+      const indiceObs = cabecalho.indexOf('obs');
+
+      if (indiceNome === -1) {
+        throw new Error('CSV deve ter coluna "nome".');
+      }
+
+      const dados = [];
+      for (let i = 1; i < linhas.length; i++) {
+        if (linhas[i].trim() === '') continue;
+
+        const valores = linhas[i].split(',').map(v => v.trim());
+        const nome = valores[indiceNome];
+
+        if (!nome) continue;
+
+        dados.push({
+          nome,
+          instagram: indiceInstagram >= 0 ? valores[indiceInstagram] : '',
+          email: indiceEmail >= 0 ? valores[indiceEmail] : '',
+          telefone: indiceTelefone >= 0 ? valores[indiceTelefone] : '',
+          situacao: indiceSituacao >= 0 ? valores[indiceSituacao] || 'lead' : 'lead',
+          obs: indiceObs >= 0 ? valores[indiceObs] : '',
+          ultimo_contato: new Date().toISOString()
+        });
+      }
+
+      return dados;
+    }
+
+    function mostrarPreviewCSV(dados) {
+      const preview = document.getElementById('tabelaPreview');
+      const totalLinhas = document.getElementById('totalLinhas');
+
+      totalLinhas.textContent = dados.length;
+      preview.innerHTML = '';
+
+      if (dados.length === 0) {
+        preview.innerHTML = '<p style="color: var(--texto-suave);">Nenhum dado válido encontrado no CSV.</p>';
+        return;
+      }
+
+      const tabela = document.createElement('table');
+      tabela.style.cssText = 'width: 100%; border-collapse: collapse;';
+
+      const cabecalho = tabela.createTHead();
+      const linhaHeader = cabecalho.insertRow();
+      ['Nome', 'Instagram', 'E-mail', 'Situação'].forEach(col => {
+        const th = document.createElement('th');
+        th.textContent = col;
+        th.style.cssText = 'text-align: left; padding: 6px; border-bottom: 1px solid var(--borda); font-weight: 600;';
+        linhaHeader.appendChild(th);
+      });
+
+      const corpo = tabela.createTBody();
+      dados.slice(0, 10).forEach(marca => {
+        const linha = corpo.insertRow();
+        linha.style.cssText = 'border-bottom: 1px solid var(--borda);';
+        [marca.nome, marca.instagram, marca.email, marca.situacao].forEach(valor => {
+          const td = document.createElement('td');
+          td.textContent = valor || '-';
+          td.style.cssText = 'padding: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px;';
+          linha.appendChild(td);
+        });
+      });
+
+      preview.appendChild(tabela);
+
+      if (dados.length > 10) {
+        const nota = document.createElement('p');
+        nota.textContent = `... e mais ${dados.length - 10} marcas`;
+        nota.style.cssText = 'color: var(--texto-suave); margin-top: 8px; font-style: italic;';
+        preview.appendChild(nota);
+      }
+    }
+
+    document.getElementById('botaoImportarCSV').addEventListener('click', () => {
+      document.getElementById('blocoImportarCSV').classList.remove('oculto');
+      document.getElementById('inputCSV').value = '';
+      document.getElementById('previewImportacao').style.display = 'none';
+      document.getElementById('botaoConfirmarImportar').style.display = 'none';
+      dadosCSVParaImportar = [];
+    });
+
+    document.getElementById('botaoCancelarImportar').addEventListener('click', () => {
+      document.getElementById('blocoImportarCSV').classList.add('oculto');
+    });
+
+    document.getElementById('inputCSV').addEventListener('change', async (e) => {
+      const arquivo = e.target.files[0];
+      if (!arquivo) return;
+
+      try {
+        const texto = await arquivo.text();
+        dadosCSVParaImportar = parseCSV(texto);
+        mostrarPreviewCSV(dadosCSVParaImportar);
+        document.getElementById('previewImportacao').style.display = 'block';
+        document.getElementById('botaoConfirmarImportar').style.display = 'inline-flex';
+      } catch (erro) {
+        mostrarMensagemArea(`Erro ao processar CSV: ${erro.message}`, 'erro');
+        document.getElementById('previewImportacao').style.display = 'none';
+        document.getElementById('botaoConfirmarImportar').style.display = 'none';
+      }
+    });
+
+    document.getElementById('botaoConfirmarImportar').addEventListener('click', async () => {
+      if (dadosCSVParaImportar.length === 0) {
+        mostrarMensagemArea('Nenhum dado para importar.', 'erro');
+        return;
+      }
+
+      const botao = document.getElementById('botaoConfirmarImportar');
+      botao.disabled = true;
+      botao.textContent = `Importando ${dadosCSVParaImportar.length} marcas...`;
+
+      try {
+        const { error } = await Auth.sb.from('marcas').insert(dadosCSVParaImportar);
+        if (error) throw error;
+
+        mostrarMensagemArea(`✅ ${dadosCSVParaImportar.length} marcas importadas com sucesso!`, 'sucesso');
+        document.getElementById('blocoImportarCSV').classList.add('oculto');
+        await recarregarMarcas();
+      } catch (erro) {
+        console.error(erro);
+        mostrarMensagemArea(`Erro na importação: ${erro.message || 'Tente novamente.'}`, 'erro');
+      } finally {
+        botao.disabled = false;
+        botao.textContent = 'Importar agora';
       }
     });
 
