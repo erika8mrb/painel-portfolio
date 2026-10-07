@@ -3217,6 +3217,21 @@
       return { fonte, perfil, id };
     }
 
+    async function extrairMetadadosLink(link) {
+      try {
+        const resp = await fetch(`https://noembed.com/embed?url=${encodeURIComponent(link)}`);
+        if (!resp.ok) return {};
+        const data = await resp.json();
+        return {
+          titulo: data.title || '',
+          autorPerfil: data.author_name || '',
+          descricao: data.description || ''
+        };
+      } catch (e) {
+        return {};
+      }
+    }
+
     async function transcreverRoteiro() {
       const link = await limparLink(document.getElementById('linkRoteiro').value.trim());
       const deQuem = document.getElementById('deQuemRoteiro').value;
@@ -3244,7 +3259,9 @@
         if (!quer) return;
       }
 
-      aviso.innerHTML = '<div class="faixa faixa-info">⏳ Criando registro...</div>';
+      aviso.innerHTML = '<div class="faixa faixa-info">⏳ Extraindo informações e criando registro...</div>';
+
+      const metadados = await extrairMetadadosLink(link);
 
       try {
         const { data: { session } } = await Auth.sb.auth.getSession();
@@ -3256,7 +3273,9 @@
           .insert({
             url: link,
             fonte,
-            perfil: perfil || null,
+            perfil: metadados.autorPerfil || perfil || null,
+            titulo: metadados.titulo || null,
+            legenda: metadados.descricao || null,
             de_quem: deQuem,
             status: 'processando',
             user_id: userId
