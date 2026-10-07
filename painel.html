@@ -3247,6 +3247,10 @@
       aviso.innerHTML = '<div class="faixa faixa-info">⏳ Criando registro...</div>';
 
       try {
+        const { data: { session } } = await Auth.sb.auth.getSession();
+        const userId = session?.user?.id;
+        if (!userId) throw new Error('Usuário não autenticado');
+
         const { data: novoRoteiro, error: erroCria } = await Auth.sb
           .from('roteiros')
           .insert({
@@ -3254,7 +3258,8 @@
             fonte,
             perfil: perfil || null,
             de_quem: deQuem,
-            status: 'processando'
+            status: 'processando',
+            user_id: userId
           })
           .select()
           .single();
