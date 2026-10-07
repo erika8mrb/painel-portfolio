@@ -1743,16 +1743,23 @@
 
       // Extrai o ID do YouTube (suporta URL completa ou só o ID)
       let videoId = document.getElementById('videoId' + id).value.trim();
-      const matchShorts = videoId.match(/youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/);
-      const matchWatch = videoId.match(/youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})/);
-      const matchYoutu = videoId.match(/youtu\.be\/([a-zA-Z0-9_-]{11})/);
-      const matchEmbed = videoId.match(/youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/);
-      const matchV = videoId.match(/youtube\.com\/v\/([a-zA-Z0-9_-]{11})/);
-      if (matchShorts) videoId = matchShorts[1];
-      else if (matchWatch) videoId = matchWatch[1];
-      else if (matchYoutu) videoId = matchYoutu[1];
-      else if (matchEmbed) videoId = matchEmbed[1];
-      else if (matchV) videoId = matchV[1];
+      try {
+        if (videoId.includes('youtube.com') || videoId.includes('youtu.be')) {
+          const url = new URL(videoId.startsWith('http') ? videoId : 'https://' + videoId);
+          if (url.hostname.includes('youtube.com')) {
+            if (url.pathname.includes('/shorts/')) videoId = url.pathname.split('/shorts/')[1];
+            else if (url.pathname.includes('/embed/')) videoId = url.pathname.split('/embed/')[1];
+            else if (url.pathname.includes('/v/')) videoId = url.pathname.split('/v/')[1];
+            else if (url.searchParams.has('v')) videoId = url.searchParams.get('v');
+          } else if (url.hostname.includes('youtu.be')) {
+            videoId = url.pathname.split('/')[1];
+          }
+        }
+      } catch (e) {
+        // Se URL parsing falhar, tenta regex simples
+        const match = videoId.match(/([a-zA-Z0-9_-]{11})/);
+        if (match) videoId = match[1];
+      }
 
       const capa = document.getElementById('capa' + id).value.trim();
       const ativo = document.getElementById('ativo' + id).checked;
@@ -1846,16 +1853,23 @@
 
       // Extrai o ID do YouTube (suporta URL completa ou só o ID)
       let videoId = document.getElementById('novoVideoId').value.trim();
-      const matchShorts = videoId.match(/youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/);
-      const matchWatch = videoId.match(/youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})/);
-      const matchYoutu = videoId.match(/youtu\.be\/([a-zA-Z0-9_-]{11})/);
-      const matchEmbed = videoId.match(/youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/);
-      const matchV = videoId.match(/youtube\.com\/v\/([a-zA-Z0-9_-]{11})/);
-      if (matchShorts) videoId = matchShorts[1];
-      else if (matchWatch) videoId = matchWatch[1];
-      else if (matchYoutu) videoId = matchYoutu[1];
-      else if (matchEmbed) videoId = matchEmbed[1];
-      else if (matchV) videoId = matchV[1];
+      try {
+        if (videoId.includes('youtube.com') || videoId.includes('youtu.be')) {
+          const url = new URL(videoId.startsWith('http') ? videoId : 'https://' + videoId);
+          if (url.hostname.includes('youtube.com')) {
+            if (url.pathname.includes('/shorts/')) videoId = url.pathname.split('/shorts/')[1];
+            else if (url.pathname.includes('/embed/')) videoId = url.pathname.split('/embed/')[1];
+            else if (url.pathname.includes('/v/')) videoId = url.pathname.split('/v/')[1];
+            else if (url.searchParams.has('v')) videoId = url.searchParams.get('v');
+          } else if (url.hostname.includes('youtu.be')) {
+            videoId = url.pathname.split('/')[1];
+          }
+        }
+      } catch (e) {
+        // Se URL parsing falhar, tenta regex simples
+        const match = videoId.match(/([a-zA-Z0-9_-]{11})/);
+        if (match) videoId = match[1];
+      }
 
       const capa = document.getElementById('novaCapa').value.trim();
       const ativo = document.getElementById('novoAtivo').checked;
