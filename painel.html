@@ -727,6 +727,202 @@
 
   /* ---------- Responsivo ---------- */
 
+  /* ---------- Aba Roteiros ---------- */
+
+  .bloco-roteiros-topo {
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+
+  .bloco-roteiros-topo h3 {
+    font-size: 16px;
+    margin-bottom: 4px;
+  }
+
+  .bloco-roteiros-topo p {
+    color: var(--texto-suave);
+    font-size: 13px;
+    margin: 0;
+  }
+
+  .formulario-roteiro {
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+
+  .grade-roteiro-topo {
+    display: grid;
+    grid-template-columns: 2fr 1fr auto;
+    gap: 12px;
+    align-items: flex-end;
+  }
+
+  .bloco-config-roteiro {
+    padding: 24px;
+    margin-bottom: 20px;
+    background: var(--creme);
+  }
+
+  .area-aviso-roteiro {
+    margin-top: 12px;
+    min-height: 0;
+  }
+
+  .area-aviso-roteiro:empty {
+    display: none;
+  }
+
+  .bloco-biblioteca-roteiro {
+    padding: 0;
+  }
+
+  .card-roteiro {
+    display: flex;
+    gap: 16px;
+    padding: 16px;
+    background: var(--branco);
+    border: 1px solid var(--borda);
+    border-radius: var(--raio-md);
+    box-shadow: var(--sombra);
+  }
+
+  .card-roteiro-capa {
+    width: 96px;
+    height: 96px;
+    flex-shrink: 0;
+    background: var(--creme);
+    border-radius: var(--raio-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  .card-roteiro-capa button {
+    background: none;
+    border: none;
+    color: var(--texto-suave);
+    font-size: 36px;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .card-roteiro-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .card-roteiro-cabecalho {
+    margin-bottom: 8px;
+  }
+
+  .card-roteiro-titulo {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--grafite);
+    margin-bottom: 4px;
+  }
+
+  .card-roteiro-perfil {
+    font-size: 12px;
+    color: var(--texto-suave);
+    margin-bottom: 6px;
+  }
+
+  .card-roteiro-meta {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+
+  .etiqueta-roteiro {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .etiqueta-minha {
+    background: rgba(45, 122, 79, 0.12);
+    color: var(--sucesso);
+  }
+
+  .etiqueta-outra {
+    background: rgba(156, 131, 101, 0.12);
+    color: var(--coral);
+  }
+
+  .card-roteiro-fonte {
+    font-size: 11px;
+    color: var(--texto-suave);
+  }
+
+  .card-roteiro-transcricao {
+    font-size: 13px;
+    color: var(--texto-suave);
+    line-height: 1.4;
+    margin: 8px 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card-roteiro-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin: 8px 0;
+  }
+
+  .tag-chip {
+    display: inline-block;
+    background: var(--creme);
+    color: var(--texto-suave);
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+  }
+
+  .card-roteiro-acoes {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .card-roteiro-acoes button {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  .modal-roteiro {
+    position: fixed;
+    inset: 0;
+    background: rgba(26, 24, 22, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+  }
+
+  .modal-roteiro.oculto {
+    display: none;
+  }
+
+  .modal-roteiro-conteudo {
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    padding: 24px;
+  }
+
   @media (max-width: 900px) {
     .sidebar {
       transform: translateX(-100%);
@@ -754,6 +950,23 @@
     .filtro-periodo {
       order: 3;
       flex-basis: 100%;
+    }
+
+    .grade-roteiro-topo {
+      grid-template-columns: 1fr;
+    }
+
+    #listaRoteiros {
+      grid-template-columns: 1fr !important;
+    }
+
+    .card-roteiro {
+      flex-direction: column;
+    }
+
+    .card-roteiro-capa {
+      width: 100%;
+      height: 200px;
     }
   }
 </style>
@@ -827,6 +1040,13 @@
           <line x1="9" y1="14" x2="15" y2="14"></line>
         </svg>
         <span>Prospecção</span>
+      </button>
+      <button class="nav-item" data-tab="roteiros">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+        </svg>
+        <span>Roteiros</span>
       </button>
     </nav>
 
@@ -1236,6 +1456,114 @@
     <!-- ================= Aba: Prospecção ================= -->
     <section id="abaPerspeccao" class="painel-tab oculto">
       <!-- Carregado por js/prospeccao.js -->
+    </section>
+
+    <!-- ================= Aba: Roteiros ================= -->
+    <section id="painelRoteiros" class="painel-tab oculto">
+      <div class="cartao bloco-roteiros-topo">
+        <div>
+          <h3>📜 Roteiros</h3>
+          <p>Cole o link de um reel e eu transcrevo. Serve pros seus e pros das outras, com etiqueta pra você separar.</p>
+        </div>
+      </div>
+
+      <div class="cartao formulario-roteiro">
+        <div class="grade-roteiro-topo">
+          <div class="campo" style="flex: 2;">
+            <label for="linkRoteiro">Cole o link aqui</label>
+            <input type="text" id="linkRoteiro" placeholder="Cole aqui: instagram.com/reel/... · tiktok.com/... · youtube.com/..." required>
+          </div>
+          <div class="campo" style="flex: 1;">
+            <label for="deQuemRoteiro">Tipo</label>
+            <select id="deQuemRoteiro">
+              <option value="minha">Meu</option>
+              <option value="outra">De outra pessoa</option>
+            </select>
+          </div>
+          <div style="display: flex; gap: 8px; align-items: flex-end;">
+            <button class="botao botao-primario" id="botaoTranscreverRoteiro">Transcrever</button>
+            <button class="botao botao-secundario" id="botaoEscreverManualRoteiro">+ Escrever na mão</button>
+          </div>
+        </div>
+        <div class="area-aviso-roteiro" id="avisoRoteiro"></div>
+      </div>
+
+      <div class="bloco-config-roteiro cartao" id="blocoConfigRoteiro" style="display: none;">
+        <div style="display: flex; gap: 12px; align-items: flex-end;">
+          <div class="campo" style="flex: 1;">
+            <label for="chaveSupadata">Chave da Supadata (últimos 4 chars)</label>
+            <div style="display: flex; gap: 8px;">
+              <input type="password" id="chaveSupadata" placeholder="Colar aqui" style="flex: 1;">
+              <button class="botao botao-primario" id="botaoSalvarChave">Salvar</button>
+            </div>
+          </div>
+          <div id="saldoSupadata" style="font-size: 13px; color: var(--texto-suave);"></div>
+        </div>
+        <p id="avisoChaveRoteiro" style="margin-top: 12px; font-size: 13px; color: var(--texto-suave);"></p>
+      </div>
+
+      <div class="bloco-biblioteca-roteiro">
+        <div style="margin-bottom: 20px;">
+          <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 12px;">
+            <input type="text" id="buscaRoteiro" placeholder="Buscar por texto, perfil ou tags..." style="flex: 1; padding: 10px 14px; border: 1px solid var(--borda); border-radius: var(--raio-sm); font-size: 14px;">
+            <button class="botao botao-secundario" id="botaoEstudarClaude">🧠 Estudar com o Claude</button>
+          </div>
+          <div id="filtrosRoteiro" style="display: flex; gap: 6px; flex-wrap: wrap;"></div>
+        </div>
+        <div id="listaRoteiros" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px;"></div>
+      </div>
+
+      <!-- Modal de edição -->
+      <div id="modalEditarRoteiro" class="modal-roteiro oculto">
+        <div class="modal-roteiro-conteudo cartao">
+          <h3 style="margin-bottom: 16px;">Editar Roteiro</h3>
+          <form id="formEditarRoteiro" style="display: flex; flex-direction: column; gap: 12px;">
+            <div class="campo">
+              <label for="editarTitulo">Título</label>
+              <input type="text" id="editarTitulo">
+            </div>
+            <div class="campo">
+              <label for="editarDeQuem">De quem</label>
+              <select id="editarDeQuem">
+                <option value="minha">Meu</option>
+                <option value="outra">De outra pessoa</option>
+              </select>
+            </div>
+            <div class="campo">
+              <label for="editarPerfil">Perfil / @</label>
+              <input type="text" id="editarPerfil" placeholder="@usuario">
+            </div>
+            <div class="campo">
+              <label for="editarLink">Link</label>
+              <input type="text" id="editarLink">
+            </div>
+            <div class="campo">
+              <label for="editarData">Data de postagem</label>
+              <input type="date" id="editarData">
+            </div>
+            <div class="campo">
+              <label for="editarTags">Tags (separadas por vírgula)</label>
+              <input type="text" id="editarTags" placeholder="tag1, tag2, tag3">
+            </div>
+            <div class="campo">
+              <label for="editarLegenda">Legenda do post</label>
+              <textarea id="editarLegenda" style="min-height: 60px;"></textarea>
+            </div>
+            <div class="campo">
+              <label for="editarTranscricao">Transcrição</label>
+              <textarea id="editarTranscricao" style="min-height: 120px;"></textarea>
+            </div>
+            <div class="campo">
+              <label for="editarObs">Notas minhas</label>
+              <textarea id="editarObs" style="min-height: 60px;"></textarea>
+            </div>
+            <div style="display: flex; gap: 8px; margin-top: 12px;">
+              <button type="submit" class="botao botao-primario">Salvar</button>
+              <button type="button" class="botao botao-secundario" id="botaoCancelarEdicao">Cancelar</button>
+            </div>
+          </form>
+        </div>
+      </div>
     </section>
   </main>
 
@@ -2771,6 +3099,492 @@
       }
     }
 
+    // ============================================================
+    // ABA: ROTEIROS
+    // ============================================================
+
+    let cacheRoteiros = [];
+    let chaveSupadataLocal = '';
+    let roteiroBuscaAtiva = '';
+
+    async function buscarRoteiros() {
+      const { data, error } = await Auth.sb
+        .from('roteiros')
+        .select('*')
+        .order('created_at', { ascending: false });
+      if (error) throw error;
+      return data || [];
+    }
+
+    async function carregarChave() {
+      try {
+        const { data, error } = await Auth.sb
+          .from('configuracoes')
+          .select('valor')
+          .eq('chave', 'supadata_key')
+          .single();
+        if (error && error.code !== 'PGRST116') throw error;
+        if (data) chaveSupadataLocal = data.valor;
+        atualizarUIChave();
+      } catch (erro) {
+        console.error('Erro ao carregar chave:', erro);
+      }
+    }
+
+    function atualizarUIChave() {
+      const blocoConfig = document.getElementById('blocoConfigRoteiro');
+      if (!chaveSupadataLocal) {
+        blocoConfig.style.display = 'block';
+        document.getElementById('avisoChaveRoteiro').innerHTML = 'Crie uma conta grátis em <strong>supadata.ai</strong> (100 créditos por mês, sem cartão), copie a API key e cole aqui.';
+        document.getElementById('linkRoteiro').disabled = true;
+        document.getElementById('botaoTranscreverRoteiro').disabled = true;
+        return;
+      }
+      blocoConfig.style.display = 'block';
+      document.getElementById('chaveSupadata').value = chaveSupadataLocal.slice(-4);
+      atualizarSaldoSupadata();
+    }
+
+    async function salvarChave() {
+      const chaveInput = document.getElementById('chaveSupadata').value.trim();
+      if (!chaveInput) {
+        mostrarMensagemArea('Cole a chave válida.', 'erro');
+        return;
+      }
+
+      try {
+        chaveSupadataLocal = chaveInput;
+        const { error } = await Auth.sb
+          .from('configuracoes')
+          .upsert({ chave: 'supadata_key', valor: chaveInput, updated_at: new Date().toISOString() });
+        if (error) throw error;
+        mostrarMensagemArea('Chave salva.', 'sucesso');
+        atualizarUIChave();
+      } catch (erro) {
+        console.error(erro);
+        mostrarMensagemArea('Não foi possível salvar a chave.', 'erro');
+      }
+    }
+
+    async function atualizarSaldoSupadata() {
+      if (!chaveSupadataLocal) return;
+      try {
+        const resp = await fetch('https://api.supadata.ai/v1/me', {
+          headers: { 'x-api-key': chaveSupadataLocal }
+        });
+        if (!resp.ok) throw new Error('Erro ao buscar saldo');
+        const data = await resp.json();
+        const usado = data.usedCredits || 0;
+        const maximo = data.maxCredits || 100;
+        document.getElementById('saldoSupadata').textContent = `${usado} de ${maximo} créditos usados`;
+      } catch (erro) {
+        console.error('Erro ao buscar saldo:', erro);
+      }
+    }
+
+    async function limparLink(link) {
+      link = link.trim();
+      if (link.includes('instagram.com/reels/')) link = link.replace('/reels/', '/reel/');
+      link = link.split('?')[0];
+      return link;
+    }
+
+    function extrairInfoLink(link) {
+      let fonte = '', perfil = '', id = '';
+
+      if (link.includes('instagram.com')) {
+        fonte = 'instagram';
+        const matchPerfil = link.match(/instagram\.com\/([^\/]+)\/reel/);
+        const matchId = link.match(/\/reel\/([a-zA-Z0-9_-]+)/);
+        if (matchPerfil) perfil = matchPerfil[1];
+        if (matchId) id = matchId[1];
+      } else if (link.includes('tiktok.com')) {
+        fonte = 'tiktok';
+        const matchPerfil = link.match(/@([^\/]+)\//);
+        const matchId = link.match(/video\/(\d+)/);
+        if (matchPerfil) perfil = matchPerfil[1];
+        if (matchId) id = matchId[1];
+      } else if (link.includes('youtube.com') || link.includes('youtu.be')) {
+        fonte = 'youtube';
+        const matchId = link.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/);
+        if (matchId) id = matchId[1];
+      }
+
+      return { fonte, perfil, id };
+    }
+
+    async function transcreverRoteiro() {
+      const link = await limparLink(document.getElementById('linkRoteiro').value.trim());
+      const deQuem = document.getElementById('deQuemRoteiro').value;
+      const aviso = document.getElementById('avisoRoteiro');
+
+      if (!link || !link.startsWith('http')) {
+        aviso.innerHTML = '<div class="faixa faixa-erro">Cole um link válido (deve começar com http).</div>';
+        return;
+      }
+
+      if (!chaveSupadataLocal) {
+        aviso.innerHTML = '<div class="faixa faixa-erro">Salve sua chave Supadata primeiro.</div>';
+        return;
+      }
+
+      const { fonte, perfil, id } = extrairInfoLink(link);
+      if (!fonte) {
+        aviso.innerHTML = '<div class="faixa faixa-erro">Link de fonte não reconhecida (Instagram, TikTok ou YouTube).</div>';
+        return;
+      }
+
+      const existente = cacheRoteiros.find(r => r.url === link);
+      if (existente) {
+        const quer = confirm('Esse vídeo já está na biblioteca. Transcrever de novo?');
+        if (!quer) return;
+      }
+
+      aviso.innerHTML = '<div class="faixa faixa-info">⏳ Criando registro...</div>';
+
+      try {
+        const { data: novoRoteiro, error: erroCria } = await Auth.sb
+          .from('roteiros')
+          .insert({
+            url: link,
+            fonte,
+            perfil: perfil || null,
+            de_quem: deQuem,
+            status: 'processando'
+          })
+          .select()
+          .single();
+
+        if (erroCria) throw erroCria;
+
+        aviso.innerHTML = '<div class="faixa faixa-info">🎬 Ouvindo o vídeo (0s). Costuma levar de 3 a 4 minutos, pode deixar a aba aberta...</div>';
+
+        const params = new URLSearchParams({
+          url: link,
+          mode: 'auto',
+          text: 'true',
+          lang: 'pt'
+        });
+
+        let resposta = await fetch(`https://api.supadata.ai/v1/transcript?${params}`, {
+          headers: { 'x-api-key': chaveSupadataLocal }
+        });
+
+        let tempoPassado = 0;
+        let jobId = null;
+
+        if (resposta.status === 202) {
+          const data202 = await resposta.json();
+          jobId = data202.jobId;
+
+          let tentativas = 0;
+          const maxTentativas = 72;
+
+          while (tentativas < maxTentativas) {
+            await new Promise(r => setTimeout(r, 5000));
+            tempoPassado += 5;
+            tentativas++;
+            aviso.innerHTML = `<div class="faixa faixa-info">🎬 Ouvindo o vídeo (${tempoPassado}s). Costuma levar de 3 a 4 minutos...</div>`;
+
+            resposta = await fetch(`https://api.supadata.ai/v1/transcript/${jobId}`, {
+              headers: { 'x-api-key': chaveSupadataLocal }
+            });
+
+            if (!resposta.ok) {
+              const erro = await resposta.json();
+              if (erro.error?.details?.includes('Plan usage limit')) {
+                throw new Error('Acabaram os créditos do mês. Tente no próximo mês ou compre créditos extras.');
+              } else if (erro.error?.details?.includes('Request rate limit')) {
+                throw new Error('Muitas chamadas seguidas. Espere 1 minuto e tente de novo.');
+              }
+              throw erro;
+            }
+
+            const result = await resposta.json();
+            if (result.status === 'completed') {
+              resposta = result;
+              break;
+            }
+            if (result.status === 'failed') {
+              throw new Error('Transcrição falhou. Tente outro vídeo.');
+            }
+          }
+
+          if (tentativas >= maxTentativas) {
+            throw new Error('Transcrição demorou muito. Tente de novo em alguns minutos.');
+          }
+        } else if (!resposta.ok) {
+          const erro = await resposta.json();
+          if (erro.error?.details?.includes('Plan usage limit')) {
+            throw new Error('Acabaram os créditos do mês.');
+          }
+          throw erro;
+        }
+
+        const resultado = await resposta.json();
+        let transcricao = '';
+
+        if (typeof resultado.content === 'string') {
+          transcricao = resultado.content;
+        } else if (Array.isArray(resultado.content)) {
+          transcricao = resultado.content.map(s => s.text).join(' ');
+        }
+
+        if (!transcricao || resultado.lang === 'none') {
+          await Auth.sb
+            .from('roteiros')
+            .update({ status: 'falhou', erro: 'Não achei fala nesse vídeo. Costuma ser reel só com música ou só com texto na tela.' })
+            .eq('id', novoRoteiro.id);
+
+          aviso.innerHTML = `<div class="faixa faixa-aviso">⚠ Não achei fala nesse vídeo. <button class="botao botao-secundario" onclick="guardaRoteiro('${novoRoteiro.id}')">Guardar assim mesmo</button></div>`;
+          await recarregarRoteiros();
+          return;
+        }
+
+        await Auth.sb
+          .from('roteiros')
+          .update({
+            transcricao,
+            status: 'pronto',
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', novoRoteiro.id);
+
+        aviso.innerHTML = '<div class="faixa faixa-sucesso">✅ Pronto. Revisa o texto abaixo, dá um nome e salva.</div>';
+        document.getElementById('linkRoteiro').value = '';
+        document.getElementById('deQuemRoteiro').value = 'minha';
+
+        await recarregarRoteiros();
+        abrirModalEdicao(novoRoteiro.id);
+
+      } catch (erro) {
+        console.error(erro);
+        aviso.innerHTML = `<div class="faixa faixa-erro">${erro.message || 'Erro na transcrição.'}</div>`;
+        if (novoRoteiro) {
+          await Auth.sb
+            .from('roteiros')
+            .update({ status: 'falhou', erro: erro.message })
+            .eq('id', novoRoteiro.id);
+          await recarregarRoteiros();
+        }
+      }
+    }
+
+    window.guardaRoteiro = async function(id) {
+      try {
+        await Auth.sb
+          .from('roteiros')
+          .update({ status: 'pronto' })
+          .eq('id', id);
+        mostrarMensagemArea('Guardado. Edita depois se precisar.', 'sucesso');
+        await recarregarRoteiros();
+      } catch (erro) {
+        console.error(erro);
+        mostrarMensagemArea('Erro ao guardar.', 'erro');
+      }
+    };
+
+    function renderRoteiros(roteiros = cacheRoteiros) {
+      const container = document.getElementById('listaRoteiros');
+
+      let roteirosRender = roteiros;
+      if (roteiroBuscaAtiva) {
+        const termo = roteiroBuscaAtiva.toLowerCase();
+        roteirosRender = roteiros.filter(r =>
+          (r.transcricao && r.transcricao.toLowerCase().includes(termo)) ||
+          (r.perfil && r.perfil.toLowerCase().includes(termo)) ||
+          (r.titulo && r.titulo.toLowerCase().includes(termo)) ||
+          (r.tags && r.tags.some(t => t.toLowerCase().includes(termo)))
+        );
+      }
+
+      if (roteirosRender.length === 0) {
+        container.innerHTML = '<div class="cartao" style="grid-column: 1/-1; padding: 40px; text-align: center;"><p class="texto-vazio">Nenhum roteiro encontrado.</p></div>';
+        return;
+      }
+
+      container.innerHTML = roteirosRender.map(r => {
+        const transcricaoPreview = r.transcricao ? r.transcricao.slice(0, 150) + '...' : '';
+        const dataFormatada = r.postado_em ? new Date(r.postado_em).toLocaleDateString('pt-BR') : '';
+        const etiqueta = r.de_quem === 'minha' ? '<span class="etiqueta-roteiro etiqueta-minha">Meu</span>' : '<span class="etiqueta-roteiro etiqueta-outra">De outra</span>';
+
+        let iconeCapa = '▶';
+        if (r.status === 'processando') iconeCapa = '⏳';
+        if (r.status === 'falhou') iconeCapa = '⚠';
+
+        return `
+          <div class="cartao card-roteiro">
+            <div class="card-roteiro-capa">
+              <button onclick="abrirEmbed('${r.id}')" title="Ver vídeo">${iconeCapa}</button>
+            </div>
+            <div class="card-roteiro-info">
+              <div>
+                <div class="card-roteiro-titulo">${escaparHtml(r.titulo || '(sem título)')}</div>
+                ${r.perfil ? `<div class="card-roteiro-perfil">@${escaparHtml(r.perfil)}</div>` : ''}
+                <div class="card-roteiro-meta">
+                  ${etiqueta}
+                  <span class="card-roteiro-fonte">${r.fonte === 'youtube' ? '📺' : r.fonte === 'tiktok' ? '🎵' : '📸'} ${r.fonte}</span>
+                  ${dataFormatada ? `<span class="card-roteiro-fonte">${dataFormatada}</span>` : ''}
+                </div>
+                ${r.tags && r.tags.length > 0 ? `<div class="card-roteiro-tags">${r.tags.map(t => `<span class="tag-chip">${escaparHtml(t)}</span>`).join('')}</div>` : ''}
+                <div class="card-roteiro-transcricao">${escaparHtml(transcricaoPreview)}</div>
+              </div>
+              <div class="card-roteiro-acoes">
+                <button class="botao botao-secundario" onclick="copiarTranscricao('${r.id}')">Copiar texto</button>
+                <button class="botao botao-secundario" onclick="abrirModalEdicao('${r.id}')">Editar</button>
+                <button class="botao botao-perigo" onclick="apagarRoteiro('${r.id}')">Apagar</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    window.abrirEmbed = function(id) {
+      const roteiro = cacheRoteiros.find(r => r.id === id);
+      if (!roteiro) return;
+
+      let embedHtml = '';
+      if (roteiro.fonte === 'instagram') {
+        embedHtml = `<iframe src="https://www.instagram.com/reel/${roteiro.id}/embed/" width="100%" height="600"></iframe>`;
+      } else if (roteiro.fonte === 'youtube') {
+        const videoId = roteiro.url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/)?.[1];
+        if (videoId) embedHtml = `<iframe width="100%" height="400" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
+      } else if (roteiro.fonte === 'tiktok') {
+        const tiktokId = roteiro.url.match(/video\/(\d+)/)?.[1];
+        if (tiktokId) embedHtml = `<iframe src="https://www.tiktok.com/embed/v2/${tiktokId}" width="100%" height="500"></iframe>`;
+      }
+
+      if (embedHtml) {
+        const modal = document.createElement('div');
+        modal.style.cssText = 'position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 200;';
+        modal.innerHTML = `<div style="background: white; border-radius: 12px; padding: 20px; width: 90%; max-width: 700px; position: relative;"><button onclick="this.parentElement.parentElement.remove()" style="position: absolute; top: 10px; right: 10px; background: none; border: none; font-size: 24px; cursor: pointer;">×</button>${embedHtml}</div>`;
+        document.body.appendChild(modal);
+      }
+    };
+
+    window.copiarTranscricao = async function(id) {
+      const roteiro = cacheRoteiros.find(r => r.id === id);
+      if (!roteiro || !roteiro.transcricao) return;
+      await navigator.clipboard.writeText(roteiro.transcricao);
+      mostrarMensagemArea('Transcrição copiada ✓', 'sucesso');
+    };
+
+    function abrirModalEdicao(id) {
+      const roteiro = cacheRoteiros.find(r => r.id === id);
+      if (!roteiro) return;
+
+      document.getElementById('editarTitulo').value = roteiro.titulo || '';
+      document.getElementById('editarDeQuem').value = roteiro.de_quem || 'outra';
+      document.getElementById('editarPerfil').value = roteiro.perfil || '';
+      document.getElementById('editarLink').value = roteiro.url || '';
+      document.getElementById('editarData').value = roteiro.postado_em || '';
+      document.getElementById('editarTags').value = (roteiro.tags || []).join(', ');
+      document.getElementById('editarLegenda').value = roteiro.legenda || '';
+      document.getElementById('editarTranscricao').value = roteiro.transcricao || '';
+      document.getElementById('editarObs').value = roteiro.obs || '';
+
+      document.getElementById('formEditarRoteiro').dataset.id = id;
+      document.getElementById('modalEditarRoteiro').classList.remove('oculto');
+    }
+
+    document.getElementById('formEditarRoteiro').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = e.target.dataset.id;
+
+      const dados = {
+        titulo: document.getElementById('editarTitulo').value.trim(),
+        de_quem: document.getElementById('editarDeQuem').value,
+        perfil: document.getElementById('editarPerfil').value.trim() || null,
+        url: document.getElementById('editarLink').value.trim(),
+        postado_em: document.getElementById('editarData').value || null,
+        tags: document.getElementById('editarTags').value.split(',').map(t => t.trim()).filter(t => t),
+        legenda: document.getElementById('editarLegenda').value.trim() || null,
+        transcricao: document.getElementById('editarTranscricao').value.trim(),
+        obs: document.getElementById('editarObs').value.trim() || null,
+        updated_at: new Date().toISOString()
+      };
+
+      try {
+        await Auth.sb.from('roteiros').update(dados).eq('id', id);
+        mostrarMensagemArea('Roteiro salvo.', 'sucesso');
+        document.getElementById('modalEditarRoteiro').classList.add('oculto');
+        await recarregarRoteiros();
+      } catch (erro) {
+        console.error(erro);
+        mostrarMensagemArea('Erro ao salvar.', 'erro');
+      }
+    });
+
+    document.getElementById('botaoCancelarEdicao').addEventListener('click', () => {
+      document.getElementById('modalEditarRoteiro').classList.add('oculto');
+    });
+
+    window.apagarRoteiro = async function(id) {
+      if (!confirm('Apagar este roteiro?')) return;
+      try {
+        await Auth.sb.from('roteiros').delete().eq('id', id);
+        mostrarMensagemArea('Roteiro apagado.', 'sucesso');
+        await recarregarRoteiros();
+      } catch (erro) {
+        console.error(erro);
+        mostrarMensagemArea('Erro ao apagar.', 'erro');
+      }
+    };
+
+    async function recarregarRoteiros() {
+      try {
+        cacheRoteiros = await buscarRoteiros();
+        renderRoteiros();
+      } catch (erro) {
+        console.error(erro);
+      }
+    }
+
+    document.getElementById('botaoTranscreverRoteiro').addEventListener('click', transcreverRoteiro);
+    document.getElementById('botaoSalvarChave').addEventListener('click', salvarChave);
+    document.getElementById('linkRoteiro').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') transcreverRoteiro();
+    });
+
+    document.getElementById('buscaRoteiro').addEventListener('input', (e) => {
+      roteiroBuscaAtiva = e.target.value;
+      renderRoteiros();
+    });
+
+    // Quando clica na aba, carrega os roteiros
+    const botaoRoteiros = document.querySelector('[data-tab="roteiros"]');
+    if (botaoRoteiros) {
+      botaoRoteiros.addEventListener('click', () => {
+        recarregarRoteiros();
+        carregarChave();
+      });
+    }
+
+    // Filtros e botão de estudar com Claude
+    document.getElementById('botaoEstudarClaude').addEventListener('click', () => {
+      const deOutras = cacheRoteiros.filter(r => r.de_quem === 'outra').slice(0, 10);
+      if (deOutras.length === 0) {
+        mostrarMensagemArea('Você não tem roteiros marcados como "De outras pessoas" para estudar.', 'aviso');
+        return;
+      }
+
+      let prompt = 'Analisando esses roteiros de outras criadores de conteúdo:\\n\\n';
+      deOutras.forEach(r => {
+        prompt += `[${r.perfil || 'desconhecido'}]\\n${r.transcricao}\\n\\n`;
+      });
+      prompt += 'Me aponte:\\n1. Assuntos em alta\\n2. Expressões que prendem\\n3. Padrões de gancho com exemplos reais\\n4. 5 novos roteiros no MEU assunto reaproveitando a estrutura desses (não o conteúdo).';
+
+      navigator.clipboard.writeText(prompt).then(() => {
+        mostrarMensagemArea('Prompt copiado! Cole no Claude.', 'sucesso');
+      });
+    });
+
+    // Botão "Escrever na mão"
+    document.getElementById('botaoEscreverManualRoteiro').addEventListener('click', () => {
+      abrirModalEdicao('novo');
+    });
+
     // ------------------------------------------------------------
     // Interação: filtro de período
     // ------------------------------------------------------------
@@ -2795,6 +3609,7 @@
       campanhas: 'Campanhas',
       checklist: 'Checklist',
       prospeccao: 'Prospecção',
+      roteiros: 'Roteiros',
     };
 
     const idsAba = {
@@ -2806,6 +3621,7 @@
       campanhas: 'painelCampanhas',
       checklist: 'painelChecklist',
       prospeccao: 'abaPerspeccao',
+      roteiros: 'painelRoteiros',
     };
 
     document.querySelectorAll('.nav-item').forEach((item) => {
