@@ -778,8 +778,8 @@
 
   .card-roteiro {
     display: flex;
-    gap: 16px;
-    padding: 16px;
+    gap: 20px;
+    padding: 20px;
     background: var(--branco);
     border: 1px solid var(--borda);
     border-radius: var(--raio-md);
@@ -787,8 +787,8 @@
   }
 
   .card-roteiro-capa {
-    width: 96px;
-    height: 96px;
+    width: 140px;
+    height: 140px;
     flex-shrink: 0;
     background: var(--creme);
     border-radius: var(--raio-sm);
@@ -797,108 +797,108 @@
     justify-content: center;
     overflow: hidden;
     cursor: pointer;
+    position: relative;
   }
 
   .card-roteiro-capa button {
     background: none;
     border: none;
-    color: var(--texto-suave);
-    font-size: 36px;
+    color: rgba(20, 17, 13, 0.6);
+    font-size: 48px;
     cursor: pointer;
     padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+  }
+
+  .card-roteiro-capa button:hover {
+    background: rgba(20, 17, 13, 0.05);
   }
 
   .card-roteiro-info {
     flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-  }
-
-  .card-roteiro-cabecalho {
-    margin-bottom: 8px;
+    justify-content: flex-start;
   }
 
   .card-roteiro-titulo {
     font-weight: 600;
-    font-size: 14px;
+    font-size: 16px;
     color: var(--grafite);
-    margin-bottom: 4px;
+    margin-bottom: 8px;
+    font-family: var(--fonte-titulo);
   }
 
   .card-roteiro-perfil {
-    font-size: 12px;
+    font-size: 13px;
     color: var(--texto-suave);
-    margin-bottom: 6px;
+    margin-bottom: 10px;
+    font-weight: 500;
   }
 
   .card-roteiro-meta {
     display: flex;
-    gap: 8px;
+    gap: 12px;
     align-items: center;
     flex-wrap: wrap;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
   }
 
   .etiqueta-roteiro {
     display: inline-block;
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-size: 11px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
     font-weight: 600;
   }
 
   .etiqueta-minha {
-    background: rgba(45, 122, 79, 0.12);
+    background: rgba(45, 122, 79, 0.15);
     color: var(--sucesso);
   }
 
   .etiqueta-outra {
-    background: rgba(156, 131, 101, 0.12);
+    background: rgba(156, 131, 101, 0.15);
     color: var(--coral);
   }
 
   .card-roteiro-fonte {
-    font-size: 11px;
+    font-size: 12px;
+    color: var(--texto-suave);
+    font-weight: 500;
+  }
+
+  .card-roteiro-data {
+    font-size: 12px;
     color: var(--texto-suave);
   }
 
   .card-roteiro-transcricao {
     font-size: 13px;
-    color: var(--texto-suave);
-    line-height: 1.4;
-    margin: 8px 0;
+    color: var(--grafite);
+    line-height: 1.5;
+    margin: 12px 0;
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
 
-  .card-roteiro-tags {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    margin: 8px 0;
-  }
-
-  .tag-chip {
-    display: inline-block;
-    background: var(--creme);
-    color: var(--texto-suave);
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-size: 11px;
-  }
-
   .card-roteiro-acoes {
     display: flex;
-    gap: 8px;
+    gap: 10px;
     margin-top: 12px;
+    flex-wrap: wrap;
   }
 
   .card-roteiro-acoes button {
-    padding: 8px 12px;
-    font-size: 12px;
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: 500;
   }
 
   .modal-roteiro {
@@ -3446,19 +3446,16 @@
               <button onclick="abrirEmbed('${r.id}')" title="Ver vídeo">${iconeCapa}</button>
             </div>
             <div class="card-roteiro-info">
-              <div>
-                <div class="card-roteiro-titulo">${escaparHtml(r.titulo || '(sem título)')}</div>
-                ${r.perfil ? `<div class="card-roteiro-perfil">@${escaparHtml(r.perfil)}</div>` : ''}
-                <div class="card-roteiro-meta">
-                  ${etiqueta}
-                  <span class="card-roteiro-fonte">${r.fonte === 'youtube' ? '📺' : r.fonte === 'tiktok' ? '🎵' : '📸'} ${r.fonte}</span>
-                  ${dataFormatada ? `<span class="card-roteiro-fonte">${dataFormatada}</span>` : ''}
-                </div>
-                ${r.tags && r.tags.length > 0 ? `<div class="card-roteiro-tags">${r.tags.map(t => `<span class="tag-chip">${escaparHtml(t)}</span>`).join('')}</div>` : ''}
-                <div class="card-roteiro-transcricao">${escaparHtml(transcricaoPreview)}</div>
+              <div class="card-roteiro-titulo">${escaparHtml(r.titulo || 'Sem título')}</div>
+              ${r.perfil ? `<div class="card-roteiro-perfil">@${escaparHtml(r.perfil)}</div>` : ''}
+              <div class="card-roteiro-meta">
+                ${etiqueta}
+                <span class="card-roteiro-fonte">${r.fonte === 'youtube' ? '📺' : r.fonte === 'tiktok' ? '🎵' : '📸'} ${r.fonte}</span>
+                ${dataFormatada ? `<span class="card-roteiro-data">${dataFormatada}</span>` : ''}
               </div>
+              <div class="card-roteiro-transcricao">${escaparHtml(transcricaoPreview)}</div>
               <div class="card-roteiro-acoes">
-                <button class="botao botao-secundario" onclick="copiarTranscricao('${r.id}')">Copiar texto</button>
+                <button class="botao botao-secundario" onclick="copiarTranscricao('${r.id}')">Copiar transcrição</button>
                 <button class="botao botao-secundario" onclick="abrirModalEdicao('${r.id}')">Editar</button>
                 <button class="botao botao-perigo" onclick="apagarRoteiro('${r.id}')">Apagar</button>
               </div>
