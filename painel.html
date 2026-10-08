@@ -788,7 +788,7 @@
 
   .card-roteiro-capa {
     width: 140px;
-    height: 140px;
+    height: 175px;
     flex-shrink: 0;
     background: var(--creme);
     border-radius: var(--raio-sm);
@@ -800,10 +800,42 @@
     position: relative;
   }
 
+  .card-roteiro-capa-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: var(--raio-sm);
+  }
+
+  .card-roteiro-capa::before {
+    content: attr(data-emoji);
+    position: absolute;
+    inset: 0;
+    background: var(--creme);
+    border-radius: var(--raio-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    z-index: 0;
+  }
+
+  .card-roteiro-capa::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: var(--raio-sm);
+    pointer-events: none;
+    z-index: 1;
+  }
+
   .card-roteiro-capa button {
     background: none;
     border: none;
-    color: rgba(20, 17, 13, 0.6);
+    color: rgba(255, 255, 255, 0.9);
     font-size: 48px;
     cursor: pointer;
     padding: 0;
@@ -812,10 +844,13 @@
     justify-content: center;
     width: 100%;
     height: 100%;
+    position: relative;
+    z-index: 3;
+    transition: text-shadow 0.15s ease;
   }
 
   .card-roteiro-capa button:hover {
-    background: rgba(20, 17, 13, 0.05);
+    text-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
   }
 
   .card-roteiro-info {
@@ -3369,11 +3404,14 @@
           return;
         }
 
+        const capaUrl = await obterUrlCapa(novoRoteiro);
+
         await Auth.sb
           .from('roteiros')
           .update({
             transcricao,
             status: 'pronto',
+            capa_url: capaUrl || null,
             updated_at: new Date().toISOString()
           })
           .eq('id', novoRoteiro.id);
@@ -3412,6 +3450,27 @@
       }
     };
 
+    async function obterUrlCapa(roteiro) {
+      if (roteiro.capa_url) return roteiro.capa_url;
+
+      if (roteiro.fonte === 'youtube') {
+        const match = roteiro.url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/);
+        if (match?.[1]) return `https://i.ytimg.com/vi/${match[1]}/hqdefault.jpg`;
+      } else if (roteiro.fonte === 'instagram') {
+        const match = roteiro.url.match(/\/(?:reel|p)\/([a-zA-Z0-9_-]+)/);
+        if (match?.[1]) return `https://images.weserv.nl/?url=instagram.com/p/${match[1]}/media/?size=l&w=480&h=600&fit=cover&output=webp`;
+      } else if (roteiro.fonte === 'tiktok') {
+        try {
+          const resp = await fetch(`https://www.tiktok.com/oembed?url=${encodeURIComponent(roteiro.url)}`);
+          if (resp.ok) {
+            const data = await resp.json();
+            if (data.thumbnail_url) return data.thumbnail_url;
+          }
+        } catch (e) {}
+      }
+      return null;
+    }
+
     function renderRoteiros(roteiros = cacheRoteiros) {
       const container = document.getElementById('listaRoteiros');
 
@@ -3431,7 +3490,9 @@
         return;
       }
 
+      console.log('INICIANDO MAP COM', roteirosRender.length, 'items');
       container.innerHTML = roteirosRender.map(r => {
+        console.log('MAP ITEM:', r.id, r.fonte);
         const transcricaoPreview = r.transcricao ? r.transcricao.slice(0, 150) + '...' : '';
         const dataFormatada = r.postado_em ? new Date(r.postado_em).toLocaleDateString('pt-BR') : '';
         const etiqueta = r.de_quem === 'minha' ? '<span class="etiqueta-roteiro etiqueta-minha">Meu</span>' : '<span class="etiqueta-roteiro etiqueta-outra">De outra</span>';
@@ -3440,9 +3501,29 @@
         if (r.status === 'processando') iconeCapa = '⏳';
         if (r.status === 'falhou') iconeCapa = '⚠';
 
+        const emojiPlataforma = r.fonte === 'youtube' ? '📺' : r.fonte === 'tiktok' ? '🎵' : '📸';
+
+        let srcImg = '';
+        console.log('DEBUG: r.fonte =', r.fonte, 'r.url =', r.url);
+        if (r.capa_url) {
+          srcImg = r.capa_url;
+        } else if (r.fonte === 'youtube') {
+          const matchYt = r.url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/);
+          if (matchYt?.[1]) srcImg = `https://i.ytimg.com/vi/${matchYt[1]}/hqdefault.jpg`;
+        } else if (r.fonte === 'instagram') {
+          const matchIg = r.url.match(/\/(?:reel|p)\/([a-zA-Z0-9_-]+)/);
+          console.log('DEBUG instagram: matchIg =', matchIg?.[1]);
+          if (matchIg?.[1]) {
+            const tipoPost = r.url.includes('/reel/') ? 'reel' : 'p';
+            srcImg = `https://images.weserv.nl/?url=https://www.instagram.com/${tipoPost}/${matchIg[1]}/media/?size=l`;
+          }
+        }
+        console.log('DEBUG final srcImg =', srcImg);
+
         return `
           <div class="cartao card-roteiro">
-            <div class="card-roteiro-capa">
+            <div class="card-roteiro-capa" data-emoji="${emojiPlataforma}">
+              ${srcImg ? `<img src="${srcImg}" alt="capa" class="card-roteiro-capa-img" onerror="this.style.display='none'">` : ''}
               <button onclick="abrirEmbed('${r.id}')" title="Ver vídeo">${iconeCapa}</button>
             </div>
             <div class="card-roteiro-info">
@@ -3666,6 +3747,20 @@
         fecharSidebarMobile();
       });
     });
+
+    function atualizarBotaoAtivo() {
+      const abaSelecionada = document.querySelector('.painel-tab:not(.oculto)');
+      if (abaSelecionada) {
+        const idAba = abaSelecionada.id;
+        const abaKey = Object.entries(idsAba).find(([_, id]) => id === idAba)?.[0];
+        if (abaKey) {
+          document.querySelectorAll('.nav-item').forEach((i) => i.classList.remove('ativo'));
+          document.querySelector(`[data-tab="${abaKey}"]`)?.classList.add('ativo');
+        }
+      }
+    }
+
+    atualizarBotaoAtivo();
 
     // ------------------------------------------------------------
     // Interação: gaveta do menu no celular
