@@ -745,32 +745,10 @@
     margin: 0;
   }
 
-  .formulario-roteiro {
-    padding: 24px;
-    margin-bottom: 20px;
-  }
 
-  .grade-roteiro-topo {
-    display: grid;
-    grid-template-columns: 2fr 1fr auto;
-    gap: 12px;
-    align-items: flex-end;
-  }
 
-  .bloco-config-roteiro {
-    padding: 24px;
-    margin-bottom: 20px;
-    background: var(--creme);
-  }
 
-  .area-aviso-roteiro {
-    margin-top: 12px;
-    min-height: 0;
-  }
 
-  .area-aviso-roteiro:empty {
-    display: none;
-  }
 
   .bloco-biblioteca-roteiro {
     padding: 0;
@@ -912,16 +890,6 @@
     color: var(--texto-suave);
   }
 
-  .card-roteiro-transcricao {
-    font-size: 13px;
-    color: var(--grafite);
-    line-height: 1.5;
-    margin: 12px 0;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
 
   .card-roteiro-acoes {
     display: flex;
@@ -985,10 +953,6 @@
     .filtro-periodo {
       order: 3;
       flex-basis: 100%;
-    }
-
-    .grade-roteiro-topo {
-      grid-template-columns: 1fr;
     }
 
     #listaRoteiros {
@@ -1495,53 +1459,18 @@
 
     <!-- ================= Aba: Roteiros ================= -->
     <section id="painelRoteiros" class="painel-tab oculto">
-      <div class="cartao bloco-roteiros-topo">
+      <div class="cartao bloco-roteiros-topo" style="display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;">
         <div>
           <h3>📜 Roteiros</h3>
-          <p>Cole o link de um reel e eu transcrevo. Serve pros seus e pros das outras, com etiqueta pra você separar.</p>
+          <p>Guarde os roteiros que você quer ter por perto, seus e de outras pessoas, com etiqueta pra você separar.</p>
         </div>
-      </div>
-
-      <div class="cartao formulario-roteiro">
-        <div class="grade-roteiro-topo">
-          <div class="campo" style="flex: 2;">
-            <label for="linkRoteiro">Cole o link aqui</label>
-            <input type="text" id="linkRoteiro" placeholder="Cole aqui: instagram.com/reel/... · tiktok.com/... · youtube.com/..." autocomplete="off" required>
-          </div>
-          <div class="campo" style="flex: 1;">
-            <label for="deQuemRoteiro">Tipo</label>
-            <select id="deQuemRoteiro">
-              <option value="minha">Meu</option>
-              <option value="outra">De outra pessoa</option>
-            </select>
-          </div>
-          <div style="display: flex; gap: 8px; align-items: flex-end;">
-            <button class="botao botao-primario" id="botaoTranscreverRoteiro">Transcrever</button>
-            <button class="botao botao-secundario" id="botaoEscreverManualRoteiro">+ Escrever na mão</button>
-          </div>
-        </div>
-        <div class="area-aviso-roteiro" id="avisoRoteiro"></div>
-      </div>
-
-      <div class="bloco-config-roteiro cartao" id="blocoConfigRoteiro" style="display: none;">
-        <div style="display: flex; gap: 12px; align-items: flex-end;">
-          <div class="campo" style="flex: 1;">
-            <label for="chaveSupadata">Chave da Supadata (últimos 4 chars)</label>
-            <div style="display: flex; gap: 8px;">
-              <input type="password" id="chaveSupadata" placeholder="Colar aqui" style="flex: 1;">
-              <button class="botao botao-primario" id="botaoSalvarChave">Salvar</button>
-            </div>
-          </div>
-          <div id="saldoSupadata" style="font-size: 13px; color: var(--texto-suave);"></div>
-        </div>
-        <p id="avisoChaveRoteiro" style="margin-top: 12px; font-size: 13px; color: var(--texto-suave);"></p>
+        <button class="botao botao-primario" id="botaoEscreverManualRoteiro">+ Escrever na mão</button>
       </div>
 
       <div class="bloco-biblioteca-roteiro">
         <div style="margin-bottom: 20px;">
           <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 12px;">
-            <input type="text" id="buscaRoteiro" placeholder="Buscar por texto, perfil ou tags..." style="flex: 1; padding: 10px 14px; border: 1px solid var(--borda); border-radius: var(--raio-sm); font-size: 14px;">
-            <button class="botao botao-secundario" id="botaoEstudarClaude">🧠 Estudar com o Claude</button>
+            <input type="text" id="buscaRoteiro" placeholder="Buscar por título, perfil ou tags..." style="flex: 1; padding: 10px 14px; border: 1px solid var(--borda); border-radius: var(--raio-sm); font-size: 14px;">
           </div>
           <div id="filtrosRoteiro" style="display: flex; gap: 6px; flex-wrap: wrap;"></div>
         </div>
@@ -1583,10 +1512,6 @@
             <div class="campo">
               <label for="editarLegenda">Legenda do post</label>
               <textarea id="editarLegenda" style="min-height: 60px;"></textarea>
-            </div>
-            <div class="campo">
-              <label for="editarTranscricao">Transcrição</label>
-              <textarea id="editarTranscricao" style="min-height: 120px;"></textarea>
             </div>
             <div class="campo">
               <label for="editarObs">Notas minhas</label>
@@ -3139,7 +3064,6 @@
     // ============================================================
 
     let cacheRoteiros = [];
-    let chaveSupadataLocal = '';
     let roteiroBuscaAtiva = '';
 
     async function buscarRoteiros() {
@@ -3151,326 +3075,6 @@
       return data || [];
     }
 
-    async function carregarChave() {
-      try {
-        const { data, error } = await Auth.sb
-          .from('configuracoes')
-          .select('valor')
-          .eq('chave', 'supadata_key')
-          .single();
-        if (error && error.code !== 'PGRST116') throw error;
-        if (data) chaveSupadataLocal = data.valor;
-        atualizarUIChave();
-      } catch (erro) {
-        console.error('Erro ao carregar chave:', erro);
-      }
-    }
-
-    function atualizarUIChave() {
-      const blocoConfig = document.getElementById('blocoConfigRoteiro');
-      if (!chaveSupadataLocal) {
-        blocoConfig.style.display = 'block';
-        document.getElementById('avisoChaveRoteiro').innerHTML = 'Crie uma conta grátis em <strong>supadata.ai</strong> (100 créditos por mês, sem cartão), copie a API key e cole aqui.';
-        document.getElementById('linkRoteiro').disabled = true;
-        document.getElementById('botaoTranscreverRoteiro').disabled = true;
-        return;
-      }
-      blocoConfig.style.display = 'block';
-      document.getElementById('chaveSupadata').value = chaveSupadataLocal.slice(-4);
-      atualizarSaldoSupadata();
-    }
-
-    async function salvarChave() {
-      const chaveInput = document.getElementById('chaveSupadata').value.trim();
-      if (!chaveInput) {
-        mostrarMensagemArea('Cole a chave válida.', 'erro');
-        return;
-      }
-
-      try {
-        const { data: { session } } = await Auth.sb.auth.getSession();
-        const userId = session?.user?.id;
-        if (!userId) throw new Error('Usuário não autenticado');
-
-        chaveSupadataLocal = chaveInput;
-        const { error } = await Auth.sb
-          .from('configuracoes')
-          .upsert({ chave: 'supadata_key', valor: chaveInput, updated_at: new Date().toISOString(), user_id: userId });
-        if (error) throw error;
-        mostrarMensagemArea('Chave salva.', 'sucesso');
-        atualizarUIChave();
-      } catch (erro) {
-        console.error(erro);
-        mostrarMensagemArea('Não foi possível salvar a chave.', 'erro');
-      }
-    }
-
-    async function atualizarSaldoSupadata() {
-      if (!chaveSupadataLocal) return;
-      try {
-        const resp = await fetch('https://api.supadata.ai/v1/me', {
-          headers: { 'x-api-key': chaveSupadataLocal }
-        });
-        if (!resp.ok) throw new Error('Erro ao buscar saldo');
-        const data = await resp.json();
-        const usado = data.usedCredits || 0;
-        const maximo = data.maxCredits || 100;
-        document.getElementById('saldoSupadata').textContent = `${usado} de ${maximo} créditos usados`;
-      } catch (erro) {
-        console.error('Erro ao buscar saldo:', erro);
-      }
-    }
-
-    async function limparLink(link) {
-      link = link.trim();
-      if (link.includes('instagram.com/reels/')) link = link.replace('/reels/', '/reel/');
-      link = link.split('?')[0];
-      return link;
-    }
-
-    function extrairInfoLink(link) {
-      let fonte = '', perfil = '', id = '';
-
-      if (link.includes('instagram.com')) {
-        fonte = 'instagram';
-        const matchPerfil = link.match(/instagram\.com\/([^\/]+)\/reel/);
-        const matchId = link.match(/\/reel\/([a-zA-Z0-9_-]+)/);
-        if (matchPerfil) perfil = matchPerfil[1];
-        if (matchId) id = matchId[1];
-      } else if (link.includes('tiktok.com')) {
-        fonte = 'tiktok';
-        const matchPerfil = link.match(/@([^\/]+)\//);
-        const matchId = link.match(/video\/(\d+)/);
-        if (matchPerfil) perfil = matchPerfil[1];
-        if (matchId) id = matchId[1];
-      } else if (link.includes('youtube.com') || link.includes('youtu.be')) {
-        fonte = 'youtube';
-        const matchId = link.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/);
-        if (matchId) id = matchId[1];
-      }
-
-      return { fonte, perfil, id };
-    }
-
-    async function extrairMetadadosLink(link) {
-      try {
-        const resp = await fetch(`https://noembed.com/embed?url=${encodeURIComponent(link)}`);
-        if (!resp.ok) return {};
-        const data = await resp.json();
-        return {
-          titulo: data.title || '',
-          autorPerfil: data.author_name || '',
-          descricao: data.description || ''
-        };
-      } catch (e) {
-        return {};
-      }
-    }
-
-    async function transcreverRoteiro() {
-      const link = await limparLink(document.getElementById('linkRoteiro').value.trim());
-      const deQuem = document.getElementById('deQuemRoteiro').value;
-      const aviso = document.getElementById('avisoRoteiro');
-
-      if (!link || !link.startsWith('http')) {
-        aviso.innerHTML = '<div class="faixa faixa-erro">Cole um link válido (deve começar com http).</div>';
-        return;
-      }
-
-      if (!chaveSupadataLocal) {
-        aviso.innerHTML = '<div class="faixa faixa-erro">Salve sua chave Supadata primeiro.</div>';
-        return;
-      }
-
-      const { fonte, perfil, id } = extrairInfoLink(link);
-      if (!fonte) {
-        aviso.innerHTML = '<div class="faixa faixa-erro">Link de fonte não reconhecida (Instagram, TikTok ou YouTube).</div>';
-        return;
-      }
-
-      const existente = cacheRoteiros.find(r => r.url === link);
-      if (existente) {
-        const quer = confirm('Esse vídeo já está na biblioteca. Transcrever de novo?');
-        if (!quer) return;
-      }
-
-      aviso.innerHTML = '<div class="faixa faixa-info">⏳ Extraindo informações e criando registro...</div>';
-
-      const metadados = await extrairMetadadosLink(link);
-
-      try {
-        const { data: { session } } = await Auth.sb.auth.getSession();
-        const userId = session?.user?.id;
-        if (!userId) throw new Error('Usuário não autenticado');
-
-        const { data: novoRoteiro, error: erroCria } = await Auth.sb
-          .from('roteiros')
-          .insert({
-            url: link,
-            fonte,
-            perfil: metadados.autorPerfil || perfil || null,
-            titulo: metadados.titulo || null,
-            legenda: metadados.descricao || null,
-            de_quem: deQuem,
-            status: 'processando',
-            user_id: userId
-          })
-          .select()
-          .single();
-
-        if (erroCria) throw erroCria;
-
-        aviso.innerHTML = '<div class="faixa faixa-info">🎬 Ouvindo o vídeo (0s). Costuma levar de 3 a 4 minutos, pode deixar a aba aberta...</div>';
-
-        const params = new URLSearchParams({
-          url: link,
-          mode: 'auto',
-          text: 'true',
-          lang: 'pt'
-        });
-
-        let resposta = await fetch(`https://api.supadata.ai/v1/transcript?${params}`, {
-          headers: { 'x-api-key': chaveSupadataLocal }
-        });
-
-        let tempoPassado = 0;
-        let jobId = null;
-
-        if (resposta.status === 202) {
-          const data202 = await resposta.json();
-          jobId = data202.jobId;
-
-          let tentativas = 0;
-          const maxTentativas = 72;
-
-          while (tentativas < maxTentativas) {
-            await new Promise(r => setTimeout(r, 5000));
-            tempoPassado += 5;
-            tentativas++;
-            aviso.innerHTML = `<div class="faixa faixa-info">🎬 Ouvindo o vídeo (${tempoPassado}s). Costuma levar de 3 a 4 minutos...</div>`;
-
-            resposta = await fetch(`https://api.supadata.ai/v1/transcript/${jobId}`, {
-              headers: { 'x-api-key': chaveSupadataLocal }
-            });
-
-            if (!resposta.ok) {
-              const erro = await resposta.json();
-              if (erro.error?.details?.includes('Plan usage limit')) {
-                throw new Error('Acabaram os créditos do mês. Tente no próximo mês ou compre créditos extras.');
-              } else if (erro.error?.details?.includes('Request rate limit')) {
-                throw new Error('Muitas chamadas seguidas. Espere 1 minuto e tente de novo.');
-              }
-              throw erro;
-            }
-
-            const result = await resposta.json();
-            if (result.status === 'completed') {
-              resposta = result;
-              break;
-            }
-            if (result.status === 'failed') {
-              throw new Error('Transcrição falhou. Tente outro vídeo.');
-            }
-          }
-
-          if (tentativas >= maxTentativas) {
-            throw new Error('Transcrição demorou muito. Tente de novo em alguns minutos.');
-          }
-        } else if (!resposta.ok) {
-          const erro = await resposta.json();
-          if (erro.error?.details?.includes('Plan usage limit')) {
-            throw new Error('Acabaram os créditos do mês.');
-          }
-          throw erro;
-        }
-
-        const resultado = await resposta.json();
-        let transcricao = '';
-
-        if (typeof resultado.content === 'string') {
-          transcricao = resultado.content;
-        } else if (Array.isArray(resultado.content)) {
-          transcricao = resultado.content.map(s => s.text).join(' ');
-        }
-
-        if (!transcricao || resultado.lang === 'none') {
-          await Auth.sb
-            .from('roteiros')
-            .update({ status: 'falhou', erro: 'Não achei fala nesse vídeo. Costuma ser reel só com música ou só com texto na tela.' })
-            .eq('id', novoRoteiro.id);
-
-          aviso.innerHTML = `<div class="faixa faixa-aviso">⚠ Não achei fala nesse vídeo. <button class="botao botao-secundario" onclick="guardaRoteiro('${novoRoteiro.id}')">Guardar assim mesmo</button></div>`;
-          await recarregarRoteiros();
-          return;
-        }
-
-        const capaUrl = await obterUrlCapa(novoRoteiro);
-
-        await Auth.sb
-          .from('roteiros')
-          .update({
-            transcricao,
-            status: 'pronto',
-            capa_url: capaUrl || null,
-            updated_at: new Date().toISOString()
-          })
-          .eq('id', novoRoteiro.id);
-
-        aviso.innerHTML = '<div class="faixa faixa-sucesso">✅ Pronto. Revisa o texto abaixo, dá um nome e salva.</div>';
-        document.getElementById('linkRoteiro').value = '';
-        document.getElementById('deQuemRoteiro').value = 'minha';
-
-        await recarregarRoteiros();
-        abrirModalEdicao(novoRoteiro.id);
-
-      } catch (erro) {
-        console.error(erro);
-        aviso.innerHTML = `<div class="faixa faixa-erro">${erro.message || 'Erro na transcrição.'}</div>`;
-        if (novoRoteiro) {
-          await Auth.sb
-            .from('roteiros')
-            .update({ status: 'falhou', erro: erro.message })
-            .eq('id', novoRoteiro.id);
-          await recarregarRoteiros();
-        }
-      }
-    }
-
-    window.guardaRoteiro = async function(id) {
-      try {
-        await Auth.sb
-          .from('roteiros')
-          .update({ status: 'pronto' })
-          .eq('id', id);
-        mostrarMensagemArea('Guardado. Edita depois se precisar.', 'sucesso');
-        await recarregarRoteiros();
-      } catch (erro) {
-        console.error(erro);
-        mostrarMensagemArea('Erro ao guardar.', 'erro');
-      }
-    };
-
-    async function obterUrlCapa(roteiro) {
-      if (roteiro.capa_url) return roteiro.capa_url;
-
-      if (roteiro.fonte === 'youtube') {
-        const match = roteiro.url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/);
-        if (match?.[1]) return `https://i.ytimg.com/vi/${match[1]}/hqdefault.jpg`;
-      } else if (roteiro.fonte === 'instagram') {
-        const match = roteiro.url.match(/\/(?:reel|p)\/([a-zA-Z0-9_-]+)/);
-        if (match?.[1]) return `https://images.weserv.nl/?url=instagram.com/p/${match[1]}/media/?size=l&w=480&h=600&fit=cover&output=webp`;
-      } else if (roteiro.fonte === 'tiktok') {
-        try {
-          const resp = await fetch(`https://www.tiktok.com/oembed?url=${encodeURIComponent(roteiro.url)}`);
-          if (resp.ok) {
-            const data = await resp.json();
-            if (data.thumbnail_url) return data.thumbnail_url;
-          }
-        } catch (e) {}
-      }
-      return null;
-    }
-
     function renderRoteiros(roteiros = cacheRoteiros) {
       const container = document.getElementById('listaRoteiros');
 
@@ -3478,7 +3082,6 @@
       if (roteiroBuscaAtiva) {
         const termo = roteiroBuscaAtiva.toLowerCase();
         roteirosRender = roteiros.filter(r =>
-          (r.transcricao && r.transcricao.toLowerCase().includes(termo)) ||
           (r.perfil && r.perfil.toLowerCase().includes(termo)) ||
           (r.titulo && r.titulo.toLowerCase().includes(termo)) ||
           (r.tags && r.tags.some(t => t.toLowerCase().includes(termo)))
@@ -3493,7 +3096,6 @@
       console.log('INICIANDO MAP COM', roteirosRender.length, 'items');
       container.innerHTML = roteirosRender.map(r => {
         console.log('MAP ITEM:', r.id, r.fonte);
-        const transcricaoPreview = r.transcricao ? r.transcricao.slice(0, 150) + '...' : '';
         const dataFormatada = r.postado_em ? new Date(r.postado_em).toLocaleDateString('pt-BR') : '';
         const etiqueta = r.de_quem === 'minha' ? '<span class="etiqueta-roteiro etiqueta-minha">Meu</span>' : '<span class="etiqueta-roteiro etiqueta-outra">De outra</span>';
 
@@ -3534,9 +3136,7 @@
                 <span class="card-roteiro-fonte">${r.fonte === 'youtube' ? '📺' : r.fonte === 'tiktok' ? '🎵' : '📸'} ${r.fonte}</span>
                 ${dataFormatada ? `<span class="card-roteiro-data">${dataFormatada}</span>` : ''}
               </div>
-              <div class="card-roteiro-transcricao">${escaparHtml(transcricaoPreview)}</div>
               <div class="card-roteiro-acoes">
-                <button class="botao botao-secundario" onclick="copiarTranscricao('${r.id}')">Copiar transcrição</button>
                 <button class="botao botao-secundario" onclick="abrirModalEdicao('${r.id}')">Editar</button>
                 <button class="botao botao-perigo" onclick="apagarRoteiro('${r.id}')">Apagar</button>
               </div>
@@ -3569,13 +3169,6 @@
       }
     };
 
-    window.copiarTranscricao = async function(id) {
-      const roteiro = cacheRoteiros.find(r => r.id === id);
-      if (!roteiro || !roteiro.transcricao) return;
-      await navigator.clipboard.writeText(roteiro.transcricao);
-      mostrarMensagemArea('Transcrição copiada ✓', 'sucesso');
-    };
-
     function abrirModalEdicao(id) {
       const roteiro = cacheRoteiros.find(r => r.id === id);
       if (!roteiro) return;
@@ -3587,7 +3180,6 @@
       document.getElementById('editarData').value = roteiro.postado_em || '';
       document.getElementById('editarTags').value = (roteiro.tags || []).join(', ');
       document.getElementById('editarLegenda').value = roteiro.legenda || '';
-      document.getElementById('editarTranscricao').value = roteiro.transcricao || '';
       document.getElementById('editarObs').value = roteiro.obs || '';
 
       document.getElementById('formEditarRoteiro').dataset.id = id;
@@ -3606,7 +3198,6 @@
         postado_em: document.getElementById('editarData').value || null,
         tags: document.getElementById('editarTags').value.split(',').map(t => t.trim()).filter(t => t),
         legenda: document.getElementById('editarLegenda').value.trim() || null,
-        transcricao: document.getElementById('editarTranscricao').value.trim(),
         obs: document.getElementById('editarObs').value.trim() || null,
         updated_at: new Date().toISOString()
       };
@@ -3647,12 +3238,6 @@
       }
     }
 
-    document.getElementById('botaoTranscreverRoteiro').addEventListener('click', transcreverRoteiro);
-    document.getElementById('botaoSalvarChave').addEventListener('click', salvarChave);
-    document.getElementById('linkRoteiro').addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') transcreverRoteiro();
-    });
-
     document.getElementById('buscaRoteiro').addEventListener('input', (e) => {
       roteiroBuscaAtiva = e.target.value;
       renderRoteiros();
@@ -3663,28 +3248,8 @@
     if (botaoRoteiros) {
       botaoRoteiros.addEventListener('click', () => {
         recarregarRoteiros();
-        carregarChave();
       });
     }
-
-    // Filtros e botão de estudar com Claude
-    document.getElementById('botaoEstudarClaude').addEventListener('click', () => {
-      const deOutras = cacheRoteiros.filter(r => r.de_quem === 'outra').slice(0, 10);
-      if (deOutras.length === 0) {
-        mostrarMensagemArea('Você não tem roteiros marcados como "De outras pessoas" para estudar.', 'aviso');
-        return;
-      }
-
-      let prompt = 'Analisando esses roteiros de outras criadores de conteúdo:\\n\\n';
-      deOutras.forEach(r => {
-        prompt += `[${r.perfil || 'desconhecido'}]\\n${r.transcricao}\\n\\n`;
-      });
-      prompt += 'Me aponte:\\n1. Assuntos em alta\\n2. Expressões que prendem\\n3. Padrões de gancho com exemplos reais\\n4. 5 novos roteiros no MEU assunto reaproveitando a estrutura desses (não o conteúdo).';
-
-      navigator.clipboard.writeText(prompt).then(() => {
-        mostrarMensagemArea('Prompt copiado! Cole no Claude.', 'sucesso');
-      });
-    });
 
     // Botão "Escrever na mão"
     document.getElementById('botaoEscreverManualRoteiro').addEventListener('click', () => {
