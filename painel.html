@@ -703,6 +703,74 @@
     text-align: center;
   }
 
+  .bloco-capa {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .bloco-capa .rotulo-campo {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--texto-suave);
+  }
+
+  .previa-capa {
+    width: 140px;
+    aspect-ratio: 4 / 5;
+    border-radius: var(--raio-sm);
+    background: var(--creme);
+    border: 1px solid var(--borda);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 8px;
+  }
+
+  .previa-capa img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .previa-capa span {
+    font-size: 11px;
+    color: var(--texto-suave);
+  }
+
+  .acoes-capa {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .acoes-capa .botao {
+    font-size: 13px;
+    color: var(--grafite);
+    cursor: pointer;
+  }
+
+  .acoes-rapidas-video {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 0 20px 16px;
+  }
+
+  .toggle-rapido {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--texto-suave);
+    margin-right: 8px;
+    cursor: pointer;
+  }
+
   .video-detalhe-acoes {
     display: flex;
     gap: 10px;
@@ -745,19 +813,120 @@
     margin: 0;
   }
 
+  .bloco-config-roteiro {
+    padding: 20px 24px;
+    margin-bottom: 20px;
+    background: var(--creme);
+  }
 
+  .config-roteiro-linha {
+    display: flex;
+    gap: 16px;
+    align-items: flex-end;
+    flex-wrap: wrap;
+  }
 
+  .saldo-supadata {
+    font-size: 13px;
+    color: var(--texto-suave);
+    padding-bottom: 12px;
+  }
 
+  .ajuda-roteiro {
+    font-size: 13px;
+    color: var(--texto-suave);
+    margin: 10px 0 0;
+  }
 
+  .formulario-roteiro {
+    padding: 24px;
+    margin-bottom: 20px;
+  }
 
-  .bloco-biblioteca-roteiro {
-    padding: 0;
+  .grade-roteiro-topo {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 12px;
+  }
+
+  .linha-botoes-roteiro {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+  }
+
+  .formulario-roteiro .faixa {
+    margin-top: 12px;
+  }
+
+  .botao-pequeno {
+    padding: 8px 14px;
+    font-size: 13px;
+  }
+
+  .faixa .botao-pequeno {
+    margin-left: 12px;
+  }
+
+  .barra-biblioteca-roteiro {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+
+  .barra-biblioteca-roteiro input {
+    flex: 1;
+    min-width: 240px;
+    padding: 12px 14px;
+    border: 1px solid var(--borda);
+    border-radius: var(--raio-sm);
+    font-size: 14px;
+    font-family: var(--fonte-texto);
+    background: var(--branco);
+  }
+
+  .filtros-roteiro {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+
+  .chip-roteiro {
+    border: 1px solid var(--borda);
+    background: var(--branco);
+    color: var(--grafite);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .chip-roteiro.ativo {
+    background: var(--coral);
+    border-color: var(--coral);
+    color: var(--branco);
+  }
+
+  .lista-roteiros {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 14px;
+  }
+
+  .lista-roteiros > .cartao:not(.card-roteiro) {
+    grid-column: 1 / -1;
+    padding: 40px;
+    text-align: center;
   }
 
   .card-roteiro {
     display: flex;
-    gap: 20px;
-    padding: 20px;
+    flex-direction: column;
+    padding: 0;
+    overflow: hidden;
     background: var(--branco);
     border: 1px solid var(--borda);
     border-radius: var(--raio-md);
@@ -765,17 +934,23 @@
   }
 
   .card-roteiro-capa {
-    width: 140px;
-    height: 175px;
+    width: 100%;
+    aspect-ratio: 4 / 5;
     flex-shrink: 0;
     background: var(--creme);
     border-radius: var(--raio-sm);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .card-roteiro-capa::before {
+    content: attr(data-emoji);
+    position: absolute;
+    inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
-    cursor: pointer;
-    position: relative;
+    font-size: 48px;
   }
 
   .card-roteiro-capa-img {
@@ -784,72 +959,67 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: var(--raio-sm);
   }
 
-  .card-roteiro-capa::before {
-    content: attr(data-emoji);
+  .botao-ver-capa {
     position: absolute;
     inset: 0;
-    background: var(--creme);
-    border-radius: var(--raio-sm);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 48px;
-    z-index: 0;
-  }
-
-  .card-roteiro-capa::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: var(--raio-sm);
-    pointer-events: none;
-    z-index: 1;
-  }
-
-  .card-roteiro-capa button {
-    background: none;
+    z-index: 2;
+    background: rgba(0, 0, 0, 0.25);
     border: none;
-    color: rgba(255, 255, 255, 0.9);
-    font-size: 48px;
-    cursor: pointer;
-    padding: 0;
+    color: var(--branco);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+  }
+
+  .card-roteiro-capa .play-roteiro {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.92);
+    color: var(--grafite);
+    font-size: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100%;
-    height: 100%;
-    position: relative;
-    z-index: 3;
-    transition: text-shadow 0.15s ease;
   }
 
-  .card-roteiro-capa button:hover {
-    text-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+  .botao-ver-capa small {
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .card-roteiro:has(.capa-com-video) {
+    grid-column: span 2;
+  }
+
+  .card-roteiro-capa.capa-com-video {
+    height: 560px;
+    aspect-ratio: auto;
   }
 
   .card-roteiro-info {
     flex: 1;
+    min-width: 0;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    padding: 12px 12px 14px;
   }
 
   .card-roteiro-titulo {
     font-weight: 600;
-    font-size: 16px;
-    color: var(--grafite);
-    margin-bottom: 8px;
+    font-size: 14px;
+    margin-bottom: 6px;
     font-family: var(--fonte-titulo);
   }
 
   .card-roteiro-perfil {
-    font-size: 13px;
+    font-size: 12px;
     color: var(--texto-suave);
-    margin-bottom: 10px;
+    margin-bottom: 6px;
     font-weight: 500;
   }
 
@@ -858,14 +1028,14 @@
     gap: 12px;
     align-items: center;
     flex-wrap: wrap;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
   }
 
   .etiqueta-roteiro {
     display: inline-block;
-    padding: 6px 12px;
+    padding: 4px 8px;
     border-radius: 20px;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
   }
 
@@ -879,29 +1049,89 @@
     color: var(--coral);
   }
 
-  .card-roteiro-fonte {
-    font-size: 12px;
-    color: var(--texto-suave);
-    font-weight: 500;
-  }
-
+  .card-roteiro-fonte,
   .card-roteiro-data {
-    font-size: 12px;
+    font-size: 11px;
     color: var(--texto-suave);
   }
 
+  .card-roteiro-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+  }
+
+  .card-roteiro-tags span {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--coral);
+  }
+
+  .roteiro-estado {
+    font-size: 13px;
+    margin-top: 10px;
+    padding: 8px 12px;
+    border-radius: var(--raio-sm);
+  }
+
+  .roteiro-processando {
+    background: var(--creme);
+    color: var(--texto-suave);
+  }
+
+  .roteiro-falhou {
+    background: rgba(196, 69, 60, 0.08);
+    color: var(--erro);
+  }
+
+  .relogio-roteiro {
+    display: inline-block;
+    animation: pulsoRelogio 1.6s ease-in-out infinite;
+  }
+
+  @keyframes pulsoRelogio {
+    0%, 100% { opacity: 0.35; }
+    50% { opacity: 1; }
+  }
 
   .card-roteiro-acoes {
     display: flex;
-    gap: 10px;
-    margin-top: 12px;
+    gap: 8px;
+    margin-top: 14px;
     flex-wrap: wrap;
   }
 
   .card-roteiro-acoes button {
-    padding: 10px 16px;
-    font-size: 13px;
+    padding: 6px 9px;
+    font-size: 11px;
     font-weight: 500;
+  }
+
+  .form-roteiro {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .campo textarea,
+  .campo select {
+    font-family: var(--fonte-texto);
+    font-size: 15px;
+    padding: 12px 14px;
+    border: 1px solid var(--borda);
+    border-radius: var(--raio-sm);
+    background: var(--branco);
+    color: var(--grafite);
+  }
+
+  .campo textarea {
+    min-height: 60px;
+    resize: vertical;
+  }
+
+  .area-transcricao {
+    min-height: 180px !important;
   }
 
   .modal-roteiro {
@@ -924,6 +1154,36 @@
     max-height: 80vh;
     overflow-y: auto;
     padding: 24px;
+  }
+
+  .modal-video-roteiro {
+    max-width: 640px;
+  }
+
+  @media (max-width: 900px) {
+    .grade-roteiro-topo {
+      grid-template-columns: 1fr;
+    }
+
+    .lista-roteiros {
+      grid-template-columns: 1fr;
+    }
+
+    .card-roteiro:has(.capa-com-video) {
+      grid-column: auto;
+    }
+
+    .card-roteiro {
+      flex-direction: column;
+    }
+
+    .card-roteiro-capa {
+      height: auto;
+    }
+
+    .card-roteiro-capa.capa-com-video {
+      height: 560px;
+    }
   }
 
   @media (max-width: 900px) {
@@ -964,8 +1224,11 @@
     }
 
     .card-roteiro-capa {
-      width: 100%;
-      height: 200px;
+      height: auto;
+    }
+
+    .card-roteiro-capa.capa-com-video {
+      height: 560px;
     }
   }
 </style>
@@ -1178,10 +1441,7 @@
               <label for="novoVideoId">ID do vídeo no YouTube</label>
               <input type="text" id="novoVideoId" placeholder="ex: w-qKXbbCqSM" required>
             </div>
-            <div class="campo">
-              <label for="novaCapa">Capa personalizada (opcional)</label>
-              <input type="text" id="novaCapa" placeholder="imagens/minha-capa.jpg">
-            </div>
+            <div id="novaCapaCampo"></div>
             <div class="campo campo-checkbox">
               <input type="checkbox" id="novoAtivo" checked>
               <label for="novoAtivo">Mostrar no site</label>
@@ -1459,29 +1719,60 @@
 
     <!-- ================= Aba: Roteiros ================= -->
     <section id="painelRoteiros" class="painel-tab oculto">
-      <div class="cartao bloco-roteiros-topo" style="display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;">
-        <div>
-          <h3>📜 Roteiros</h3>
-          <p>Guarde os roteiros que você quer ter por perto, seus e de outras pessoas, com etiqueta pra você separar.</p>
+      <div class="cartao bloco-roteiros-topo">
+        <h3>📜 Roteiros</h3>
+        <p>Cole o link de um reel e eu transcrevo. Serve pros seus e pros das outras, com etiqueta pra você separar.</p>
+      </div>
+
+      <div class="cartao bloco-config-roteiro">
+        <div class="config-roteiro-linha">
+          <div class="campo" style="flex: 1; min-width: 240px;">
+            <label for="chaveSupadata">Chave da Supadata</label>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <input type="password" id="chaveSupadata" placeholder="Cole a API key aqui" autocomplete="off" style="flex: 1; min-width: 200px;">
+              <button class="botao botao-primario" id="botaoSalvarChaveSupadata">Salvar</button>
+            </div>
+          </div>
+          <div class="saldo-supadata" id="saldoSupadata"></div>
         </div>
-        <button class="botao botao-primario" id="botaoEscreverManualRoteiro">+ Escrever na mão</button>
+        <p class="ajuda-roteiro" id="ajudaChaveSupadata"></p>
+      </div>
+
+      <div class="cartao formulario-roteiro">
+        <div class="grade-roteiro-topo">
+          <div class="campo">
+            <label for="linkRoteiro">Link do vídeo</label>
+            <input type="text" id="linkRoteiro" placeholder="Cole aqui: instagram.com/reel/... · tiktok.com/... · youtube.com/..." autocomplete="off">
+          </div>
+          <div class="campo">
+            <label for="deQuemRoteiro">De quem é</label>
+            <select id="deQuemRoteiro">
+              <option value="outra">De outra pessoa</option>
+              <option value="minha">Meu</option>
+            </select>
+          </div>
+        </div>
+        <div class="linha-botoes-roteiro">
+          <button class="botao botao-primario" id="botaoTranscreverRoteiro">▶ Transcrever</button>
+          <button class="botao botao-secundario" id="botaoEscreverManualRoteiro">+ Escrever na mão</button>
+        </div>
+        <div class="faixa oculto" id="avisoRoteiro"></div>
       </div>
 
       <div class="bloco-biblioteca-roteiro">
-        <div style="margin-bottom: 20px;">
-          <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 12px;">
-            <input type="text" id="buscaRoteiro" placeholder="Buscar por título, perfil ou tags..." style="flex: 1; padding: 10px 14px; border: 1px solid var(--borda); border-radius: var(--raio-sm); font-size: 14px;">
-          </div>
-          <div id="filtrosRoteiro" style="display: flex; gap: 6px; flex-wrap: wrap;"></div>
+        <div class="barra-biblioteca-roteiro">
+          <input type="text" id="buscaRoteiro" placeholder="Buscar na transcrição, perfil, título, tags ou notas...">
+          <button class="botao botao-secundario" id="botaoEstudarClaude">🧠 Estudar com o Claude</button>
         </div>
-        <div id="listaRoteiros" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px;"></div>
+        <div class="filtros-roteiro" id="filtrosRoteiro"></div>
+        <div class="lista-roteiros" id="listaRoteiros"></div>
       </div>
 
-      <!-- Modal de edição -->
       <div id="modalEditarRoteiro" class="modal-roteiro oculto">
         <div class="modal-roteiro-conteudo cartao">
-          <h3 style="margin-bottom: 16px;">Editar Roteiro</h3>
-          <form id="formEditarRoteiro" style="display: flex; flex-direction: column; gap: 12px;">
+          <h3 id="tituloModalRoteiro" style="margin-bottom: 16px;">Editar roteiro</h3>
+          <form id="formEditarRoteiro" class="form-roteiro">
+            <div class="faixa oculto" id="avisoModalRoteiro"></div>
             <div class="campo">
               <label for="editarTitulo">Título</label>
               <input type="text" id="editarTitulo">
@@ -1489,8 +1780,8 @@
             <div class="campo">
               <label for="editarDeQuem">De quem</label>
               <select id="editarDeQuem">
-                <option value="minha">Meu</option>
                 <option value="outra">De outra pessoa</option>
+                <option value="minha">Meu</option>
               </select>
             </div>
             <div class="campo">
@@ -1511,19 +1802,24 @@
             </div>
             <div class="campo">
               <label for="editarLegenda">Legenda do post</label>
-              <textarea id="editarLegenda" style="min-height: 60px;"></textarea>
+              <textarea id="editarLegenda"></textarea>
+            </div>
+            <div class="campo">
+              <label for="editarTranscricao">Transcrição</label>
+              <textarea id="editarTranscricao" class="area-transcricao"></textarea>
             </div>
             <div class="campo">
               <label for="editarObs">Notas minhas</label>
-              <textarea id="editarObs" style="min-height: 60px;"></textarea>
+              <textarea id="editarObs"></textarea>
             </div>
-            <div style="display: flex; gap: 8px; margin-top: 12px;">
+            <div class="linha-botoes-roteiro">
               <button type="submit" class="botao botao-primario">Salvar</button>
               <button type="button" class="botao botao-secundario" id="botaoCancelarEdicao">Cancelar</button>
             </div>
           </form>
         </div>
       </div>
+
     </section>
   </main>
 
@@ -1950,6 +2246,12 @@
                 <polyline points="6 9 12 15 18 9"></polyline>
               </svg>
             </button>
+            <div class="acoes-rapidas-video">
+              <label class="toggle-rapido"><input type="checkbox" data-ativo-rapido="${video.id}" ${video.ativo ? 'checked' : ''}> Mostrar no site</label>
+              <button type="button" class="botao botao-secundario botao-pequeno" data-mover-video="${video.id}" data-direcao="-1" ${indice === 0 ? 'disabled' : ''}>↑ Subir</button>
+              <button type="button" class="botao botao-secundario botao-pequeno" data-mover-video="${video.id}" data-direcao="1" ${indice === cacheVideos.length - 1 ? 'disabled' : ''}>↓ Descer</button>
+              <button type="button" class="botao botao-perigo botao-pequeno" data-excluir-video="${video.id}">Excluir</button>
+            </div>
             <div class="mensagem-detalhe oculto" id="detalheVideo${video.id}">
               <form class="grade-campos-video" style="margin-top:16px;" onsubmit="return false;">
                 <div class="campo">
@@ -1968,10 +2270,7 @@
                   <label for="videoId${video.id}">ID do vídeo no YouTube</label>
                   <input type="text" id="videoId${video.id}" value="${escaparHtml(video.video_id || '')}" required>
                 </div>
-                <div class="campo">
-                  <label for="capa${video.id}">Capa personalizada (opcional)</label>
-                  <input type="text" id="capa${video.id}" value="${escaparHtml(video.capa || '')}">
-                </div>
+                ${blocoCapaHtml(video.id, urlCapaMostrada(video))}
                 <div class="campo campo-checkbox">
                   <input type="checkbox" id="ativo${video.id}" ${video.ativo ? 'checked' : ''}>
                   <label for="ativo${video.id}">Mostrar no site</label>
@@ -1979,9 +2278,6 @@
               </form>
               <div class="video-detalhe-acoes">
                 <button type="button" class="botao botao-primario" data-salvar-video="${video.id}">Salvar</button>
-                <button type="button" class="botao botao-secundario" data-mover-video="${video.id}" data-direcao="-1" ${indice === 0 ? 'disabled' : ''}>↑ Subir</button>
-                <button type="button" class="botao botao-secundario" data-mover-video="${video.id}" data-direcao="1" ${indice === cacheVideos.length - 1 ? 'disabled' : ''}>↓ Descer</button>
-                <button type="button" class="botao botao-perigo" data-excluir-video="${video.id}">Excluir</button>
               </div>
             </div>
           </div>
@@ -2009,10 +2305,130 @@
         });
       });
 
+      container.querySelectorAll('[data-ativo-rapido]').forEach((campo) => {
+        campo.addEventListener('change', () => alternarAtivoVideo(campo.getAttribute('data-ativo-rapido'), campo.checked));
+      });
+
       container.querySelectorAll('[data-excluir-video]').forEach((botao) => {
         botao.addEventListener('click', () => excluirVideo(botao.getAttribute('data-excluir-video')));
       });
     }
+
+    const capasPendentes = {};
+    const TIPOS_CAPA = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp' };
+    const TAMANHO_MAX_CAPA = 5 * 1024 * 1024;
+
+    function blocoCapaHtml(chave, urlMostrada) {
+      const previa = urlMostrada
+        ? `<img src="${escaparAtributo(urlMostrada)}" alt="Prévia da capa">`
+        : '<span>Sem capa própria: usa a miniatura do YouTube</span>';
+      return `
+        <div class="bloco-capa" data-chave-capa="${escaparAtributo(chave)}">
+          <span class="rotulo-campo">Capa personalizada (opcional)</span>
+          <div class="previa-capa">${previa}</div>
+          <div class="acoes-capa">
+            <label class="botao botao-secundario botao-pequeno">Selecionar imagem
+              <input type="file" accept="image/jpeg,image/png,image/webp" data-selecionar-capa="${escaparAtributo(chave)}" hidden>
+            </label>
+            <button type="button" class="botao botao-secundario botao-pequeno" data-remover-capa="${escaparAtributo(chave)}">Remover capa</button>
+          </div>
+        </div>`;
+    }
+
+    function urlCapaMostrada(video) {
+      const pendente = capasPendentes[video.id];
+      if (!pendente) return video.capa || null;
+      return pendente.remover ? null : pendente.previewUrl;
+    }
+
+    function atualizarPreviaCapa(chave, url) {
+      const previa = document.querySelector(`[data-chave-capa="${chave}"] .previa-capa`);
+      if (!previa) return;
+      previa.innerHTML = url
+        ? `<img src="${escaparAtributo(url)}" alt="Prévia da capa">`
+        : '<span>Sem capa própria: usa a miniatura do YouTube</span>';
+    }
+
+    function escolherCapa(chave, arquivo) {
+      if (!arquivo) return;
+      if (!TIPOS_CAPA[arquivo.type]) {
+        mostrarMensagemArea('Escolha uma imagem JPG, PNG ou WebP.', 'erro');
+        return;
+      }
+      if (arquivo.size > TAMANHO_MAX_CAPA) {
+        mostrarMensagemArea('A imagem passa de 5 MB. Escolha uma menor.', 'erro');
+        return;
+      }
+      const previewUrl = URL.createObjectURL(arquivo);
+      capasPendentes[chave] = { arquivo, remover: false, previewUrl };
+      atualizarPreviaCapa(chave, previewUrl);
+    }
+
+    function removerCapa(chave) {
+      capasPendentes[chave] = { arquivo: null, remover: true, previewUrl: null };
+      atualizarPreviaCapa(chave, null);
+    }
+
+    function limparCapaPendente(chave) {
+      const pendente = capasPendentes[chave];
+      if (pendente?.previewUrl) URL.revokeObjectURL(pendente.previewUrl);
+      delete capasPendentes[chave];
+      atualizarPreviaCapa(chave, null);
+    }
+
+    async function resolverCapa(chave, capaAtual) {
+      const pendente = capasPendentes[chave];
+      if (!pendente) return capaAtual || null;
+      if (pendente.remover) return null;
+      const caminho = `${crypto.randomUUID()}.${TIPOS_CAPA[pendente.arquivo.type]}`;
+      const bucket = Auth.sb.storage.from('capas-portfolio');
+      const { error } = await bucket.upload(caminho, pendente.arquivo, {
+        contentType: pendente.arquivo.type,
+        cacheControl: '31536000',
+      });
+      if (error) throw error;
+      return bucket.getPublicUrl(caminho).data.publicUrl;
+    }
+
+    async function apagarCapaAntiga(urlAntiga) {
+      const marcador = '/capas-portfolio/';
+      if (!urlAntiga || !urlAntiga.includes(marcador)) return;
+      const caminho = urlAntiga.split(marcador)[1];
+      await Auth.sb.storage.from('capas-portfolio').remove([caminho]);
+    }
+
+    async function alternarAtivoVideo(id, ativo) {
+      try {
+        const { error } = await Auth.sb
+          .from('portfolio_videos')
+          .update({ ativo, updated_at: new Date().toISOString() })
+          .eq('id', id);
+        if (error) throw error;
+        mostrarMensagemArea(ativo ? 'Vídeo visível no site.' : 'Vídeo oculto do site.', 'sucesso');
+        await recarregarVideos();
+      } catch (erro) {
+        console.error(erro);
+        mostrarMensagemArea('Não foi possível mudar a visibilidade agora.', 'erro');
+        await recarregarVideos();
+      }
+    }
+
+    function tratarCapaEvento(evento) {
+      const alvo = evento.target;
+      if (evento.type === 'change' && alvo.matches('[data-selecionar-capa]')) {
+        escolherCapa(alvo.dataset.selecionarCapa, alvo.files[0]);
+        alvo.value = '';
+      }
+      if (evento.type === 'click' && alvo.matches('[data-remover-capa]')) {
+        removerCapa(alvo.dataset.removerCapa);
+      }
+    }
+
+    ['listaVideosAdmin', 'novaCapaCampo'].forEach((id) => {
+      const area = document.getElementById(id);
+      area.addEventListener('change', tratarCapaEvento);
+      area.addEventListener('click', tratarCapaEvento);
+    });
 
     async function recarregarVideos() {
       try {
@@ -2049,7 +2465,6 @@
         if (match) videoId = match[1];
       }
 
-      const capa = document.getElementById('capa' + id).value.trim();
       const ativo = document.getElementById('ativo' + id).checked;
 
       if (!titulo || !marca || !videoId) {
@@ -2058,6 +2473,8 @@
       }
 
       try {
+        const capaAntiga = cacheVideos.find((v) => v.id === id)?.capa || null;
+        const capaFinal = await resolverCapa(id, capaAntiga);
         const { error } = await Auth.sb
           .from('portfolio_videos')
           .update({
@@ -2065,12 +2482,14 @@
             marca,
             categoria,
             video_id: videoId,
-            capa: capa || null,
+            capa: capaFinal,
             ativo,
             updated_at: new Date().toISOString(),
           })
           .eq('id', id);
         if (error) throw error;
+        if (capaFinal !== capaAntiga) await apagarCapaAntiga(capaAntiga);
+        delete capasPendentes[id];
         mostrarMensagemArea('Vídeo atualizado.', 'sucesso');
         await recarregarVideos();
       } catch (erro) {
@@ -2119,6 +2538,7 @@
     // Aba Vídeos — formulário de "+ Novo vídeo"
     // ------------------------------------------------------------
     document.getElementById('novaCategoria').innerHTML = opcoesCategoriaHtml();
+    document.getElementById('novaCapaCampo').innerHTML = blocoCapaHtml('novo', null);
 
     const blocoNovoVideo = document.getElementById('blocoNovoVideo');
     const formNovoVideo = document.getElementById('formNovoVideo');
@@ -2129,6 +2549,7 @@
 
     document.getElementById('botaoCancelarNovoVideo').addEventListener('click', () => {
       formNovoVideo.reset();
+      limparCapaPendente('novo');
       blocoNovoVideo.classList.add('oculto');
     });
 
@@ -2159,7 +2580,6 @@
         if (match) videoId = match[1];
       }
 
-      const capa = document.getElementById('novaCapa').value.trim();
       const ativo = document.getElementById('novoAtivo').checked;
 
       const botaoSalvar = document.getElementById('botaoSalvarNovoVideo');
@@ -2168,12 +2588,13 @@
 
       try {
         const maiorOrdem = cacheVideos.reduce((max, v) => Math.max(max, v.ordem), 0);
+        const capaFinal = await resolverCapa('novo', null);
         const { error } = await Auth.sb.from('portfolio_videos').insert({
           titulo,
           marca,
           categoria,
           video_id: videoId,
-          capa: capa || null,
+          capa: capaFinal,
           ativo,
           ordem: maiorOrdem + 1,
         });
@@ -2181,6 +2602,7 @@
 
         mostrarMensagemArea('Vídeo adicionado.', 'sucesso');
         formNovoVideo.reset();
+        limparCapaPendente('novo');
         blocoNovoVideo.classList.add('oculto');
         await recarregarVideos();
       } catch (erro) {
@@ -3063,198 +3485,729 @@
     // ABA: ROTEIROS
     // ============================================================
 
-    let cacheRoteiros = [];
-    let roteiroBuscaAtiva = '';
+    const SUPADATA_URL = 'https://api.supadata.ai/v1';
+    const CHAVE_SUPADATA = 'supadata_api_key';
+    const TEMPO_MAXIMO_TRANSCRICAO_MS = 6 * 60 * 1000;
+    const MSG_SEM_CHAVE = 'Ainda não tem chave salva. Crie uma conta grátis em supadata.ai (100 créditos por mês, sem cartão), copie a API key e cole no campo "Chave da Supadata" aqui em cima.';
+    const MSG_SEM_FALA = 'Não achei fala nesse vídeo. Costuma ser reel só com música ou só com texto na tela.';
 
-    async function buscarRoteiros() {
-      const { data, error } = await Auth.sb
-        .from('roteiros')
-        .select('*')
-        .order('created_at', { ascending: false });
-      if (error) throw error;
-      return data || [];
+    let cacheRoteiros = [];
+    let filtroRoteiro = 'todos';
+    let buscaRoteiro = '';
+    let transcrevendo = false;
+
+    const esperar = (ms) => new Promise((resolver) => setTimeout(resolver, ms));
+    const escaparAtributo = (texto) => escaparHtml(texto).replace(/"/g, '&quot;');
+
+    async function usuarioIdAtual() {
+      const { data: { session } } = await Auth.sb.auth.getSession();
+      const id = session?.user?.id;
+      if (!id) throw new Error('Usuário não autenticado');
+      return id;
     }
 
-    function renderRoteiros(roteiros = cacheRoteiros) {
-      const container = document.getElementById('listaRoteiros');
+    function mostrarAvisoRoteiro(texto, tipo = 'info', acao = null) {
+      const aviso = document.getElementById('avisoRoteiro');
+      aviso.className = `faixa faixa-${tipo}`;
+      aviso.replaceChildren();
+      const trecho = document.createElement('span');
+      trecho.textContent = texto;
+      aviso.appendChild(trecho);
+      if (acao) {
+        const botao = document.createElement('button');
+        botao.className = 'botao botao-secundario botao-pequeno';
+        botao.textContent = acao.texto;
+        botao.addEventListener('click', acao.onClick);
+        aviso.appendChild(botao);
+      }
+    }
 
-      let roteirosRender = roteiros;
-      if (roteiroBuscaAtiva) {
-        const termo = roteiroBuscaAtiva.toLowerCase();
-        roteirosRender = roteiros.filter(r =>
-          (r.perfil && r.perfil.toLowerCase().includes(termo)) ||
-          (r.titulo && r.titulo.toLowerCase().includes(termo)) ||
-          (r.tags && r.tags.some(t => t.toLowerCase().includes(termo)))
-        );
+    function mostrarAvisoModal(texto, tipo) {
+      const aviso = document.getElementById('avisoModalRoteiro');
+      aviso.textContent = texto;
+      aviso.className = tipo ? `faixa faixa-${tipo}` : 'faixa oculto';
+    }
+
+    function limparLinkRoteiro(bruto) {
+      const texto = (bruto || '').trim();
+      if (!/^https?:\/\//i.test(texto)) {
+        throw new Error('Cole o link completo, começando com https://');
+      }
+      let url;
+      try {
+        url = new URL(texto);
+      } catch {
+        throw new Error('Esse link não parece válido. Confere se copiou certinho.');
+      }
+      url.hash = '';
+      if (url.hostname.includes('instagram.com')) {
+        url.pathname = url.pathname.replace('/reels/', '/reel/');
+        url.search = '';
+      } else if (url.hostname.includes('youtube.com') || url.hostname === 'youtu.be') {
+        const v = url.searchParams.get('v');
+        url.search = v ? `?v=${encodeURIComponent(v)}` : '';
+      } else {
+        url.search = '';
+      }
+      return url.toString();
+    }
+
+    function detectarFonteRoteiro(link) {
+      let host;
+      try {
+        host = new URL(link).hostname;
+      } catch {
+        return null;
+      }
+      if (host.endsWith('instagram.com')) return 'instagram';
+      if (host.endsWith('tiktok.com')) return 'tiktok';
+      if (host.endsWith('youtube.com') || host === 'youtu.be') return 'youtube';
+      return null;
+    }
+
+    function extrairPerfilRoteiro(link, fonte) {
+      const caminho = new URL(link).pathname;
+      if (fonte === 'instagram') return caminho.match(/^\/([^\/]+)\/(reel|p)\//)?.[1] ?? null;
+      if (fonte === 'tiktok') return caminho.match(/^\/@([^\/]+)/)?.[1] ?? null;
+      return null;
+    }
+
+    function idYoutubeRoteiro(link) {
+      return link.match(/(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/)?.[1] ?? null;
+    }
+
+    function capaInstagramRoteiro(link) {
+      const id = link.match(/\/(?:reel|p)\/([A-Za-z0-9_-]+)/)?.[1];
+      if (!id) return null;
+      const alvo = encodeURIComponent(`instagram.com/p/${id}/media/?size=l`);
+      return `https://images.weserv.nl/?url=${alvo}&w=480&h=600&fit=cover&output=webp`;
+    }
+
+    async function capaTiktokRoteiro(link) {
+      try {
+        const resposta = await fetch(`https://www.tiktok.com/oembed?url=${encodeURIComponent(link)}`);
+        if (!resposta.ok) return null;
+        const dados = await resposta.json();
+        return dados.thumbnail_url || null;
+      } catch {
+        return null;
+      }
+    }
+
+    async function capaDoRoteiro({ fonte, url }) {
+      if (fonte === 'instagram') return capaInstagramRoteiro(url);
+      if (fonte === 'youtube') {
+        const id = idYoutubeRoteiro(url);
+        return id ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` : null;
+      }
+      if (fonte === 'tiktok') return capaTiktokRoteiro(url);
+      return null;
+    }
+
+    function montarEmbedRoteiro(linha) {
+      const link = linha.url || '';
+      let src = null;
+      let altura = 560;
+      if (linha.fonte === 'instagram') {
+        const m = link.match(/\/(reel|p)\/([A-Za-z0-9_-]+)/);
+        if (m) src = `https://www.instagram.com/${m[1]}/${m[2]}/embed`;
+      } else if (linha.fonte === 'youtube') {
+        const id = idYoutubeRoteiro(link);
+        if (id) {
+          src = `https://www.youtube.com/embed/${id}`;
+          altura = 400;
+        }
+      } else if (linha.fonte === 'tiktok') {
+        const m = link.match(/\/video\/(\d+)/);
+        if (m) src = `https://www.tiktok.com/embed/v2/${m[1]}`;
+      }
+      if (!src) return null;
+      const iframe = document.createElement('iframe');
+      iframe.src = src;
+      iframe.width = '100%';
+      iframe.height = String(altura);
+      iframe.style.border = '0';
+      iframe.allowFullscreen = true;
+      iframe.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture');
+      return iframe;
+    }
+
+    async function chamarSupadata(chave, caminho, params = null) {
+      const url = `${SUPADATA_URL}${caminho}${params ? `?${params.toString()}` : ''}`;
+      let resposta;
+      try {
+        resposta = await fetch(url, { headers: { 'x-api-key': chave } });
+      } catch {
+        throw new Error('Não consegui falar com a Supadata. Confere sua internet e tenta de novo.');
+      }
+      const corpo = await resposta.json().catch(() => ({}));
+      return { status: resposta.status, corpo };
+    }
+
+    function mensagemErroSupadata(status, corpo) {
+      const codigo = corpo?.error || '';
+      const detalhes = String(corpo?.details || '');
+      if (status === 401 || status === 403) {
+        return 'A Supadata não aceitou a chave. Confere se colou a chave certa, sem espaço.';
+      }
+      if (codigo === 'limit-exceeded') {
+        if (/usage/i.test(detalhes)) return 'Os créditos desse mês da Supadata acabaram. Eles voltam no mês que vem.';
+        if (/rate/i.test(detalhes)) return 'Muitas chamadas seguidas. Espera 1 minuto e tenta de novo.';
+        return 'A Supadata está ocupada agora. Tenta de novo em 1 minuto.';
+      }
+      if (codigo === 'transcript-unavailable') {
+        return 'Não consegui ouvir esse vídeo. Pode ser privado ou ter sido apagado.';
+      }
+      return 'A Supadata não conseguiu transcrever esse vídeo agora.';
+    }
+
+    function verificarRespostaSupadata(status, corpo) {
+      if (status >= 400 || (status !== 202 && corpo?.error)) {
+        throw new Error(mensagemErroSupadata(status, corpo));
+      }
+    }
+
+    function normalizarTranscricao(conteudo) {
+      if (Array.isArray(conteudo)) {
+        const texto = conteudo.map((trecho) => trecho.text).join(' ').replace(/\s+/g, ' ').trim();
+        return { texto, segmentos: conteudo };
+      }
+      return { texto: String(conteudo ?? '').trim(), segmentos: null };
+    }
+
+    async function pedirTranscricao(chave, link) {
+      const params = new URLSearchParams({ url: link, mode: 'auto', text: 'true', lang: 'pt' });
+      let { status, corpo } = await chamarSupadata(chave, '/transcript', params);
+
+      if (status === 202 && corpo.jobId) {
+        const jobId = corpo.jobId;
+        const limite = Date.now() + TEMPO_MAXIMO_TRANSCRICAO_MS;
+        while (true) {
+          await esperar(5000);
+          if (Date.now() > limite) {
+            throw new Error('Demorou mais de 6 minutos. Tenta de novo em instantes.');
+          }
+          ({ status, corpo } = await chamarSupadata(chave, `/transcript/${encodeURIComponent(jobId)}`));
+          verificarRespostaSupadata(status, corpo);
+          if (corpo.status === 'completed') return normalizarTranscricao(corpo.content);
+          if (corpo.status === 'failed') throw new Error('A Supadata não conseguiu transcrever esse vídeo.');
+        }
       }
 
-      if (roteirosRender.length === 0) {
-        container.innerHTML = '<div class="cartao" style="grid-column: 1/-1; padding: 40px; text-align: center;"><p class="texto-vazio">Nenhum roteiro encontrado.</p></div>';
+      verificarRespostaSupadata(status, corpo);
+      return normalizarTranscricao(corpo.content);
+    }
+
+    async function obterChaveSupadata() {
+      const { data, error } = await Auth.sb
+        .from('configuracoes')
+        .select('valor')
+        .eq('chave', CHAVE_SUPADATA)
+        .maybeSingle();
+      if (error) throw error;
+      return data?.valor || null;
+    }
+
+    async function atualizarBlocoChaveSupadata() {
+      const ajuda = document.getElementById('ajudaChaveSupadata');
+      const saldo = document.getElementById('saldoSupadata');
+      try {
+        const chave = await obterChaveSupadata();
+        if (!chave) {
+          ajuda.textContent = 'Nenhuma chave salva ainda.';
+          saldo.textContent = '';
+          return;
+        }
+        ajuda.textContent = `Chave salva: ••••${chave.slice(-4)}`;
+        const { status, corpo } = await chamarSupadata(chave, '/me');
+        saldo.textContent = status < 400
+          ? `${corpo.usedCredits ?? 0} de ${corpo.maxCredits ?? 0} créditos usados`
+          : 'Não consegui ler o saldo.';
+      } catch (erro) {
+        console.error(erro);
+        saldo.textContent = 'Não consegui ler o saldo.';
+      }
+    }
+
+    document.getElementById('botaoSalvarChaveSupadata').addEventListener('click', async () => {
+      const campo = document.getElementById('chaveSupadata');
+      const chave = campo.value.trim();
+      if (!chave) {
+        mostrarAvisoRoteiro('Cola a chave antes de salvar.', 'erro');
+        return;
+      }
+      try {
+        const { status } = await chamarSupadata(chave, '/me');
+        if (status >= 400) {
+          mostrarAvisoRoteiro('A Supadata não aceitou essa chave. Confere se copiou a API key inteira.', 'erro');
+          return;
+        }
+        const userId = await usuarioIdAtual();
+        const { error } = await Auth.sb.from('configuracoes').upsert(
+          { chave: CHAVE_SUPADATA, valor: chave, user_id: userId, updated_at: new Date().toISOString() },
+          { onConflict: 'chave' }
+        );
+        if (error) throw error;
+        campo.value = '';
+        mostrarAvisoRoteiro('Chave salva. Agora é só transcrever.', 'sucesso');
+        await atualizarBlocoChaveSupadata();
+      } catch (erro) {
+        console.error(erro);
+        mostrarAvisoRoteiro('Não consegui salvar a chave. Tenta de novo.', 'erro');
+      }
+    });
+
+    async function atualizarLinhaRoteiro(id, campos) {
+      const { error } = await Auth.sb
+        .from('roteiros')
+        .update({ ...campos, updated_at: new Date().toISOString() })
+        .eq('id', id);
+      if (error) throw error;
+    }
+
+    async function executarTranscricaoRoteiro(linha) {
+      if (transcrevendo) return;
+      transcrevendo = true;
+      const inicio = Date.now();
+      const mostrarEspera = () => {
+        const segundos = Math.floor((Date.now() - inicio) / 1000);
+        mostrarAvisoRoteiro(`Ouvindo o vídeo… ${segundos}s. Costuma levar de 3 a 4 minutos, pode deixar a aba aberta.`, 'info');
+      };
+      mostrarEspera();
+      const temporizador = setInterval(mostrarEspera, 5000);
+
+      try {
+        const chave = await obterChaveSupadata();
+        if (!chave) throw new Error(MSG_SEM_CHAVE);
+
+        await atualizarLinhaRoteiro(linha.id, { status: 'processando', erro: null });
+        await recarregarRoteiros();
+
+        const { texto, segmentos } = await pedirTranscricao(chave, linha.url);
+        if (!texto) {
+          await atualizarLinhaRoteiro(linha.id, { status: 'falhou', erro: MSG_SEM_FALA });
+          await recarregarRoteiros();
+          mostrarAvisoRoteiro(MSG_SEM_FALA, 'erro', {
+            texto: 'Guardar assim mesmo',
+            onClick: () => guardarSemTranscricao(linha.id),
+          });
+          return;
+        }
+
+        await atualizarLinhaRoteiro(linha.id, { transcricao: texto, segmentos, status: 'pronto', erro: null });
+        await recarregarRoteiros();
+        abrirModalRoteiro(cacheRoteiros.find((r) => r.id === linha.id), 'Pronto. Revisa, dá um nome e salva.');
+      } catch (erro) {
+        console.error(erro);
+        await atualizarLinhaRoteiro(linha.id, { status: 'falhou', erro: erro.message }).catch(() => {});
+        await recarregarRoteiros();
+        mostrarAvisoRoteiro(erro.message, 'erro');
+      } finally {
+        clearInterval(temporizador);
+        transcrevendo = false;
+      }
+    }
+
+    async function guardarSemTranscricao(id) {
+      try {
+        await atualizarLinhaRoteiro(id, { status: 'pronto', erro: null });
+        await recarregarRoteiros();
+        abrirModalRoteiro(cacheRoteiros.find((r) => r.id === id), 'Guardado sem transcrição. Escreve o texto aqui se quiser.');
+      } catch (erro) {
+        console.error(erro);
+        mostrarAvisoRoteiro('Não consegui guardar. Tenta de novo.', 'erro');
+      }
+    }
+
+    async function iniciarTranscricaoRoteiro() {
+      if (transcrevendo) {
+        mostrarAvisoRoteiro('Já tem uma transcrição rodando. Espera ela terminar.', 'info');
+        return;
+      }
+      let link;
+      try {
+        link = limparLinkRoteiro(document.getElementById('linkRoteiro').value);
+      } catch (erro) {
+        mostrarAvisoRoteiro(erro.message, 'erro');
+        return;
+      }
+      const fonte = detectarFonteRoteiro(link);
+      if (!fonte) {
+        mostrarAvisoRoteiro('Só consigo transcrever links de Instagram, TikTok ou YouTube.', 'erro');
         return;
       }
 
-      console.log('INICIANDO MAP COM', roteirosRender.length, 'items');
-      container.innerHTML = roteirosRender.map(r => {
-        console.log('MAP ITEM:', r.id, r.fonte);
-        const dataFormatada = r.postado_em ? new Date(r.postado_em).toLocaleDateString('pt-BR') : '';
-        const etiqueta = r.de_quem === 'minha' ? '<span class="etiqueta-roteiro etiqueta-minha">Meu</span>' : '<span class="etiqueta-roteiro etiqueta-outra">De outra</span>';
-
-        let iconeCapa = '▶';
-        if (r.status === 'processando') iconeCapa = '⏳';
-        if (r.status === 'falhou') iconeCapa = '⚠';
-
-        const emojiPlataforma = r.fonte === 'youtube' ? '📺' : r.fonte === 'tiktok' ? '🎵' : '📸';
-
-        let srcImg = '';
-        console.log('DEBUG: r.fonte =', r.fonte, 'r.url =', r.url);
-        if (r.capa_url) {
-          srcImg = r.capa_url;
-        } else if (r.fonte === 'youtube') {
-          const matchYt = r.url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/);
-          if (matchYt?.[1]) srcImg = `https://i.ytimg.com/vi/${matchYt[1]}/hqdefault.jpg`;
-        } else if (r.fonte === 'instagram') {
-          const matchIg = r.url.match(/\/(?:reel|p)\/([a-zA-Z0-9_-]+)/);
-          console.log('DEBUG instagram: matchIg =', matchIg?.[1]);
-          if (matchIg?.[1]) {
-            const tipoPost = r.url.includes('/reel/') ? 'reel' : 'p';
-            srcImg = `https://images.weserv.nl/?url=https://www.instagram.com/${tipoPost}/${matchIg[1]}/media/?size=l`;
-          }
+      try {
+        const chave = await obterChaveSupadata();
+        if (!chave) {
+          mostrarAvisoRoteiro(MSG_SEM_CHAVE, 'info');
+          return;
         }
-        console.log('DEBUG final srcImg =', srcImg);
 
-        return `
-          <div class="cartao card-roteiro">
-            <div class="card-roteiro-capa" data-emoji="${emojiPlataforma}">
-              ${srcImg ? `<img src="${srcImg}" alt="capa" class="card-roteiro-capa-img" onerror="this.style.display='none'">` : ''}
-              <button onclick="abrirEmbed('${r.id}')" title="Ver vídeo">${iconeCapa}</button>
-            </div>
-            <div class="card-roteiro-info">
-              <div class="card-roteiro-titulo">${escaparHtml(r.titulo || 'Sem título')}</div>
-              ${r.perfil ? `<div class="card-roteiro-perfil">@${escaparHtml(r.perfil)}</div>` : ''}
-              <div class="card-roteiro-meta">
-                ${etiqueta}
-                <span class="card-roteiro-fonte">${r.fonte === 'youtube' ? '📺' : r.fonte === 'tiktok' ? '🎵' : '📸'} ${r.fonte}</span>
-                ${dataFormatada ? `<span class="card-roteiro-data">${dataFormatada}</span>` : ''}
-              </div>
-              <div class="card-roteiro-acoes">
-                <button class="botao botao-secundario" onclick="abrirModalEdicao('${r.id}')">Editar</button>
-                <button class="botao botao-perigo" onclick="apagarRoteiro('${r.id}')">Apagar</button>
-              </div>
-            </div>
-          </div>
-        `;
-      }).join('');
+        const { data: iguais, error: erroBusca } = await Auth.sb
+          .from('roteiros')
+          .select('*')
+          .eq('url', link)
+          .limit(1);
+        if (erroBusca) throw erroBusca;
+
+        let linha = iguais?.[0];
+        if (linha) {
+          if (!confirm('Esse link já está na sua biblioteca. Quer transcrever de novo?')) return;
+        } else {
+          const userId = await usuarioIdAtual();
+          const { data, error } = await Auth.sb
+            .from('roteiros')
+            .insert({
+              user_id: userId,
+              fonte,
+              url: link,
+              perfil: extrairPerfilRoteiro(link, fonte),
+              de_quem: document.getElementById('deQuemRoteiro').value,
+              status: 'processando',
+              capa_url: await capaDoRoteiro({ fonte, url: link }),
+            })
+            .select()
+            .single();
+          if (error) throw error;
+          linha = data;
+        }
+
+        document.getElementById('linkRoteiro').value = '';
+        await executarTranscricaoRoteiro(linha);
+      } catch (erro) {
+        console.error(erro);
+        mostrarAvisoRoteiro('Não consegui começar a transcrição. Tenta de novo.', 'erro');
+      }
     }
 
-    window.abrirEmbed = function(id) {
-      const roteiro = cacheRoteiros.find(r => r.id === id);
-      if (!roteiro) return;
+    document.getElementById('botaoTranscreverRoteiro').addEventListener('click', iniciarTranscricaoRoteiro);
+    document.getElementById('linkRoteiro').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') iniciarTranscricaoRoteiro();
+    });
 
-      let embedHtml = '';
-      if (roteiro.fonte === 'instagram') {
-        embedHtml = `<iframe src="https://www.instagram.com/reel/${roteiro.id}/embed/" width="100%" height="600"></iframe>`;
-      } else if (roteiro.fonte === 'youtube') {
-        const videoId = roteiro.url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/)?.[1];
-        if (videoId) embedHtml = `<iframe width="100%" height="400" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
-      } else if (roteiro.fonte === 'tiktok') {
-        const tiktokId = roteiro.url.match(/video\/(\d+)/)?.[1];
-        if (tiktokId) embedHtml = `<iframe src="https://www.tiktok.com/embed/v2/${tiktokId}" width="100%" height="500"></iframe>`;
+    async function recarregarRoteiros() {
+      try {
+        const { data, error } = await Auth.sb
+          .from('roteiros')
+          .select('*')
+          .order('created_at', { ascending: false });
+        if (error) throw error;
+        cacheRoteiros = data || [];
+        renderFiltrosRoteiro();
+        renderRoteiros();
+        preencherCapasRoteiros();
+      } catch (erro) {
+        console.error(erro);
+        mostrarAvisoRoteiro('Não consegui carregar os roteiros agora.', 'erro');
+      }
+    }
+
+    let preenchendoCapas = false;
+
+    async function preencherCapasRoteiros() {
+      if (preenchendoCapas) return;
+      const pendentes = cacheRoteiros.filter((r) => r.url && r.fonte !== 'manual' && !r.capa_url);
+      if (pendentes.length === 0) return;
+      preenchendoCapas = true;
+      try {
+        for (const linha of pendentes) {
+          const capa = await capaDoRoteiro(linha);
+          if (!capa) continue;
+          await atualizarLinhaRoteiro(linha.id, { capa_url: capa });
+          linha.capa_url = capa;
+        }
+        renderRoteiros();
+      } catch (erro) {
+        console.error(erro);
+      } finally {
+        preenchendoCapas = false;
+      }
+    }
+
+    function roteirosVisiveis() {
+      let lista = cacheRoteiros;
+      if (filtroRoteiro === 'minha' || filtroRoteiro === 'outra') {
+        lista = lista.filter((r) => r.de_quem === filtroRoteiro);
+      } else if (filtroRoteiro.startsWith('tag:')) {
+        const tag = filtroRoteiro.slice(4);
+        lista = lista.filter((r) => (r.tags || []).includes(tag));
+      }
+      if (buscaRoteiro) {
+        const termo = buscaRoteiro.toLowerCase();
+        lista = lista.filter((r) =>
+          [r.transcricao, r.perfil, r.titulo, r.obs, ...(r.tags || [])]
+            .some((campo) => campo && campo.toLowerCase().includes(termo))
+        );
+      }
+      return lista;
+    }
+
+    function renderFiltrosRoteiro() {
+      const tags = [...new Set(cacheRoteiros.flatMap((r) => r.tags || []))].sort();
+      const opcoes = [
+        ['todos', 'Todos'],
+        ['minha', 'Meus'],
+        ['outra', 'De outras'],
+        ...tags.map((tag) => [`tag:${tag}`, `#${tag}`]),
+      ];
+      document.getElementById('filtrosRoteiro').innerHTML = opcoes.map(([valor, rotulo]) =>
+        `<button class="chip-roteiro${filtroRoteiro === valor ? ' ativo' : ''}" data-filtro="${escaparAtributo(valor)}">${escaparHtml(rotulo)}</button>`
+      ).join('');
+    }
+
+    function cardRoteiro(r) {
+      const emoji = { instagram: '📸', tiktok: '🎵', youtube: '📺' }[r.fonte] || '✍️';
+      const nomeFonte = { instagram: 'Instagram', tiktok: 'TikTok', youtube: 'YouTube', manual: 'Manual' }[r.fonte] || r.fonte;
+      const etiqueta = r.de_quem === 'minha'
+        ? '<span class="etiqueta-roteiro etiqueta-minha">Meu</span>'
+        : '<span class="etiqueta-roteiro etiqueta-outra">De outra</span>';
+      const data = r.postado_em ? new Date(`${r.postado_em}T00:00:00`).toLocaleDateString('pt-BR') : '';
+      const podeVer = r.fonte !== 'manual' && Boolean(r.url);
+      const id = escaparAtributo(r.id);
+
+      const capaImg = r.capa_url
+        ? `<img src="${escaparAtributo(r.capa_url)}" alt="" class="card-roteiro-capa-img" loading="lazy" onerror="this.remove()">`
+        : '';
+      const botaoVer = podeVer
+        ? `<button class="botao-ver-capa" data-acao="ver" data-id="${id}"><span class="play-roteiro">▶</span><small>ver vídeo</small></button>`
+        : '';
+
+      const tags = (r.tags || []).map((tag) => `<span>#${escaparHtml(tag)}</span>`).join('');
+
+      let estado = '';
+      if (r.status === 'processando') {
+        estado = '<div class="roteiro-estado roteiro-processando"><span class="relogio-roteiro">⏳</span> Transcrevendo. Se a aba fechou no meio, toca em "Tentar de novo".</div>';
+      } else if (r.status === 'falhou') {
+        estado = `<div class="roteiro-estado roteiro-falhou">⚠️ ${escaparHtml(r.erro || 'Não deu certo.')}</div>`;
       }
 
-      if (embedHtml) {
-        const modal = document.createElement('div');
-        modal.style.cssText = 'position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 200;';
-        modal.innerHTML = `<div style="background: white; border-radius: 12px; padding: 20px; width: 90%; max-width: 700px; position: relative;"><button onclick="this.parentElement.parentElement.remove()" style="position: absolute; top: 10px; right: 10px; background: none; border: none; font-size: 24px; cursor: pointer;">×</button>${embedHtml}</div>`;
-        document.body.appendChild(modal);
+      const acoes = [];
+      if (r.status === 'pronto' && r.transcricao) {
+        acoes.push(`<button class="botao botao-secundario" data-acao="copiar" data-id="${id}">Copiar transcrição</button>`);
       }
-    };
+      if (r.status === 'falhou') {
+        acoes.push(`<button class="botao botao-secundario" data-acao="editar" data-id="${id}">Abrir mesmo assim</button>`);
+      } else if (r.status === 'pronto') {
+        acoes.push(`<button class="botao botao-secundario" data-acao="editar" data-id="${id}">Editar</button>`);
+      }
+      if (r.status !== 'pronto' && podeVer) {
+        acoes.push(`<button class="botao botao-secundario" data-acao="tentar" data-id="${id}">Tentar de novo</button>`);
+      }
+      acoes.push(`<button class="botao botao-secundario" data-acao="apagar" data-id="${id}">Apagar</button>`);
 
-    function abrirModalEdicao(id) {
-      const roteiro = cacheRoteiros.find(r => r.id === id);
-      if (!roteiro) return;
+      return `
+        <div class="cartao card-roteiro">
+          <div class="card-roteiro-capa" data-emoji="${emoji}">
+            ${capaImg}
+            ${botaoVer}
+          </div>
+          <div class="card-roteiro-info">
+            <div class="card-roteiro-titulo">${escaparHtml(r.titulo || 'Sem título')}</div>
+            ${r.perfil ? `<div class="card-roteiro-perfil">@${escaparHtml(r.perfil)}</div>` : ''}
+            <div class="card-roteiro-meta">
+              ${etiqueta}
+              <span class="card-roteiro-fonte">${escaparHtml(nomeFonte)}</span>
+              ${data ? `<span class="card-roteiro-data">${data}</span>` : ''}
+            </div>
+            ${tags ? `<div class="card-roteiro-tags">${tags}</div>` : ''}
+            ${estado}
+            <div class="card-roteiro-acoes">${acoes.join('')}</div>
+          </div>
+        </div>`;
+    }
 
-      document.getElementById('editarTitulo').value = roteiro.titulo || '';
-      document.getElementById('editarDeQuem').value = roteiro.de_quem || 'outra';
-      document.getElementById('editarPerfil').value = roteiro.perfil || '';
-      document.getElementById('editarLink').value = roteiro.url || '';
-      document.getElementById('editarData').value = roteiro.postado_em || '';
-      document.getElementById('editarTags').value = (roteiro.tags || []).join(', ');
-      document.getElementById('editarLegenda').value = roteiro.legenda || '';
-      document.getElementById('editarObs').value = roteiro.obs || '';
+    function renderRoteiros() {
+      const container = document.getElementById('listaRoteiros');
+      if (cacheRoteiros.length === 0) {
+        container.innerHTML = '<div class="cartao"><p class="texto-vazio">Nenhum roteiro ainda. Cole um link aqui em cima ou escreva na mão.</p></div>';
+        return;
+      }
+      const visiveis = roteirosVisiveis();
+      if (visiveis.length === 0) {
+        container.innerHTML = '<div class="cartao"><p class="texto-vazio">Nenhum roteiro encontrado com esse filtro.</p></div>';
+        return;
+      }
+      container.innerHTML = visiveis.map(cardRoteiro).join('');
+    }
 
-      document.getElementById('formEditarRoteiro').dataset.id = id;
+    document.getElementById('filtrosRoteiro').addEventListener('click', (e) => {
+      const chip = e.target.closest('[data-filtro]');
+      if (!chip) return;
+      filtroRoteiro = chip.dataset.filtro;
+      renderFiltrosRoteiro();
+      renderRoteiros();
+    });
+
+    document.getElementById('buscaRoteiro').addEventListener('input', (e) => {
+      buscaRoteiro = e.target.value.trim();
+      renderRoteiros();
+    });
+
+    function mostrarEmbedNaCapa(linha, capa) {
+      const embed = montarEmbedRoteiro(linha);
+      if (!embed) {
+        window.open(linha.url, '_blank', 'noopener');
+        return;
+      }
+      embed.style.cssText = 'position: absolute; inset: 0; width: 100%; height: 100%; border: 0; z-index: 3;';
+      const fechar = document.createElement('button');
+      fechar.className = 'botao botao-secundario botao-pequeno';
+      fechar.textContent = 'Fechar';
+      fechar.style.cssText = 'position: absolute; top: 8px; right: 8px; z-index: 4;';
+      fechar.addEventListener('click', renderRoteiros);
+      capa.classList.add('capa-com-video');
+      capa.replaceChildren(embed, fechar);
+    }
+
+    async function copiarTranscricaoRoteiro(linha, botao) {
+      try {
+        await navigator.clipboard.writeText(linha.transcricao);
+        botao.textContent = 'copiado ✓';
+        setTimeout(() => { botao.textContent = 'Copiar transcrição'; }, 2000);
+      } catch (erro) {
+        console.error(erro);
+        mostrarAvisoRoteiro('Não consegui copiar. Seleciona o texto e copia na mão.', 'erro');
+      }
+    }
+
+    async function apagarRoteiro(linha) {
+      if (!confirm('Apagar este roteiro? Não tem volta.')) return;
+      try {
+        const { error } = await Auth.sb.from('roteiros').delete().eq('id', linha.id);
+        if (error) throw error;
+        mostrarAvisoRoteiro('Roteiro apagado.', 'sucesso');
+        await recarregarRoteiros();
+      } catch (erro) {
+        console.error(erro);
+        mostrarAvisoRoteiro('Não consegui apagar. Tenta de novo.', 'erro');
+      }
+    }
+
+    document.getElementById('listaRoteiros').addEventListener('click', (e) => {
+      const botao = e.target.closest('button[data-acao]');
+      if (!botao) return;
+      const linha = cacheRoteiros.find((r) => r.id === botao.dataset.id);
+      if (!linha) return;
+      const acao = botao.dataset.acao;
+      if (acao === 'ver') mostrarEmbedNaCapa(linha, botao.closest('.card-roteiro-capa'));
+      if (acao === 'editar') abrirModalRoteiro(linha);
+      if (acao === 'tentar') executarTranscricaoRoteiro(linha);
+      if (acao === 'apagar') apagarRoteiro(linha);
+      if (acao === 'copiar') copiarTranscricaoRoteiro(linha, botao);
+    });
+
+    function abrirModalRoteiro(linha = null, aviso = null) {
+      const r = linha || { id: null, de_quem: 'outra', status: 'pronto' };
+      document.getElementById('tituloModalRoteiro').textContent = linha ? 'Editar roteiro' : 'Escrever roteiro na mão';
+      document.getElementById('formEditarRoteiro').dataset.id = r.id || '';
+      document.getElementById('editarTitulo').value = r.titulo || '';
+      document.getElementById('editarDeQuem').value = r.de_quem || 'outra';
+      document.getElementById('editarPerfil').value = r.perfil || '';
+      document.getElementById('editarLink').value = r.url || '';
+      document.getElementById('editarData').value = r.postado_em || '';
+      document.getElementById('editarTags').value = (r.tags || []).join(', ');
+      document.getElementById('editarLegenda').value = r.legenda || '';
+      document.getElementById('editarTranscricao').value = r.transcricao || '';
+      document.getElementById('editarObs').value = r.obs || '';
+
+      if (aviso) {
+        mostrarAvisoModal(aviso, 'sucesso');
+      } else if (r.status === 'falhou') {
+        mostrarAvisoModal(r.erro || 'Esse roteiro ainda não tem transcrição.', 'erro');
+      } else {
+        mostrarAvisoModal('', null);
+      }
       document.getElementById('modalEditarRoteiro').classList.remove('oculto');
+    }
+
+    function fecharModalRoteiro() {
+      document.getElementById('modalEditarRoteiro').classList.add('oculto');
+    }
+
+    document.getElementById('botaoEscreverManualRoteiro').addEventListener('click', () => abrirModalRoteiro());
+    document.getElementById('botaoCancelarEdicao').addEventListener('click', fecharModalRoteiro);
+
+    function lerCamposModalRoteiro() {
+      const campo = (id) => document.getElementById(id).value.trim();
+      return {
+        titulo: campo('editarTitulo') || null,
+        de_quem: document.getElementById('editarDeQuem').value,
+        perfil: campo('editarPerfil').replace(/^@/, '') || null,
+        url: campo('editarLink') || null,
+        postado_em: document.getElementById('editarData').value || null,
+        tags: campo('editarTags').split(',').map((tag) => tag.trim()).filter(Boolean),
+        legenda: campo('editarLegenda') || null,
+        transcricao: campo('editarTranscricao') || null,
+        obs: campo('editarObs') || null,
+      };
     }
 
     document.getElementById('formEditarRoteiro').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const id = e.target.dataset.id;
-
-      const dados = {
-        titulo: document.getElementById('editarTitulo').value.trim(),
-        de_quem: document.getElementById('editarDeQuem').value,
-        perfil: document.getElementById('editarPerfil').value.trim() || null,
-        url: document.getElementById('editarLink').value.trim(),
-        postado_em: document.getElementById('editarData').value || null,
-        tags: document.getElementById('editarTags').value.split(',').map(t => t.trim()).filter(t => t),
-        legenda: document.getElementById('editarLegenda').value.trim() || null,
-        obs: document.getElementById('editarObs').value.trim() || null,
-        updated_at: new Date().toISOString()
-      };
-
+      const id = e.currentTarget.dataset.id;
+      const campos = lerCamposModalRoteiro();
       try {
-        await Auth.sb.from('roteiros').update(dados).eq('id', id);
-        mostrarMensagemArea('Roteiro salvo.', 'sucesso');
-        document.getElementById('modalEditarRoteiro').classList.add('oculto');
+        if (id) {
+          const linha = cacheRoteiros.find((r) => r.id === id);
+          const mudancas = { ...campos };
+          if (linha && linha.fonte !== 'manual' && campos.url) {
+            mudancas.capa_url = await capaDoRoteiro({ fonte: linha.fonte, url: campos.url });
+          }
+          if (linha?.status === 'falhou') {
+            mudancas.status = 'pronto';
+            mudancas.erro = null;
+          }
+          await atualizarLinhaRoteiro(id, mudancas);
+        } else {
+          const userId = await usuarioIdAtual();
+          const fonte = (campos.url && detectarFonteRoteiro(campos.url)) || 'manual';
+          const capa_url = fonte !== 'manual' ? await capaDoRoteiro({ fonte, url: campos.url }) : null;
+          const { error } = await Auth.sb
+            .from('roteiros')
+            .insert({ ...campos, user_id: userId, fonte, status: 'pronto', capa_url });
+          if (error) throw error;
+        }
+        fecharModalRoteiro();
+        mostrarAvisoRoteiro('Roteiro salvo.', 'sucesso');
         await recarregarRoteiros();
       } catch (erro) {
         console.error(erro);
-        mostrarMensagemArea('Erro ao salvar.', 'erro');
+        mostrarAvisoModal('Não consegui salvar. Tenta de novo.', 'erro');
       }
     });
 
-    document.getElementById('botaoCancelarEdicao').addEventListener('click', () => {
-      document.getElementById('modalEditarRoteiro').classList.add('oculto');
-    });
-
-    window.apagarRoteiro = async function(id) {
-      if (!confirm('Apagar este roteiro?')) return;
-      try {
-        await Auth.sb.from('roteiros').delete().eq('id', id);
-        mostrarMensagemArea('Roteiro apagado.', 'sucesso');
-        await recarregarRoteiros();
-      } catch (erro) {
-        console.error(erro);
-        mostrarMensagemArea('Erro ao apagar.', 'erro');
+    async function copiarPromptEstudo() {
+      const exemplos = cacheRoteiros.filter((r) => r.de_quem === 'outra' && r.transcricao).slice(0, 10);
+      if (exemplos.length === 0) {
+        mostrarAvisoRoteiro('Ainda não tem transcrição de outras creators pra estudar. Transcreve alguns reels primeiro.', 'info');
+        return;
       }
-    };
+      const blocos = exemplos
+        .map((r, i) => `Roteiro ${i + 1} (${r.perfil ? '@' + r.perfil : 'sem perfil'}, ${r.fonte}):\n${r.transcricao}`)
+        .join('\n\n');
+      const prompt = `Sou a Erika Barreiros, criadora de conteúdo UGC. Faço vídeos para marcas que parecem conselho de amiga, não propaganda.
 
-    async function recarregarRoteiros() {
+Abaixo estão transcrições de vídeos de outras criadoras que estão performando bem. Me responda em português do Brasil:
+
+1. Os assuntos que estão em alta nesses vídeos.
+2. As expressões e frases que estão prendendo a atenção.
+3. Os padrões de gancho (a primeira frase de cada vídeo), com um exemplo real de cada padrão tirado das transcrições.
+4. Cinco roteiros novos no meu assunto, reaproveitando a estrutura dos vídeos de cima, mas sem copiar o conteúdo. Escreva de forma natural, sem cara de robô.
+
+Transcrições:
+
+${blocos}`;
       try {
-        cacheRoteiros = await buscarRoteiros();
-        renderRoteiros();
+        await navigator.clipboard.writeText(prompt);
+        mostrarAvisoRoteiro('Prompt copiado. Cola no Claude.', 'sucesso');
       } catch (erro) {
         console.error(erro);
+        mostrarAvisoRoteiro('Não consegui copiar o prompt. Tenta de novo.', 'erro');
       }
     }
 
-    document.getElementById('buscaRoteiro').addEventListener('input', (e) => {
-      roteiroBuscaAtiva = e.target.value;
-      renderRoteiros();
-    });
-
-    // Quando clica na aba, carrega os roteiros
-    const botaoRoteiros = document.querySelector('[data-tab="roteiros"]');
-    if (botaoRoteiros) {
-      botaoRoteiros.addEventListener('click', () => {
-        recarregarRoteiros();
-      });
-    }
-
-    // Botão "Escrever na mão"
-    document.getElementById('botaoEscreverManualRoteiro').addEventListener('click', () => {
-      abrirModalEdicao('novo');
-    });
+    document.getElementById('botaoEstudarClaude').addEventListener('click', copiarPromptEstudo);
 
     // ------------------------------------------------------------
     // Interação: filtro de período
@@ -3311,6 +4264,7 @@
 
         if (aba === 'roteiros') {
           recarregarRoteiros();
+          atualizarBlocoChaveSupadata();
         }
 
         fecharSidebarMobile();
