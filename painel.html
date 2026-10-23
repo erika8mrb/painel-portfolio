@@ -2247,6 +2247,9 @@
               </svg>
             </button>
             <div class="acoes-rapidas-video">
+              <label class="botao botao-primario botao-pequeno">Trocar capa
+                <input type="file" accept="image/jpeg,image/png,image/webp" data-capa-direta="${video.id}" hidden>
+              </label>
               <label class="toggle-rapido"><input type="checkbox" data-ativo-rapido="${video.id}" ${video.ativo ? 'checked' : ''}> Mostrar no site</label>
               <button type="button" class="botao botao-secundario botao-pequeno" data-mover-video="${video.id}" data-direcao="-1" ${indice === 0 ? 'disabled' : ''}>↑ Subir</button>
               <button type="button" class="botao botao-secundario botao-pequeno" data-mover-video="${video.id}" data-direcao="1" ${indice === cacheVideos.length - 1 ? 'disabled' : ''}>↓ Descer</button>
@@ -2349,14 +2352,52 @@
         : '<span>Sem capa própria: usa a miniatura do YouTube</span>';
     }
 
-    function escolherCapa(chave, arquivo) {
+    function capaInvalida(arquivo) {
+      if (!TIPOS_CAPA[arquivo.type]) return 'Escolha uma imagem JPG, PNG ou WebP.';
+      if (arquivo.size > TAMANHO_MAX_CAPA) return 'A imagem passa de 5 MB. Escolha uma menor.';
+      return null;
+    }
+
+    async function enviarArquivoCapa(arquivo) {
+      const caminho = `${crypto.randomUUID()}.${TIPOS_CAPA[arquivo.type]}`;
+      const bucket = Auth.sb.storage.from('capas-portfolio');
+      const { error } = await bucket.upload(caminho, arquivo, {
+        contentType: arquivo.type,
+        cacheControl: '31536000',
+      });
+      if (error) throw error;
+      return bucket.getPublicUrl(caminho).data.publicUrl;
+    }
+
+    async function salvarCapaDireta(id, arquivo) {
       if (!arquivo) return;
-      if (!TIPOS_CAPA[arquivo.type]) {
-        mostrarMensagemArea('Escolha uma imagem JPG, PNG ou WebP.', 'erro');
+      const erroValidacao = capaInvalida(arquivo);
+      if (erroValidacao) {
+        mostrarMensagemArea(erroValidacao, 'erro');
         return;
       }
-      if (arquivo.size > TAMANHO_MAX_CAPA) {
-        mostrarMensagemArea('A imagem passa de 5 MB. Escolha uma menor.', 'erro');
+      try {
+        const capaAntiga = cacheVideos.find((v) => v.id === id)?.capa || null;
+        const capaNova = await enviarArquivoCapa(arquivo);
+        const { error } = await Auth.sb
+          .from('portfolio_videos')
+          .update({ capa: capaNova, updated_at: new Date().toISOString() })
+          .eq('id', id);
+        if (error) throw error;
+        await apagarCapaAntiga(capaAntiga);
+        mostrarMensagemArea('Capa trocada.', 'sucesso');
+        await recarregarVideos();
+      } catch (erro) {
+        console.error(erro);
+        mostrarMensagemArea('Não foi possível trocar a capa agora.', 'erro');
+      }
+    }
+
+    function escolherCapa(chave, arquivo) {
+      if (!arquivo) return;
+      const erroValidacao = capaInvalida(arquivo);
+      if (erroValidacao) {
+        mostrarMensagemArea(erroValidacao, 'erro');
         return;
       }
       const previewUrl = URL.createObjectURL(arquivo);
@@ -2380,14 +2421,7 @@
       const pendente = capasPendentes[chave];
       if (!pendente) return capaAtual || null;
       if (pendente.remover) return null;
-      const caminho = `${crypto.randomUUID()}.${TIPOS_CAPA[pendente.arquivo.type]}`;
-      const bucket = Auth.sb.storage.from('capas-portfolio');
-      const { error } = await bucket.upload(caminho, pendente.arquivo, {
-        contentType: pendente.arquivo.type,
-        cacheControl: '31536000',
-      });
-      if (error) throw error;
-      return bucket.getPublicUrl(caminho).data.publicUrl;
+      return enviarArquivoCapa(pendente.arquivo);
     }
 
     async function apagarCapaAntiga(urlAntiga) {
@@ -2417,6 +2451,10 @@
       const alvo = evento.target;
       if (evento.type === 'change' && alvo.matches('[data-selecionar-capa]')) {
         escolherCapa(alvo.dataset.selecionarCapa, alvo.files[0]);
+        alvo.value = '';
+      }
+      if (evento.type === 'change' && alvo.matches('[data-capa-direta]')) {
+        salvarCapaDireta(alvo.dataset.capaDireta, alvo.files[0]);
         alvo.value = '';
       }
       if (evento.type === 'click' && alvo.matches('[data-remover-capa]')) {
