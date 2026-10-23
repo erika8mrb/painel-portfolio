@@ -3535,7 +3535,9 @@
     let transcrevendo = false;
 
     const esperar = (ms) => new Promise((resolver) => setTimeout(resolver, ms));
-    const escaparAtributo = (texto) => escaparHtml(texto).replace(/"/g, '&quot;');
+    function escaparAtributo(texto) {
+      return escaparHtml(texto).replace(/"/g, '&quot;');
+    }
 
     async function usuarioIdAtual() {
       const { data: { session } } = await Auth.sb.auth.getSession();
