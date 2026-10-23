@@ -752,23 +752,22 @@
     cursor: pointer;
   }
 
-  .acoes-rapidas-video {
+  .linha-video {
     display: flex;
     gap: 8px;
-    flex-wrap: wrap;
-    align-items: center;
-    padding: 0 20px 16px;
+    align-items: flex-start;
   }
 
-  .toggle-rapido {
-    display: inline-flex;
-    align-items: center;
+  .linha-video > .cartao-mensagem {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .setas-video {
+    display: flex;
+    flex-direction: column;
     gap: 6px;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--texto-suave);
-    margin-right: 8px;
-    cursor: pointer;
+    padding-top: 14px;
   }
 
   .video-detalhe-acoes {
@@ -2235,6 +2234,7 @@
 
       container.innerHTML = cacheVideos
         .map((video, indice) => `
+          <div class="linha-video">
           <div class="cartao-mensagem">
             <button class="mensagem-cabecalho" data-toggle-video="${video.id}" aria-expanded="false">
               <span class="video-cabecalho-ordem">${indice + 1}</span>
@@ -2246,15 +2246,6 @@
                 <polyline points="6 9 12 15 18 9"></polyline>
               </svg>
             </button>
-            <div class="acoes-rapidas-video">
-              <label class="botao botao-primario botao-pequeno">Trocar capa
-                <input type="file" accept="image/jpeg,image/png,image/webp" data-capa-direta="${video.id}" hidden>
-              </label>
-              <label class="toggle-rapido"><input type="checkbox" data-ativo-rapido="${video.id}" ${video.ativo ? 'checked' : ''}> Mostrar no site</label>
-              <button type="button" class="botao botao-secundario botao-pequeno" data-mover-video="${video.id}" data-direcao="-1" ${indice === 0 ? 'disabled' : ''}>↑ Subir</button>
-              <button type="button" class="botao botao-secundario botao-pequeno" data-mover-video="${video.id}" data-direcao="1" ${indice === cacheVideos.length - 1 ? 'disabled' : ''}>↓ Descer</button>
-              <button type="button" class="botao botao-perigo botao-pequeno" data-excluir-video="${video.id}">Excluir</button>
-            </div>
             <div class="mensagem-detalhe oculto" id="detalheVideo${video.id}">
               <form class="grade-campos-video" style="margin-top:16px;" onsubmit="return false;">
                 <div class="campo">
@@ -2281,8 +2272,14 @@
               </form>
               <div class="video-detalhe-acoes">
                 <button type="button" class="botao botao-primario" data-salvar-video="${video.id}">Salvar</button>
+                <button type="button" class="botao botao-perigo" data-excluir-video="${video.id}">Excluir</button>
               </div>
             </div>
+          </div>
+          <div class="setas-video">
+            <button type="button" class="botao botao-secundario botao-pequeno" data-mover-video="${video.id}" data-direcao="-1" ${indice === 0 ? 'disabled' : ''} title="Subir">↑</button>
+            <button type="button" class="botao botao-secundario botao-pequeno" data-mover-video="${video.id}" data-direcao="1" ${indice === cacheVideos.length - 1 ? 'disabled' : ''} title="Descer">↓</button>
+          </div>
           </div>
         `)
         .join('');
@@ -2308,10 +2305,6 @@
         });
       });
 
-      container.querySelectorAll('[data-ativo-rapido]').forEach((campo) => {
-        campo.addEventListener('change', () => alternarAtivoVideo(campo.getAttribute('data-ativo-rapido'), campo.checked));
-      });
-
       container.querySelectorAll('[data-excluir-video]').forEach((botao) => {
         botao.addEventListener('click', () => excluirVideo(botao.getAttribute('data-excluir-video')));
       });
@@ -2330,8 +2323,8 @@
           <span class="rotulo-campo">Capa personalizada (opcional)</span>
           <div class="previa-capa">${previa}</div>
           <div class="acoes-capa">
-            <label class="botao botao-secundario botao-pequeno">Selecionar imagem
-              <input type="file" accept="image/jpeg,image/png,image/webp" data-selecionar-capa="${escaparAtributo(chave)}" hidden>
+            <label class="botao botao-secundario botao-pequeno">${chave === 'novo' ? 'Selecionar imagem' : 'Trocar capa'}
+              <input type="file" accept="image/jpeg,image/png,image/webp" ${chave === 'novo' ? `data-selecionar-capa="novo"` : `data-capa-direta="${escaparAtributo(chave)}"`} hidden>
             </label>
             <button type="button" class="botao botao-secundario botao-pequeno" data-remover-capa="${escaparAtributo(chave)}">Remover capa</button>
           </div>
@@ -2429,22 +2422,6 @@
       if (!urlAntiga || !urlAntiga.includes(marcador)) return;
       const caminho = urlAntiga.split(marcador)[1];
       await Auth.sb.storage.from('capas-portfolio').remove([caminho]);
-    }
-
-    async function alternarAtivoVideo(id, ativo) {
-      try {
-        const { error } = await Auth.sb
-          .from('portfolio_videos')
-          .update({ ativo, updated_at: new Date().toISOString() })
-          .eq('id', id);
-        if (error) throw error;
-        mostrarMensagemArea(ativo ? 'Vídeo visível no site.' : 'Vídeo oculto do site.', 'sucesso');
-        await recarregarVideos();
-      } catch (erro) {
-        console.error(erro);
-        mostrarMensagemArea('Não foi possível mudar a visibilidade agora.', 'erro');
-        await recarregarVideos();
-      }
     }
 
     function tratarCapaEvento(evento) {
