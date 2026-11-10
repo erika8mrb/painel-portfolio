@@ -1,0 +1,21 @@
+name: Manter Supabase ativo
+
+on:
+  schedule:
+    - cron: '0 12 * * *'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Leitura leve na tabela portfolio_videos
+        run: |
+          status=$(curl -s -o /dev/null -w "%{http_code}" \
+            "https://tvgpzamubhmhypsuyyps.supabase.co/rest/v1/portfolio_videos?select=id&limit=1" \
+            -H "apikey: ${{ env.SUPABASE_ANON_KEY }}" \
+            -H "Authorization: Bearer ${{ env.SUPABASE_ANON_KEY }}")
+          echo "Status: $status"
+          test "$status" = "200"
+        env:
+          SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR2Z3B6YW11YmhtaHlwc3V5eXBzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM4MDk0MjksImV4cCI6MjA5OTM4NTQyOX0.RMsHOQLvai6uK1MbYTCw3pRHar63DrtsVq7kLC3R8I
